@@ -58,13 +58,17 @@ void usage() {
 }
 
 bool SDMMakeNewFolderAtPath(char *path, mode_t mode) {
-	bool result = false;
+	bool status = false;
 	struct stat st;
-	if (stat(path, &st) == -1) {
+	int result = stat(path, &st);
+	if (result == -1) {
 		int mkdirResult = mkdir(path, mode);
 		result = ((mkdirResult == 0 || (mkdirResult == -1 && errno == EEXIST)) ? true : false);
 	}
-	return result;
+	else if (result == 0) {
+		status = true;
+	}
+	return status;
 }
 
 int main(int argc, const char * argv[]) {
@@ -90,6 +94,9 @@ int main(int argc, const char * argv[]) {
 					}
 					else if (strcmp(optarg, "x86_64") == 0) {
 						options_enabled[OptionsArch] = loader_arch_x86_64_type;
+					}
+					else if (strcmp(optarg, "arm") == 0) {
+						printf("not yet, sorry :(\n");
 					}
 				}
 				break;
