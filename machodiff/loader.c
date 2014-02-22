@@ -182,7 +182,7 @@ void SDMGenerateSymbols(struct loader_binary * binary) {
 					uint32_t *n_value = (uint32_t *)PtrAdd(entry, sizeof(struct loader_generic_nlist));
 					symbol_address = (uintptr_t)*n_value;
 				}
-				binary->map->symbol_table->symbol = realloc(binary->map->symbol_table->symbol, sizeof(struct loader_symbol)*(binary->map->symbol_table->count+0x1));
+				binary->map->symbol_table->symbol = realloc(binary->map->symbol_table->symbol, sizeof(struct loader_symbol)*(unsigned long)(binary->map->symbol_table->count+0x1));
 				struct loader_symbol *symbol = (struct loader_symbol *)calloc(1, sizeof(struct loader_symbol));
 				if (symbol) {
 					symbol->symbol_number = symbol_index;
@@ -503,7 +503,7 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 			if (fd != 0xff) {
 				off_t size = fs.st_size;
 				off_t offset = 0;
-				struct loader_fat_header *whole_binary = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, offset);
+				struct loader_fat_header *whole_binary = mmap(NULL, (unsigned long)size, PROT_READ, MAP_PRIVATE, fd, offset);
 				binary->endian_type = SDMGetBinaryEndianness(whole_binary->magic.magic);
 				offset += sizeof(struct loader_fat_header);
 				uint32_t arch_count = EndianFix(binary->endian_type, whole_binary->n_arch);
@@ -522,7 +522,7 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 					}
 					offset += sizeof(struct loader_arch_header);
 				}
-				munmap(whole_binary, size);
+				munmap(whole_binary, (size_t)size);
 			}
 			close(fd);
 		}

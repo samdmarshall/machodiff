@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 Sam Marshall. All rights reserved.
 //
 
-#include <CoreFoundation/CoreFoundation.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <getopt.h>
 
 #include "diff.h"
