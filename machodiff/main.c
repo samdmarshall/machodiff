@@ -10,6 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#include <sys/stat.h>
+#include <sys/fcntl.h>
+#include <errno.h>
 
 #include "diff.h"
 
@@ -52,6 +55,16 @@ void usage() {
 	printf("%s [Mach-O binary] : specify an Mach-O binary as input\n",input_arg_def);
 	printf("%s [directory] : specify an output directory\n",output_arg_def);
 	printf("%s [i386|x86_64] : specify an architecture to target\n",arch_arg_def);
+}
+
+bool SDMMakeNewFolderAtPath(char *path, mode_t mode) {
+	bool result = false;
+	struct stat st;
+	if (stat(path, &st) == -1) {
+		int mkdirResult = mkdir(path, mode);
+		result = ((mkdirResult == 0 || (mkdirResult == -1 && errno == EEXIST)) ? true : false);
+	}
+	return result;
 }
 
 int main(int argc, const char * argv[]) {
@@ -140,7 +153,10 @@ int main(int argc, const char * argv[]) {
 		struct loader_binary *input_one = SDMLoadTarget(input_args[0], options_enabled[OptionsArch]);
 		struct loader_binary *input_two = SDMLoadTarget(input_args[1], options_enabled[OptionsArch]);
 		
-		SDMPerformComparison(input_one, input_two);
+		bool status = SDMMakeNewFolderAtPath(output_arg, 0700);
+		if (status) {
+			SDMPerformComparison(input_one, input_two, output_arg);
+		}
 		
 		SDMReleaseBinary(input_one);
 		SDMReleaseBinary(input_two);

@@ -18,9 +18,7 @@ struct loader_binary * SDMLoadTarget(char *path, uint8_t type) {
 	return input;
 }
 
-
-
-void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary *input_two) {
+void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary *input_two, char *output_path) {
 	
 }
 
