@@ -84,6 +84,14 @@ static char *ObjcStackSize[kObjcStackSizeCount] = {
 	"9"
 };
 
+CoreRange SDMSTObjcStackSize(char *type, uint64_t offset, uint64_t *stackSize);
+CoreRange SDMSTObjcGetRangeFromTokens(char *startToken, char *endToken, char *type, uint64_t offset);
+CoreRange SDMSTObjcGetStructContentsRange(char *type, uint64_t offset);
+CoreRange SDMSTObjcGetArrayContentsRange(char *type, uint64_t offset);
+CoreRange SDMSTObjcGetStructNameRange(char *contents, uint64_t offset);
+struct loader_objc_lexer_type* SDMSTMemberCountOfStructContents(char *structContents, CoreRange nameRange);
+uint32_t SDMSTParseToken(struct loader_objc_lexer_type *decode, char *type, uint64_t offset);
+
 CoreRange SDMSTObjcStackSize(char *type, uint64_t offset, uint64_t *stackSize) {
 	uint64_t counter = 0;
 	bool findStackSize = true;
@@ -100,7 +108,7 @@ CoreRange SDMSTObjcStackSize(char *type, uint64_t offset, uint64_t *stackSize) {
 	CoreRange stackRange = CoreRangeCreate((uintptr_t)offset, counter);
 	char *stack = calloc((uint32_t)stackRange.length+1, sizeof(char));
 	memcpy(stack, &(type[offset]), (uint32_t)stackRange.length);
-	*stackSize = atoi(stack);
+	*stackSize = (uint64_t)atoi(stack);
 	free(stack);
 	return stackRange;
 }

@@ -47,6 +47,8 @@ static uint8_t options_enabled[OptionsCount] = {0};
 #define kSatisfiedOutput (options_enabled[OptionsOutput] == 1)
 #define kSatisfiedArch (options_enabled[OptionsArch] != 0)
 
+void usage(void);
+
 void usage() {
 	printf("%s : display help\n",help_arg_def);
 	printf("%s [Mach-O binary] : specify an Mach-O binary as input\n",input_arg_def);

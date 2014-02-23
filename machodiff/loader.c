@@ -64,13 +64,15 @@ void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary);
 
 bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName);
 
+void SDMReleaseMap(struct loader_map *map);
+
 #pragma mark -
 #pragma mark Private Function Definitions
 
 uint64_t SDMCalculateVMSlide(struct loader_binary * binary) {
 	uint64_t slide = k64BitMask;
 	if (binary->image_index < _dyld_image_count()) {
-		slide = _dyld_get_image_vmaddr_slide(binary->image_index);
+		slide = (uint64_t)_dyld_get_image_vmaddr_slide(binary->image_index);
 	} else {
 		slide = 0;
 	}
@@ -351,7 +353,7 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 		for (uint32_t i = 0x0; i < textSections; i++) {
 			uint64_t memOffset;
 			if (binary->memory_ref) {
-				memOffset = _dyld_get_image_vmaddr_slide(binary->image_index);
+				memOffset = (uint64_t)_dyld_get_image_vmaddr_slide(binary->image_index);
 			} else {
 				memOffset = (uint64_t)(binary->header) - binaryOffset;
 			}
@@ -380,7 +382,7 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 				Dl_info info;
 				uint64_t loaded;
 				if (binary->memory_ref) {
-					loaded = dladdr((void*)(address), &info);
+					loaded = (uint64_t)dladdr((void*)(address), &info);
 				} else {
 					loaded = address;
 				}
@@ -392,9 +394,9 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 							while (offset < (size - (isIntel64bitArch ? Intel_x86_64bit_StackSetupLength : Intel_x86_32bit_StackSetupLength))) {
 								uint32_t result = 0;
 								if (isIntel64bitArch) {
-									result = memcmp((void*)(address+offset), &(Intel_x86_64bit_StackSetup[0]), Intel_x86_64bit_StackSetupLength);
+									result = (uint32_t)memcmp((void*)(address+offset), &(Intel_x86_64bit_StackSetup[0]), Intel_x86_64bit_StackSetupLength);
 								} else {
-									result = memcmp((void*)(address+offset), &(Intel_x86_32bit_StackSetup[0]), Intel_x86_32bit_StackSetupLength);
+									result = (uint32_t)memcmp((void*)(address+offset), &(Intel_x86_32bit_StackSetup[0]), Intel_x86_32bit_StackSetupLength);
 								}
 								if (!result) {
 									char *buffer = calloc(1024, sizeof(char));
@@ -443,9 +445,9 @@ void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary) {
 
 bool SDMMatchArchToCPU(struct loader_arch_header *arch_header, uint8_t target_arch, uint8_t endian_type) {
 	bool result = false;
-	cpu_type_t type = EndianFix(endian_type, arch_header->arch.cputype);
+	cpu_type_t type = (cpu_type_t)EndianFix(endian_type, (uint32_t)arch_header->arch.cputype);
 	if ((type & CPU_TYPE_X86) == CPU_TYPE_X86) {
-		cpu_subtype_t subtype = EndianFix(endian_type, arch_header->arch.subtype);
+		cpu_subtype_t subtype = (cpu_subtype_t)EndianFix(endian_type, (uint32_t)arch_header->arch.subtype);
 		if ((subtype & CPU_SUBTYPE_I386_ALL) == CPU_SUBTYPE_I386_ALL && target_arch == loader_arch_i386_type) {
 			result = true;
 		}
@@ -454,7 +456,7 @@ bool SDMMatchArchToCPU(struct loader_arch_header *arch_header, uint8_t target_ar
 		}
 	}
 	else if ((type & CPU_TYPE_ARM) == CPU_TYPE_ARM) {
-		cpu_subtype_t subtype = EndianFix(endian_type, arch_header->arch.subtype);
+		cpu_subtype_t subtype = (cpu_subtype_t)EndianFix(endian_type, (uint32_t)arch_header->arch.subtype);
 		if ((subtype & CPU_SUBTYPE_ARM_V6) == CPU_SUBTYPE_ARM_V6 && target_arch == loader_arch_armv6_type) {
 			result = true;
 		}
@@ -482,7 +484,7 @@ bool SDMMatchArchToCPU(struct loader_arch_header *arch_header, uint8_t target_ar
 }
 
 uint8_t SDMGetBinaryEndianness(uint32_t magic) {
-	uint32_t type = loader_endian_invalid_type;
+	uint8_t type = loader_endian_invalid_type;
 	if (magic == FAT_MAGIC) {
 		type = loader_endian_big_type;
 	}

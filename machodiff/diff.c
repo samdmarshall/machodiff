@@ -18,6 +18,15 @@
 
 #define kBufferSize 1024
 
+char* SDMCreatePathWithName(char *path, char *name);
+char* SDMCreateDirectoryAtPath(char *name, char *path);
+
+bool SDMNameListContainsName(struct loader_diff *diff, struct loader_subroutine *subroutine, struct loader_binary *input);
+void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input);
+struct loader_diff * SDMGenerateSymbolList(struct loader_binary *input_one, struct loader_binary *input_two);
+void SDMWriteSubroutineData(CoreRange range, char *path, char *name, char *append);
+void SDMAnalyzeSymbol(struct loader_diff_symbol *symbol, struct loader_binary *input_one, struct loader_binary *input_two, char *output);
+
 char* SDMCreatePathWithName(char *path, char *name) {
 	char *subpath = calloc(1, strlen(path)+strlen(name)+2);
 	sprintf(subpath,"%s/%s",path,name);

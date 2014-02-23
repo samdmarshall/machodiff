@@ -26,7 +26,7 @@
 #define __unsafe_unretained /* empty */
 #endif
 
-#define GetDigitsOfNumber(num) (num > 0 ? (int)log10(num)+0x1 : 0x1)
+#define GetDigitsOfNumber(num) (unsigned long)(num > 0 ? (int)log10(num)+0x1 : 0x1)
 
 struct Range {
 	uint64_t offset;
