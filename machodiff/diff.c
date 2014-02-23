@@ -37,7 +37,7 @@ char* SDMCreateDirectoryAtPath(char *name, char *path) {
 	char *subpath = SDMCreatePathWithName(path, name);
 	bool status = SDMMakeNewFolderAtPath(subpath, 0700);
 	if (status == false) {
-		printf("error creating subpath for dump %s\n",subpath);
+		printf("error creating subpath for dump %s\n\n",subpath);
 	}
 	return subpath;
 }

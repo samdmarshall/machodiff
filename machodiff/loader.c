@@ -614,8 +614,8 @@ uint8_t SDMIsBinaryFat(char *path) {
 }
 
 bool SDMBinaryIs64Bit(struct loader_generic_header *header) {
-	bool isCPU64Bit = ((header->arch->cputype & CPU_ARCH_ABI64) == CPU_ARCH_ABI64);
-	bool isMagic64Bit = (header->magic->magic == MH_MAGIC_64 || header->magic->magic == MH_CIGAM_64);
+	bool isCPU64Bit = ((header->arch.cputype & CPU_ARCH_ABI64) == CPU_ARCH_ABI64);
+	bool isMagic64Bit = (header->magic.magic == MH_MAGIC_64 || header->magic.magic == MH_CIGAM_64);
 	return (isCPU64Bit && isMagic64Bit);
 }
 
