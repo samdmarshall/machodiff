@@ -10,9 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
-#include <sys/stat.h>
-#include <sys/fcntl.h>
-#include <errno.h>
 
 #include "diff.h"
 
@@ -55,20 +52,6 @@ void usage() {
 	printf("%s [Mach-O binary] : specify an Mach-O binary as input\n",input_arg_def);
 	printf("%s [directory] : specify an output directory\n",output_arg_def);
 	printf("%s [i386|x86_64|armv6|armv7|armv7s|arm64|ppc|ppc64] : specify an architecture to target\n",arch_arg_def);
-}
-
-bool SDMMakeNewFolderAtPath(char *path, mode_t mode) {
-	bool status = false;
-	struct stat st;
-	int result = stat(path, &st);
-	if (result == -1) {
-		int mkdirResult = mkdir(path, mode);
-		result = ((mkdirResult == 0 || (mkdirResult == -1 && errno == EEXIST)) ? true : false);
-	}
-	else if (result == 0) {
-		status = true;
-	}
-	return status;
 }
 
 int main(int argc, const char * argv[]) {

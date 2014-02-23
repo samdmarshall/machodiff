@@ -52,17 +52,13 @@ uint8_t SDMGetBinaryEndianness(uint32_t magic);
 uint64_t SDMCalculateVMSlide(struct loader_binary *binary);
 uint64_t SDMComputeFslide(struct loader_segment_map *segment_map, bool is64Bit);
 
-
 void SDMGenerateSymbols(struct loader_binary *binary);
 
 bool SDMMapObjcClasses32(struct loader_binary *binary);
 bool SDMMapObjcClasses64(struct loader_binary *binary);
 
-
 void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary);
 void SDMSTFindSubroutines(struct loader_binary *binary);
-
-CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct loader_binary *binary);
 
 void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary);
 
@@ -299,17 +295,17 @@ void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary) 
 		} else {
 			break;
 		}
-	} while ((*pointer++ & 0x80) != 0x0);
+	} while ((*pointer++ & 0x80) != 0);
 	
 	if (offset) {
-		char *buffer = calloc(0x1, sizeof(char)*0x400);
+		char *buffer = calloc(1024, sizeof(char));
 		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, sizeof(struct loader_subroutine)*(binary->map->subroutine_map->count+0x1));
 		struct loader_subroutine *subroutine = &(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count]);
 		subroutine->offset = offset + (binary->map->subroutine_map->count ? binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count-0x1].offset : 0x0);
 		sprintf(buffer, "%lx", (subroutine->offset));
-		subroutine->name = calloc(0x1, sizeof(char)*(0x5 + (strlen(buffer))));
+		subroutine->name = calloc((5 + strlen(buffer)), sizeof(char));
 		sprintf(subroutine->name, "sub_%lx", (subroutine->offset));
-		subroutine->section_offset = 0xffffffff;
+		subroutine->section_offset = k32BitMask;
 		free(buffer);
 		binary->map->subroutine_map->count++;
 	}
@@ -369,8 +365,8 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 				address = (uint64_t)PtrAdd(memOffset, ((struct section *)textSectionOffset)->addr);
 			}
 			if (hasLCFunctionStarts && binary->map->subroutine_map->count) {
-				for (uint32_t j = 0x0; j < binary->map->subroutine_map->count; j++) {
-					if (binary->map->subroutine_map->subroutine[j].section_offset == 0xffffffff) {
+				for (uint32_t j = 0; j < binary->map->subroutine_map->count; j++) {
+					if (binary->map->subroutine_map->subroutine[j].section_offset == k32BitMask) {
 						uint64_t subOffset = pageZero+memOffset+binary->map->subroutine_map->subroutine[j].offset;
 						if (subOffset < (address+size)) {
 							binary->map->subroutine_map->subroutine[j].section_offset = textSectionOffset;
@@ -388,26 +384,26 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 				} else {
 					loaded = address;
 				}
-				if (loaded != 0x0) {
-					if (((flags & S_REGULAR)==0x0) && ((flags & S_ATTR_PURE_INSTRUCTIONS) || (flags & S_ATTR_SOME_INSTRUCTIONS))) {
-						uint64_t offset = 0x0;
+				if (loaded) {
+					if (((flags & S_REGULAR)==0) && ((flags & S_ATTR_PURE_INSTRUCTIONS) || (flags & S_ATTR_SOME_INSTRUCTIONS))) {
+						uint64_t offset = 0;
 						bool isIntel64bitArch = (SDMBinaryIs64Bit(binary->header) && binary->header->arch.cputype == CPU_TYPE_X86_64);
 						if (size) {
 							while (offset < (size - (isIntel64bitArch ? Intel_x86_64bit_StackSetupLength : Intel_x86_32bit_StackSetupLength))) {
-								uint32_t result = 0x0;
+								uint32_t result = 0;
 								if (isIntel64bitArch) {
-									result = memcmp((void*)(address+offset), &(Intel_x86_64bit_StackSetup[0x0]), Intel_x86_64bit_StackSetupLength);
+									result = memcmp((void*)(address+offset), &(Intel_x86_64bit_StackSetup[0]), Intel_x86_64bit_StackSetupLength);
 								} else {
-									result = memcmp((void*)(address+offset), &(Intel_x86_32bit_StackSetup[0x0]), Intel_x86_32bit_StackSetupLength);
+									result = memcmp((void*)(address+offset), &(Intel_x86_32bit_StackSetup[0]), Intel_x86_32bit_StackSetupLength);
 								}
 								if (!result) {
-									char *buffer = calloc(0x1, sizeof(char)*0x400);
-									binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, ((binary->map->subroutine_map->count+0x1)*sizeof(struct loader_subroutine)));
-									struct loader_subroutine *subroutine = (struct loader_subroutine *)calloc(0x1, sizeof(struct loader_subroutine));
+									char *buffer = calloc(1024, sizeof(char));
+									binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, ((binary->map->subroutine_map->count+1)*sizeof(struct loader_subroutine)));
+									struct loader_subroutine *subroutine = (struct loader_subroutine *)calloc(1, sizeof(struct loader_subroutine));
 									subroutine->offset = (uintptr_t)(address+offset);
 									
 									sprintf(buffer, "%lx", subroutine->offset);
-									subroutine->name = calloc(0x5 + (strlen(buffer)), sizeof(char));
+									subroutine->name = calloc(5 + (strlen(buffer)), sizeof(char));
 									sprintf(subroutine->name, "sub_%lx", subroutine->offset);
 									
 									subroutine->section_offset = textSectionOffset;
@@ -431,36 +427,10 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 	}
 }
 
-CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct loader_binary *binary) {
-	CoreRange range = {0x0, 0x0};
-	for (uint32_t i = 0x0; i < binary->map->subroutine_map->count; i++) {
-		if (binary->map->subroutine_map->subroutine[i].offset == subroutine->offset) {
-			range.offset = (uintptr_t)(subroutine->offset);
-			uint32_t next = i+0x1;
-			if (next < binary->map->subroutine_map->count) {
-				range.length = ((binary->map->subroutine_map->subroutine[next].offset) - range.offset);
-			} else {
-				uint64_t size, address;
-				uint64_t memOffset = SDMCalculateVMSlide(binary);
-				if (SDMBinaryIs64Bit(binary->header)) {
-					size = ((struct loader_section_64 *)(subroutine->section_offset))->position.size;
-					address = ((struct loader_section_64 *)(subroutine->section_offset))->position.addr + memOffset;
-				} else {
-					size = ((struct loader_section_32 *)(subroutine->section_offset))->position.size;
-					address = ((struct loader_section_32 *)(subroutine->section_offset))->position.addr + memOffset;
-				}
-				range.length = ((address+size) - range.offset);
-			}
-			break;
-		}
-	}
-	return range;
-}
-
 void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary) {
-	uint32_t counter = 0x0;
-	for (uint32_t i = 0x0; i < binary->map->symbol_table->count; i++) {
-		for (uint32_t j = 0x0; j < binary->map->subroutine_map->count; j++) {
+	uint32_t counter = 0;
+	for (uint32_t i = 0; i < binary->map->symbol_table->count; i++) {
+		for (uint32_t j = 0; j < binary->map->subroutine_map->count; j++) {
 			if (binary->map->symbol_table->symbol[i].offset == (binary->map->subroutine_map->subroutine[j].offset - (uint64_t)binary->header)) {
 				binary->map->subroutine_map->subroutine[j].name = realloc(binary->map->subroutine_map->subroutine[j].name, sizeof(char)*(strlen(binary->map->symbol_table->symbol[i].symbol_name)+0x1));
 				memcpy(binary->map->subroutine_map->subroutine[j].name, binary->map->symbol_table->symbol[i].symbol_name, sizeof(char)*strlen(binary->map->symbol_table->symbol[i].symbol_name));
@@ -569,7 +539,7 @@ bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName) {
 			if (offset) {
 				uint32_t originOffset = (uint32_t)(offset - symFromTable);
 				if (tabSymLength-originOffset == symLength) {
-					matchesName = (strcmp(&symFromTable[originOffset], symbolName) == 0x0);
+					matchesName = (strcmp(&symFromTable[originOffset], symbolName) == 0);
 				}
 			}
 		}
@@ -689,6 +659,43 @@ void SDMReleaseBinary(struct loader_binary *binary) {
 		
 		free(binary);
 	}
+}
+
+struct loader_subroutine* SDMFindSubroutineFromName(struct loader_binary *binary, char *name) {
+	for (uint32_t index = 0; index < binary->map->subroutine_map->count; index++) {
+		if (strcmp(name, binary->map->subroutine_map->subroutine[index].name) == 0) {
+			return &(binary->map->subroutine_map->subroutine[index]);
+		}
+	}
+	return NULL;
+}
+
+CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct loader_binary *binary) {
+	CoreRange range = {0, 0};
+	if (subroutine) {
+		for (uint32_t i = 0; i < binary->map->subroutine_map->count; i++) {
+			if (binary->map->subroutine_map->subroutine[i].offset == subroutine->offset) {
+				range.offset = (uintptr_t)(subroutine->offset);
+				uint32_t next = i + 1;
+				if (next < binary->map->subroutine_map->count) {
+					range.length = ((binary->map->subroutine_map->subroutine[next].offset) - range.offset);
+				} else {
+					uint64_t size, address;
+					uint64_t memOffset = SDMCalculateVMSlide(binary);
+					if (SDMBinaryIs64Bit(binary->header)) {
+						size = ((struct loader_section_64 *)(subroutine->section_offset))->position.size;
+						address = ((struct loader_section_64 *)(subroutine->section_offset))->position.addr + memOffset;
+					} else {
+						size = ((struct loader_section_32 *)(subroutine->section_offset))->position.size;
+						address = ((struct loader_section_32 *)(subroutine->section_offset))->position.addr + memOffset;
+					}
+					range.length = ((address+size) - range.offset);
+				}
+				break;
+			}
+		}
+	}
+	return range;
 }
 
 #endif

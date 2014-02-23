@@ -22,6 +22,8 @@ struct loader_diff {
 	uint32_t name_count;
 } ATR_PACK;
 
+bool SDMMakeNewFolderAtPath(char *path, mode_t mode);
+
 struct loader_binary * SDMLoadTarget(char *path, uint8_t type);
 
 void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary *input_two, char *output_path);

@@ -239,4 +239,8 @@ bool SDMBinaryIs64Bit(struct loader_generic_header *header);
 
 void SDMReleaseBinary(struct loader_binary *binary);
 
+struct loader_subroutine* SDMFindSubroutineFromName(struct loader_binary *binary, char *name);
+
+CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct loader_binary *binary);
+
 #endif

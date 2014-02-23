@@ -11,6 +11,39 @@
 
 #include "diff.h"
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/fcntl.h>
+#include <errno.h>
+#include <unistd.h>
+
+char* SDMCreatePathWithName(char *path, char *name) {
+	char *subpath = calloc(1, strlen(path)+strlen(name)+2);
+	sprintf(subpath,"%s/%s",path,name);
+	return subpath;
+}
+
+char* SDMCreateDirectoryAtPath(char *name, char *path) {
+	char *subpath = SDMCreatePathWithName(path, name);
+	bool status = SDMMakeNewFolderAtPath(subpath, 0700);
+	if (status == false) {
+		printf("error creating subpath for dump %s\n",subpath);
+	}
+	return subpath;
+}
+
+bool SDMMakeNewFolderAtPath(char *path, mode_t mode) {
+	bool status = false;
+	struct stat st;
+	int result = stat(path, &st);
+	if (result == -1) {
+		int mkdirResult = mkdir(path, mode);
+		status = ((mkdirResult == 0 || (mkdirResult == -1 && errno == EEXIST)) ? true : false);
+	}
+	else if (result == 0) {
+		status = true;
+	}
+	return status;
+}
 
 struct loader_binary * SDMLoadTarget(char *path, uint8_t type) {
 	printf("%s:\n",path);
@@ -60,11 +93,50 @@ struct loader_diff * SDMGenerateSymbolList(struct loader_binary *input_one, stru
 	return diff;
 }
 
+void SDMWriteSubroutineData(CoreRange range, char *path, char *name) {
+	if (range.length) {
+		char *file_path = SDMCreatePathWithName(path, name);
+		FILE *fd = fopen(file_path, "wb");
+		if (fd) {
+			fwrite(Ptr(range.offset), (unsigned long)range.length, sizeof(char), fd);
+		}
+		fclose(fd);
+		free(file_path);
+	}
+}
+
+void SDMAnalyzeSymbol(struct loader_diff_symbol *symbol, struct loader_binary *input_one, struct loader_binary *input_two, char *output) {
+	bool should_dump = false;
+	
+	struct loader_subroutine *sub_one = SDMFindSubroutineFromName(input_one, symbol->name);
+	
+	struct loader_subroutine *sub_two = SDMFindSubroutineFromName(input_two, symbol->name);
+	
+	CoreRange range_one = SDMSTRangeOfSubroutine(sub_one, input_one);
+	
+	CoreRange range_two = SDMSTRangeOfSubroutine(sub_two, input_two);
+	
+	if (range_one.length == range_two.length) {
+		should_dump = memcmp(Ptr(range_one.offset), Ptr(range_two.offset), (unsigned long)range_one.length);
+	} else {
+		should_dump = true;
+	}
+	
+	if (should_dump) {
+		char *out_path = SDMCreateDirectoryAtPath(symbol->name, output);
+		SDMWriteSubroutineData(range_one, out_path, "one");
+		SDMWriteSubroutineData(range_two, out_path, "two");
+		free(out_path);
+	}
+	
+}
+
 void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary *input_two, char *output_path) {
 	struct loader_diff *diff = SDMGenerateSymbolList(input_one, input_two);
 	for (uint32_t index = 0; index < diff->name_count; index++) {
-		
+		SDMAnalyzeSymbol(&(diff->symbol[index]), input_one, input_two, output_path);
 	}
+	free(diff);
 }
 
 #endif
