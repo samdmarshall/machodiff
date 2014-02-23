@@ -72,6 +72,7 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input) {
 	uint32_t add_counter = 0;
 	for (uint32_t index = 0; index < input->map->subroutine_map->count; index++) {
 		bool has_name = SDMNameListContainsName(diff, &(input->map->subroutine_map->subroutine[index]), input);
+		// SDM: add a check in here for the contents of the subroutine, because names won't work when symbols are stripped.
 		if (has_name == false) {
 			diff->symbol = realloc(diff->symbol, sizeof(struct loader_diff_symbol)*(diff->name_count+1));
 			diff->symbol[diff->name_count].name = input->map->subroutine_map->subroutine[index].name;
