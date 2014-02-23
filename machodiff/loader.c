@@ -26,8 +26,6 @@
 #pragma mark -
 #pragma mark Private Types
 
-#define kStubName "__sdmst_stub_"
-
 #define Intel_x86_32bit_StackSetupLength 0x3
 static uint8_t Intel_x86_32bit_StackSetup[Intel_x86_32bit_StackSetupLength] = {0x55, 0x89, 0xe5};
 
@@ -292,6 +290,7 @@ bool SDMMapObjcClasses64(struct loader_binary * binary) {
 			}
 		}
 	}
+	result = (binary->objc->cls ? true : false);
 	return result;
 }
 
@@ -314,9 +313,9 @@ void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary) 
 		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, sizeof(struct loader_subroutine)*(binary->map->subroutine_map->count+0x1));
 		struct loader_subroutine *subroutine = &(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count]);
 		subroutine->offset = offset + (binary->map->subroutine_map->count ? binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count-0x1].offset : 0x0);
-		sprintf(buffer, "%lx", (subroutine->offset));
+		sprintf(buffer, kSubFormatter, (subroutine->offset));
 		subroutine->name = calloc((5 + strlen(buffer)), sizeof(char));
-		sprintf(subroutine->name, "sub_%lx", (subroutine->offset));
+		sprintf(subroutine->name, kSubName, (subroutine->offset));
 		subroutine->section_offset = k32BitMask;
 		free(buffer);
 		binary->map->subroutine_map->count++;
@@ -414,9 +413,9 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 									struct loader_subroutine *subroutine = (struct loader_subroutine *)calloc(1, sizeof(struct loader_subroutine));
 									subroutine->offset = (uintptr_t)(address+offset);
 									
-									sprintf(buffer, "%lx", subroutine->offset);
+									sprintf(buffer, kSubFormatter, subroutine->offset);
 									subroutine->name = calloc(5 + (strlen(buffer)), sizeof(char));
-									sprintf(subroutine->name, "sub_%lx", subroutine->offset);
+									sprintf(subroutine->name, kSubName, subroutine->offset);
 									
 									subroutine->section_offset = textSectionOffset;
 									
@@ -480,11 +479,11 @@ bool SDMMatchArchToCPU(struct loader_arch_header *arch_header, uint8_t target_ar
 	bool result = false;
 	cpu_type_t type = (cpu_type_t)EndianFix(endian_type, (uint32_t)arch_header->arch.cputype);
 	if ((type & CPU_TYPE_X86) == CPU_TYPE_X86) {
-		cpu_subtype_t subtype = (cpu_subtype_t)EndianFix(endian_type, (uint32_t)arch_header->arch.subtype);
-		if (((subtype & CPU_SUBTYPE_LIB64) == CPU_SUBTYPE_LIB64 && subtype & CPU_SUBTYPE_X86_ALL) == CPU_SUBTYPE_X86_ALL && target_arch == loader_arch_x86_64_type) {
+		uint32_t subtype = (uint32_t)EndianFix(endian_type, (uint32_t)arch_header->arch.subtype);
+		if (((subtype & CPU_SUBTYPE_LIB64) == CPU_SUBTYPE_LIB64) && ((subtype & CPU_SUBTYPE_X86_ALL) == CPU_SUBTYPE_X86_ALL) && target_arch == loader_arch_x86_64_type) {
 			result = true;
 		}
-		else if ((subtype & CPU_SUBTYPE_LIB64) != CPU_SUBTYPE_LIB64 && (subtype & CPU_SUBTYPE_I386_ALL) == CPU_SUBTYPE_I386_ALL && target_arch == loader_arch_i386_type) {
+		else if (((subtype & CPU_SUBTYPE_LIB64) != CPU_SUBTYPE_LIB64) && ((subtype & CPU_SUBTYPE_I386_ALL) == CPU_SUBTYPE_I386_ALL) && target_arch == loader_arch_i386_type) {
 			result = true;
 		}
 	}

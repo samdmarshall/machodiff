@@ -85,7 +85,7 @@ void SDMSTObjc1CreateClassFromSymbol(struct loader_objc_map *objcData, struct lo
 		for (uint32_t i = 0; i < counter; i++) {
 			Pointer definition_pointer = PtrCast(PtrAdd(mem_offset, symbol[i].defintion), Pointer);
 			
-			if (((definition_pointer >= (PtrAdd(PtrHighPointer(mem_offset), objcData->classRange.offset))) && (definition_pointer <= (PtrAdd(PtrHighPointer(mem_offset), ((uint64_t)(objcData->classRange.offset) + (uint64_t)objcData->classRange.length)))))) {
+			if (((Ptr(definition_pointer) >= (PtrAdd(PtrHighPointer(mem_offset), objcData->classRange.offset))) && (Ptr(definition_pointer) <= (PtrAdd(PtrHighPointer(mem_offset), ((uint64_t)(objcData->classRange.offset) + (uint64_t)objcData->classRange.length)))))) {
 				struct loader_objc_1_class *objc1class = (struct loader_objc_1_class *)PtrAdd(memOffset, symbol[i].defintion);
 				struct loader_objc_class *newClass = SDMSTObjc1CreateClassFromClass(objcData, objc1class, memOffset);
 				memcpy(&(objcData->cls[objcData->clsCount]), newClass, sizeof(struct loader_objc_class));
@@ -93,7 +93,7 @@ void SDMSTObjc1CreateClassFromSymbol(struct loader_objc_map *objcData, struct lo
 				objcData->clsCount++;
 				objcData->cls = realloc(objcData->cls, sizeof(struct loader_objc_class)*(objcData->clsCount+1));
 			}
-			if ((definition_pointer >= PtrAdd(PtrHighPointer(mem_offset), objcData->catRange.offset)) && (definition_pointer <= (PtrAdd(PtrHighPointer(mem_offset), (objcData->catRange.offset + objcData->catRange.length))))) {
+			if ((Ptr(definition_pointer) >= PtrAdd(PtrHighPointer(mem_offset), objcData->catRange.offset)) && (Ptr(definition_pointer) <= (PtrAdd(PtrHighPointer(mem_offset), (objcData->catRange.offset + objcData->catRange.length))))) {
 				struct loader_objc_1_category *objc1cat = (struct loader_objc_1_category *)PtrAdd(memOffset,symbol[i].defintion);
 				struct loader_objc_class *newClass = SDMSTObjc1CreateClassFromCategory(objcData, objc1cat, memOffset);
 				memcpy(&(objcData->cls[objcData->clsCount]), newClass, sizeof(struct loader_objc_class));

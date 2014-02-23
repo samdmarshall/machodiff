@@ -35,12 +35,12 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 		uintptr_t offset = 0;
 		
 		char *subroutine_name = input_one->map->subroutine_map->subroutine[index].name;
-		if (strncmp(subroutine_name, "sub_", sizeof(char[4])) == 0) {
+		if (strncmp(subroutine_name, kSubPrefix, sizeof(char[4])) == 0) {
 			unnamed_subroutine = true;
 		}
 		
 		if (unnamed_subroutine) {
-			int has_offset = sscanf(subroutine_name, "sub_%lx",&offset);
+			int has_offset = sscanf(subroutine_name, kSubName, &offset);
 			if (has_offset == 1) {
 				//printf("offset: %lx %lx\n",offset,(input_one->map->subroutine_map->subroutine[index].offset - (SDMBinaryIs64Bit(input_one->header) ? (uint64_t)input_one->header : 0)));
 			}

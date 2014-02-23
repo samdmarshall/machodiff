@@ -19,6 +19,12 @@
 #pragma mark -
 #pragma mark Private Types
 
+#define kStubName "__sdmst_stub_"
+
+#define kSubPrefix "sub_"
+#define kSubFormatter "%lx"
+#define kSubName "sub_%lx"
+
 enum loader_endian_type {
 	loader_endian_invalid_type = 0,
 	loader_endian_little_type,
