@@ -464,6 +464,9 @@ void SDMSTMapMethodsToSubroutines(struct loader_binary *binary) {
 					if ((method->offset & k32BitMask) == ((binary->map->subroutine_map->subroutine[subroutine_index].offset + (SDMBinaryIs64Bit(binary->header) ? -(uint64_t)binary->header : 0x1000)))) {
 						
 						// SDM: perform unique mapping in here
+						// CLASS
+						// +/-
+						// METHOD
 						
 						counter++;
 					}
