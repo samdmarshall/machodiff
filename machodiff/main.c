@@ -132,26 +132,30 @@ int main(int argc, const char * argv[]) {
 	
 	if (kSatisfiedHelp) {
 		usage();
-	} else {
+	}
+	else if (input_args[0] != NULL && input_args[1] != NULL){
 		uint8_t type_1 = SDMIsBinaryFat(input_args[0]);
 		uint8_t type_2 = SDMIsBinaryFat(input_args[1]);
 		if ((type_1 != loader_binary_arch_invalid_type && type_2 != loader_binary_arch_invalid_type) && (type_1 == loader_binary_arch_fat_type || type_2 == loader_binary_arch_fat_type)) {
 			if (kSatisfiedArch) {
 				run_analysis |= ArchOK;
-			} else {
+			}
+			else {
 				printf("Please specify architecture for fat binaries.\n");
 			}
 		}
 		
 		if (kSatisfiedInput) {
 			run_analysis |= InputOK;
-		} else {
+		}
+		else {
 			printf("Insufficient input specified.\n");
 		}
 		
 		if (kSatisfiedOutput) {
 			run_analysis |= OutputOK;
-		} else {
+		}
+		else {
 			printf("No output directory specified.\n");
 		}
 	}
