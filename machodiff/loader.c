@@ -621,6 +621,7 @@ struct loader_binary * SDMLoadBinaryWithPath(char *path, uint8_t target_arch) {
 	struct loader_binary *binary = calloc(1, sizeof(struct loader_binary));
 	bool is_loaded = false;
 	binary->memory_ref = SDMIsBinaryLoaded(path, binary);
+	binary->name = path;
 	if (binary->memory_ref) {
 		is_loaded = true;
 	} else {

@@ -95,13 +95,25 @@ struct loader_diff * SDMGenerateSymbolList(struct loader_binary *input_one, stru
 
 void SDMWriteSubroutineData(CoreRange range, char *path, char *name) {
 	if (range.length) {
-		char *file_path = SDMCreatePathWithName(path, name);
+		char *path_name = calloc(strlen(name)+1, sizeof(char));
+		memcpy(path_name, name, strlen(name));
+		char file_name[1024] = {0}, *pch = strtok(path_name,"/");
+		while (pch != NULL) {
+			memcpy(file_name, pch, strlen(pch));
+			pch = strtok(NULL, "/");
+			if (pch != NULL) {
+				memset(file_name, 0, 1024);
+			}
+		}
+		
+		char *file_path = SDMCreatePathWithName(path, file_name);
 		FILE *fd = fopen(file_path, "wb");
 		if (fd) {
 			fwrite(Ptr(range.offset), (unsigned long)range.length, sizeof(char), fd);
 		}
 		fclose(fd);
 		free(file_path);
+		free(path_name);
 	}
 }
 
@@ -124,8 +136,8 @@ void SDMAnalyzeSymbol(struct loader_diff_symbol *symbol, struct loader_binary *i
 	
 	if (should_dump) {
 		char *out_path = SDMCreateDirectoryAtPath(symbol->name, output);
-		SDMWriteSubroutineData(range_one, out_path, "one");
-		SDMWriteSubroutineData(range_two, out_path, "two");
+		SDMWriteSubroutineData(range_one, out_path, input_one->name);
+		SDMWriteSubroutineData(range_two, out_path, input_two->name);
 		free(out_path);
 	}
 	

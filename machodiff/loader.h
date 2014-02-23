@@ -219,6 +219,7 @@ struct loader_map {
 } ATR_PACK;
 
 struct loader_binary {
+	char *name;
 	uint32_t image_index;
 	bool memory_ref;
 	uint64_t file_offset;
