@@ -29,6 +29,12 @@ enum loader_arch_type {
 	loader_arch_invalid_type = 0,
 	loader_arch_i386_type,
 	loader_arch_x86_64_type,
+	loader_arch_armv6_type,
+	loader_arch_armv7_type,
+	loader_arch_armv7s_type,
+	loader_arch_arm64_type,
+	loader_arch_ppc_type,
+	loader_arch_ppc64_type,
 };
 
 enum loader_binary_arch_type {

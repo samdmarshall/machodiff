@@ -32,6 +32,7 @@ bool SDMNameListContainsName(struct loader_diff *diff, struct loader_subroutine 
 	return found;
 }
 
+// SDM: this will give some variation due to the approximation in unique when parsing dynamically created block_ref symbols in a binary.
 void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input) {
 	uint32_t add_counter = 0;
 	for (uint32_t index = 0; index < input->map->subroutine_map->count; index++) {
@@ -55,8 +56,6 @@ struct loader_diff * SDMGenerateSymbolList(struct loader_binary *input_one, stru
 	SDMDiffAddSymbols(diff, input_one);
 	
 	SDMDiffAddSymbols(diff, input_two);
-	
-	printf("found %i unique symbols\n",diff->name_count);
 	
 	return diff;
 }

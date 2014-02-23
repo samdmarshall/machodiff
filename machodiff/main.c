@@ -54,7 +54,7 @@ void usage() {
 	printf("%s : display help\n",help_arg_def);
 	printf("%s [Mach-O binary] : specify an Mach-O binary as input\n",input_arg_def);
 	printf("%s [directory] : specify an output directory\n",output_arg_def);
-	printf("%s [i386|x86_64] : specify an architecture to target\n",arch_arg_def);
+	printf("%s [i386|x86_64|armv6|armv7|armv7s|arm64|ppc|ppc64] : specify an architecture to target\n",arch_arg_def);
 }
 
 bool SDMMakeNewFolderAtPath(char *path, mode_t mode) {
@@ -95,8 +95,23 @@ int main(int argc, const char * argv[]) {
 					else if (strcmp(optarg, "x86_64") == 0) {
 						options_enabled[OptionsArch] = loader_arch_x86_64_type;
 					}
-					else if (strcmp(optarg, "arm") == 0) {
-						printf("not yet, sorry :(\n");
+					else if (strcmp(optarg, "armv6") == 0) {
+						options_enabled[OptionsArch] = loader_arch_armv6_type;
+					}
+					else if (strcmp(optarg, "armv7") == 0) {
+						options_enabled[OptionsArch] = loader_arch_armv7_type;
+					}
+					else if (strcmp(optarg, "armv7s") == 0) {
+						options_enabled[OptionsArch] = loader_arch_armv7s_type;
+					}
+					else if (strcmp(optarg, "arm64") == 0) {
+						options_enabled[OptionsArch] = loader_arch_arm64_type;
+					}
+					else if (strcmp(optarg, "ppc") == 0) {
+						options_enabled[OptionsArch] = loader_arch_ppc_type;
+					}
+					else if (strcmp(optarg, "ppc64") == 0) {
+						options_enabled[OptionsArch] = loader_arch_ppc64_type;
 					}
 				}
 				break;

@@ -36,6 +36,10 @@ static uint8_t Intel_x86_64bit_StackSetup[Intel_x86_64bit_StackSetupLength] = {0
 #pragma mark -
 #pragma mark Private Function Declaration
 
+#ifndef CPU_SUBTYPE_ARM_V8
+#define CPU_SUBTYPE_ARM_V8		((cpu_subtype_t) 13)
+#endif
+
 #define EndianFix(type, value) ((type == loader_endian_little_type) ? SDMSwapEndian32(value) : value);
 
 struct loader_map *SDMCreateBinaryMap(struct loader_generic_header *header);
@@ -476,6 +480,31 @@ bool SDMMatchArchToCPU(struct loader_arch_header *arch_header, uint8_t target_ar
 			result = true;
 		}
 		if ((subtype & CPU_SUBTYPE_X86_ALL) == CPU_SUBTYPE_X86_ALL && target_arch == loader_arch_x86_64_type) {
+			result = true;
+		}
+	}
+	else if ((type & CPU_TYPE_ARM) == CPU_TYPE_ARM) {
+		cpu_subtype_t subtype = EndianFix(endian_type, arch_header->arch.subtype);
+		if ((subtype & CPU_SUBTYPE_ARM_V6) == CPU_SUBTYPE_ARM_V6 && target_arch == loader_arch_armv6_type) {
+			result = true;
+		}
+		if ((subtype & CPU_SUBTYPE_ARM_V7) == CPU_SUBTYPE_ARM_V7 && target_arch == loader_arch_armv7_type) {
+			result = true;
+		}
+		if ((subtype & CPU_SUBTYPE_ARM_V7S) == CPU_SUBTYPE_ARM_V7S && target_arch == loader_arch_armv7s_type) {
+			result = true;
+		}
+		if ((subtype & CPU_SUBTYPE_ARM_V8) == CPU_SUBTYPE_ARM_V8 && target_arch == loader_arch_arm64_type) {
+			result = true;
+		}
+	}
+	else if ((type & CPU_TYPE_POWERPC) == CPU_TYPE_POWERPC) {
+		if (target_arch == loader_arch_ppc_type) {
+			result = true;
+		}
+	}
+	else if ((type & CPU_TYPE_POWERPC64) == CPU_TYPE_POWERPC64) {
+		if (target_arch == loader_arch_ppc64_type) {
 			result = true;
 		}
 	}
