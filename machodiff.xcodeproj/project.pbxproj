@@ -248,7 +248,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WARNING_CFLAGS = "-Wall";
+				WARNING_CFLAGS = "";
 			};
 			name = Debug;
 		};
@@ -266,7 +266,7 @@
 				GCC_WARN_PEDANTIC = YES;
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WARNING_CFLAGS = "-Wall";
+				WARNING_CFLAGS = "";
 			};
 			name = Release;
 		};
