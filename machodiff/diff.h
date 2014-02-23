@@ -11,10 +11,16 @@
 
 #include "loader.h"
 
-struct loader_diff_symbol {
+struct loader_diff_symbol_imp {
 	char *name;
 	uintptr_t offset;
 	struct loader_binary *binary;
+} ATR_PACK;
+
+struct loader_diff_symbol {
+	char *name;
+	struct loader_diff_symbol_imp input_one;
+	struct loader_diff_symbol_imp input_two;
 } ATR_PACK;
 
 struct loader_diff {

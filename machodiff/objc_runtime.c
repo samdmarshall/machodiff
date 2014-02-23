@@ -77,13 +77,15 @@ struct loader_objc_class* SDMSTObjc1CreateClassFromClass(struct loader_objc_map 
 	return newClass;
 }
 
-void SDMSTObjc1CreateClassFromSymbol(struct loader_objc_map *objcData, struct loader_objc_1_symtab *symtab) {
+void SDMSTObjc1CreateClassFromSymbol(struct loader_objc_map *objcData, struct loader_objc_1_symtab *symtab, uint64_t mem_offset) {
 	if (symtab) {
+		uint64_t memOffset = mem_offset;
 		uint32_t counter = symtab->catCount + symtab->classCount;
 		struct loader_objc_1_symtab_definition *symbol = (struct loader_objc_1_symtab_definition *)PtrAdd(symtab, sizeof(struct loader_objc_1_symtab));
 		for (uint32_t i = 0; i < counter; i++) {
-			uint64_t memOffset = 0;
-			if (((PtrAdd(memOffset, symbol[i].defintion) >= (PtrAdd(PtrHighPointer(memOffset), objcData->classRange.offset))) && (PtrAdd(memOffset, symbol[i].defintion) <= (PtrAdd(PtrHighPointer(memOffset), ((uint64_t)(objcData->classRange.offset) + (uint64_t)objcData->classRange.length)))))) {
+			Pointer definition_pointer = PtrCast(PtrAdd(mem_offset, symbol[i].defintion), Pointer);
+			
+			if (((definition_pointer >= (PtrAdd(PtrHighPointer(mem_offset), objcData->classRange.offset))) && (definition_pointer <= (PtrAdd(PtrHighPointer(mem_offset), ((uint64_t)(objcData->classRange.offset) + (uint64_t)objcData->classRange.length)))))) {
 				struct loader_objc_1_class *objc1class = (struct loader_objc_1_class *)PtrAdd(memOffset, symbol[i].defintion);
 				struct loader_objc_class *newClass = SDMSTObjc1CreateClassFromClass(objcData, objc1class, memOffset);
 				memcpy(&(objcData->cls[objcData->clsCount]), newClass, sizeof(struct loader_objc_class));
@@ -91,7 +93,7 @@ void SDMSTObjc1CreateClassFromSymbol(struct loader_objc_map *objcData, struct lo
 				objcData->clsCount++;
 				objcData->cls = realloc(objcData->cls, sizeof(struct loader_objc_class)*(objcData->clsCount+1));
 			}
-			if ((PtrAdd(memOffset, symbol[i].defintion) >= PtrAdd(PtrHighPointer(memOffset), objcData->catRange.offset)) && (PtrAdd(memOffset, symbol[i].defintion) <= (PtrAdd(PtrHighPointer(memOffset), (objcData->catRange.offset + objcData->catRange.length))))) {
+			if ((definition_pointer >= PtrAdd(PtrHighPointer(mem_offset), objcData->catRange.offset)) && (definition_pointer <= (PtrAdd(PtrHighPointer(mem_offset), (objcData->catRange.offset + objcData->catRange.length))))) {
 				struct loader_objc_1_category *objc1cat = (struct loader_objc_1_category *)PtrAdd(memOffset,symbol[i].defintion);
 				struct loader_objc_class *newClass = SDMSTObjc1CreateClassFromCategory(objcData, objc1cat, memOffset);
 				memcpy(&(objcData->cls[objcData->clsCount]), newClass, sizeof(struct loader_objc_class));

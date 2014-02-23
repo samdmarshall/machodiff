@@ -15,6 +15,7 @@
 #include <sys/fcntl.h>
 #include <errno.h>
 #include <unistd.h>
+#include "compare.h"
 
 #define kBufferSize 1024
 
@@ -22,7 +23,6 @@ char* SDMCreatePathWithName(char *path, char *name);
 char* SDMCreateDirectoryAtPath(char *name, char *path);
 
 bool SDMNameListContainsName(struct loader_diff *diff, struct loader_subroutine *subroutine, struct loader_binary *input);
-void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input);
 struct loader_diff * SDMGenerateSymbolList(struct loader_binary *input_one, struct loader_binary *input_two);
 void SDMWriteSubroutineData(CoreRange range, char *path, char *name, char *append);
 void SDMAnalyzeSymbol(struct loader_diff_symbol *symbol, struct loader_binary *input_one, struct loader_binary *input_two, char *output);
@@ -63,44 +63,12 @@ struct loader_binary * SDMLoadTarget(char *path, uint8_t type) {
 	return input;
 }
 
-bool SDMNameListContainsName(struct loader_diff *diff, struct loader_subroutine *subroutine, struct loader_binary *input) {
-	bool found = false;
-	for (uint32_t index = 0; index < diff->name_count; index++) {
-		if (strcmp(subroutine->name, diff->symbol[index].name) == 0) {
-			found = (input == diff->symbol[index].binary ? (diff->symbol[index].offset == subroutine->offset) : true);
-			if (found) {
-				break;
-			}
-		}
-	}
-	return found;
-}
-
-// SDM: this will give some variation due to the approximation in unique when parsing dynamically created block_ref symbols in a binary.
-void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input) {
-	uint32_t add_counter = 0;
-	for (uint32_t index = 0; index < input->map->subroutine_map->count; index++) {
-		bool has_name = SDMNameListContainsName(diff, &(input->map->subroutine_map->subroutine[index]), input);
-		// SDM: add a check in here for the contents of the subroutine, because names won't work when symbols are stripped.
-		if (has_name == false) {
-			diff->symbol = realloc(diff->symbol, sizeof(struct loader_diff_symbol)*(diff->name_count+1));
-			diff->symbol[diff->name_count].name = input->map->subroutine_map->subroutine[index].name;
-			diff->symbol[diff->name_count].binary = input;
-			diff->symbol[diff->name_count].offset = input->map->subroutine_map->subroutine[index].offset;
-			diff->name_count++;
-			add_counter++;
-		}
-	}
-}
-
 struct loader_diff * SDMGenerateSymbolList(struct loader_binary *input_one, struct loader_binary *input_two) {
 	struct loader_diff *diff = calloc(1, sizeof(struct loader_diff));
 	diff->symbol = calloc(1, sizeof(struct loader_diff_symbol));
 	diff->name_count = 0;
 	
-	SDMDiffAddSymbols(diff, input_one);
-	
-	SDMDiffAddSymbols(diff, input_two);
+	SDMDiffAddSymbols(diff, input_one, input_two);
 	
 	return diff;
 }
@@ -131,7 +99,6 @@ void SDMWriteSubroutineData(CoreRange range, char *path, char *name, char *appen
 }
 
 void SDMAnalyzeSymbol(struct loader_diff_symbol *symbol, struct loader_binary *input_one, struct loader_binary *input_two, char *output) {
-	bool should_dump = false;
 	
 	struct loader_subroutine *sub_one = SDMFindSubroutineFromName(input_one, symbol->name);
 	
@@ -141,11 +108,7 @@ void SDMAnalyzeSymbol(struct loader_diff_symbol *symbol, struct loader_binary *i
 	
 	CoreRange range_two = SDMSTRangeOfSubroutine(sub_two, input_two);
 	
-	if (range_one.length == range_two.length) {
-		should_dump = memcmp(Ptr(range_one.offset), Ptr(range_two.offset), (unsigned long)range_one.length);
-	} else {
-		should_dump = true;
-	}
+	bool should_dump = SDMCompareSymbol(symbol, range_one, input_one, range_two, input_two);
 	
 	if (should_dump) {
 		char *out_path = SDMCreateDirectoryAtPath(symbol->name, output);

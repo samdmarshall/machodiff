@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		22345EFA18B95AE100FC106D /* diff.c in Sources */ = {isa = PBXBuildFile; fileRef = 22345EF918B95AE100FC106D /* diff.c */; };
 		22345EFC18B95EC300FC106D /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22345EFB18B95EC200FC106D /* libobjc.dylib */; };
+		2234603818BA822000FC106D /* compare.c in Sources */ = {isa = PBXBuildFile; fileRef = 2234603718BA822000FC106D /* compare.c */; };
 		22B7479718B8F5310019BC58 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B7479618B8F5310019BC58 /* main.c */; };
 		22B747C018B903710019BC58 /* loader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747B818B903710019BC58 /* loader.c */; };
 		22B747C118B903710019BC58 /* objc_lexer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747BA18B903710019BC58 /* objc_lexer.c */; };
@@ -19,6 +20,11 @@
 		22345EF818B95AD100FC106D /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
 		22345EF918B95AE100FC106D /* diff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = diff.c; sourceTree = "<group>"; };
 		22345EFB18B95EC200FC106D /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
+		2234603618BA821800FC106D /* compare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = compare.h; sourceTree = "<group>"; };
+		2234603718BA822000FC106D /* compare.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compare.c; sourceTree = "<group>"; };
+		2234603918BA838B00FC106D /* libdispatch.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdispatch.dylib; path = usr/lib/system/libdispatch.dylib; sourceTree = SDKROOT; };
+		2234603B18BA839C00FC106D /* libdispatch.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdispatch.dylib; path = usr/lib/system/introspection/libdispatch.dylib; sourceTree = SDKROOT; };
+		2234603D18BA843C00FC106D /* libSystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.dylib; path = usr/lib/libSystem.dylib; sourceTree = SDKROOT; };
 		22B7479018B8F5310019BC58 /* machodiff */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = machodiff; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B7479318B8F5310019BC58 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		22B7479618B8F5310019BC58 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -66,6 +72,9 @@
 		22B7479218B8F5310019BC58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2234603D18BA843C00FC106D /* libSystem.dylib */,
+				2234603B18BA839C00FC106D /* libdispatch.dylib */,
+				2234603918BA838B00FC106D /* libdispatch.dylib */,
 				22345EFB18B95EC200FC106D /* libobjc.dylib */,
 				22B7479318B8F5310019BC58 /* CoreFoundation.framework */,
 			);
@@ -96,6 +105,8 @@
 				22B747BA18B903710019BC58 /* objc_lexer.c */,
 				22345EF818B95AD100FC106D /* diff.h */,
 				22345EF918B95AE100FC106D /* diff.c */,
+				2234603618BA821800FC106D /* compare.h */,
+				2234603718BA822000FC106D /* compare.c */,
 			);
 			name = "mach-o";
 			sourceTree = "<group>";
@@ -153,6 +164,7 @@
 				22B747C118B903710019BC58 /* objc_lexer.c in Sources */,
 				22B747C218B903710019BC58 /* objc_runtime.c in Sources */,
 				22B747C018B903710019BC58 /* loader.c in Sources */,
+				2234603818BA822000FC106D /* compare.c in Sources */,
 				22345EFA18B95AE100FC106D /* diff.c in Sources */,
 				22B7479718B8F5310019BC58 /* main.c in Sources */,
 			);
@@ -222,6 +234,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -245,6 +258,11 @@
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_PEDANTIC = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib/system/introspection",
+				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -264,6 +282,11 @@
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_PEDANTIC = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+					"$(SDKROOT)/usr/lib/system/introspection",
+				);
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";

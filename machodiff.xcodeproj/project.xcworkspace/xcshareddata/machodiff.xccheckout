@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>16F56ECF-115A-4649-AC77-3963319C2E53</string>
+	<key>IDESourceControlProjectName</key>
+	<string>machodiff</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>8AB6682A-D2A6-4B27-B8DF-CE521664C232</key>
+		<string>ssh://github.com/samdmarshall/machodiff.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>machodiff.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>8AB6682A-D2A6-4B27-B8DF-CE521664C232</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/samdmarshall/machodiff.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>8AB6682A-D2A6-4B27-B8DF-CE521664C232</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8AB6682A-D2A6-4B27-B8DF-CE521664C232</string>
+			<key>IDESourceControlWCCName</key>
+			<string>machodiff</string>
+		</dict>
+	</array>
+</dict>
+</plist>
