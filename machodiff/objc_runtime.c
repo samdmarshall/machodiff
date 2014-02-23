@@ -36,9 +36,11 @@ struct loader_objc_class* SDMSTObjc1CreateClassFromClass(struct loader_objc_map 
 			if (cls->superClass != cls->isa && isValidClass) {
 				struct loader_objc_1_class *objc1class = (struct loader_objc_1_class *)PtrAdd(offset, cls->superClass);
 				newClass->superCls = SDMSTObjc1CreateClassFromClass(objcData, objc1class, offset);
-			} else if (isValidClass) {
+			}
+			else if (isValidClass) {
 				newClass->superCls = (struct loader_objc_class *)PtrAdd(offset, cls->superClass);
-			} else {
+			}
+			else {
 				newClass->superCls = 0;
 			}
 			newClass->className = Ptr(PtrAdd(offset, cls->name));
@@ -93,6 +95,7 @@ void SDMSTObjc1CreateClassFromSymbol(struct loader_objc_map *objcData, struct lo
 				objcData->clsCount++;
 				objcData->cls = realloc(objcData->cls, sizeof(struct loader_objc_class)*(objcData->clsCount+1));
 			}
+			
 			if ((Ptr(definition_pointer) >= PtrAdd(PtrHighPointer(mem_offset), objcData->catRange.offset)) && (Ptr(definition_pointer) <= (PtrAdd(PtrHighPointer(mem_offset), (objcData->catRange.offset + objcData->catRange.length))))) {
 				struct loader_objc_1_category *objc1cat = (struct loader_objc_1_category *)PtrAdd(memOffset,symbol[i].defintion);
 				struct loader_objc_class *newClass = SDMSTObjc1CreateClassFromCategory(objcData, objc1cat, memOffset);
@@ -101,6 +104,7 @@ void SDMSTObjc1CreateClassFromSymbol(struct loader_objc_map *objcData, struct lo
 				objcData->clsCount++;
 				objcData->cls = realloc(objcData->cls, sizeof(struct loader_objc_class)*(objcData->clsCount+1));
 			}
+			
 			symbol = (struct loader_objc_1_symtab_definition *)PtrAdd(symbol, sizeof(struct loader_objc_1_symtab_definition));
 		}
 	}

@@ -58,7 +58,8 @@ bool SDMCompareSymbol(struct loader_diff_symbol *symbol, CoreRange range_one, st
 	
 	if (range_one.length == range_two.length) {
 		status = memcmp(ptr_subroutine_one, ptr_subroutine_two, (unsigned long)range_one.length);
-	} else {
+	}
+	else {
 		status = true;
 	}
 	

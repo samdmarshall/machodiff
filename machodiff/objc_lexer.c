@@ -135,7 +135,8 @@ char* SDMSTObjcCreateMethodDescription(struct loader_objc_lexer_type *type, char
 	uint32_t nameLength = 1;
 	if (name) {
 		nameLength += strlen(name);
-	} else {
+	}
+	else {
 		name = "";
 	}
 	char *description = calloc(1, sizeof(char)*(nameLength+3+strlen(type->token[0].type)));
@@ -165,7 +166,8 @@ char* SDMSTObjcCreateMethodDescription(struct loader_objc_lexer_type *type, char
 			offset = offset + (uint32_t)methodArgRange.length + 1;
 			counter++;
 		}
-	} else {
+	}
+	else {
 		sprintf(description,"(%s)%s",type->token[0].type,name);
 	}
 	description = realloc(description, sizeof(char)*(strlen(description)+2));
@@ -306,7 +308,8 @@ uint32_t SDMSTParseToken(struct loader_objc_lexer_type *decode, char *type, uint
 					if (strncmp(objectProtocolTest, "<", 1) == 0 && strncmp(objectProtocolTest+(uint32_t)(nameRange.length-1), ">", 1) == 0) {
 						sprintf(&(name[0]),"id");
 						memcpy(&(name[2]), &(type[nameRange.offset]), sizeof(char)*nameRange.length);
-					} else {
+					}
+					else {
 						memcpy(name, &(type[nameRange.offset]), sizeof(char)*nameRange.length);
 						sprintf(name,"%s*",name);
 					}
@@ -346,12 +349,14 @@ uint32_t SDMSTParseToken(struct loader_objc_lexer_type *decode, char *type, uint
 				break;
 			};
 		}
-	} else {
+	}
+	else {
 		uint64_t stackSize;
 		CoreRange stackRange = SDMSTObjcStackSize(type, offset, &stackSize);
 		if (stackRange.length) {
 			parsedLength = (uint32_t)stackRange.length;
-		} else {
+		}
+		else {
 			if (strncmp(&(type[offset]), kObjcNameTokenStart, sizeof(char)) == 0) {
 				CoreRange nameRange = SDMSTObjcGetTokenRangeFromOffset(type, offset+1, kObjcNameTokenEnd);
 				char *name = calloc(1, sizeof(char)*((uint32_t)nameRange.length+256));
@@ -458,10 +463,12 @@ uint64_t SDMSTObjcDecodeSizeOfType(struct loader_objc_lexer_token *token) {
 			for (uint32_t i = 0; i < token->childrenCount; i++) {
 				size += SDMSTObjcDecodeSizeOfType(&(token->children[i]));
 			}
-		} else {
+		}
+		else {
 			if (token->pointerCount) {
 				size += sizeof(Pointer);
-			} else {
+			}
+			else {
 				switch (token->typeClass) {
 					case ObjcCharEncoding: {
 						size += sizeof(char);

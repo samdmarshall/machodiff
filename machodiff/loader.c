@@ -73,7 +73,8 @@ uint64_t SDMCalculateVMSlide(struct loader_binary * binary) {
 	uint64_t slide = k64BitMask;
 	if (binary->image_index < _dyld_image_count()) {
 		slide = (uint64_t)_dyld_get_image_vmaddr_slide(binary->image_index);
-	} else {
+	}
+	else {
 		slide = 0;
 	}
 	return slide;
@@ -155,7 +156,8 @@ uint64_t SDMComputeFslide(struct loader_segment_map * segment_map, bool is64Bit)
 		if (link_segment != NULL && text_segment != NULL) {
 			fslide = (uint64_t)(link_segment->data.vm_position.addr - text_segment->data.vm_position.addr) - link_segment->data.file_position.addr;
 		}
-	} else {
+	}
+	else {
 		struct loader_segment_32 *text_segment = PtrCast(segment_map->text, struct loader_segment_32 *);
 		struct loader_segment_32 *link_segment = PtrCast(segment_map->link, struct loader_segment_32 *);
 		if (link_segment != NULL && text_segment != NULL) {
@@ -180,7 +182,8 @@ void SDMGenerateSymbols(struct loader_binary * binary) {
 				if (is64Bit) {
 					uint64_t *n_value = (uint64_t *)PtrAdd(entry, sizeof(struct loader_generic_nlist));
 					symbol_address = (uintptr_t)*n_value;
-				} else {
+				}
+				else {
 					uint32_t *n_value = (uint32_t *)PtrAdd(entry, sizeof(struct loader_generic_nlist));
 					symbol_address = (uintptr_t)*n_value;
 				}
@@ -192,7 +195,8 @@ void SDMGenerateSymbols(struct loader_binary * binary) {
 					if (entry->n_un.n_strx && (entry->n_un.n_strx < symtab_cmd->strsize)) {
 						symbol->symbol_name = PtrAdd(strTable, entry->n_un.n_strx);
 						symbol->stub = false;
-					} else {
+					}
+					else {
 						symbol->symbol_name = calloc(1 + strlen(kStubName) + ((binary->map->symbol_table->count==0) ? 1 : (uint32_t)log10(binary->map->symbol_table->count) + 0x1), sizeof(char));
 						sprintf(symbol->symbol_name, "%s%llu", kStubName, binary->map->symbol_table->count);
 						symbol->stub = true;
@@ -218,7 +222,7 @@ bool SDMMapObjcClasses32(struct loader_binary * binary) {
 		struct loader_objc_module_raw *module = NULL;
 		uint64_t mem_offset = SDMCalculateVMSlide(binary);
 		if (binary->memory_ref == false) {
-			mem_offset = (uint64_t)binary->header - 0x1000;;
+			mem_offset = (uint64_t)binary->header - 0x1000;
 		}
 		
 		for (uint32_t index = 0; index < section_count; index++) {
@@ -303,7 +307,8 @@ void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary) 
 		if (bitCount < 0x40) {
 			offset |= (slice << bitCount);
 			bitCount += 0x7;
-		} else {
+		}
+		else {
 			break;
 		}
 	} while ((*pointer++ & 0x80) != 0);
@@ -332,7 +337,8 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 	if (SDMBinaryIs64Bit(binary->header)) {
 		textSections = ((struct loader_segment_64 *)(binary->map->segment_map->text))->info.nsects;
 		pageZero = ((struct loader_segment_64 *)(binary->map->segment_map->text))->data.vm_position.addr;
-	} else {
+	}
+	else {
 		textSections = ((struct loader_segment_32 *)(binary->map->segment_map->text))->info.nsects;
 		pageZero = ((struct loader_segment_32 *)(binary->map->segment_map->text))->data.vm_position.addr;
 	}
@@ -341,7 +347,8 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 	uintptr_t textSectionOffset = (uintptr_t)(binary->map->segment_map->text);
 	if (SDMBinaryIs64Bit(binary->header)) {
 		textSectionOffset += sizeof(struct loader_segment_64);
-	} else {
+	}
+	else {
 		textSectionOffset += sizeof(struct loader_segment_32);
 	}
 	if (binary->map->function_start) {
@@ -349,7 +356,8 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 		uint64_t memOffset;
 		if (binary->memory_ref) {
 			memOffset = SDMCalculateVMSlide(binary);
-		} else {
+		}
+		else {
 			memOffset = (uint64_t)(binary->header) - binaryOffset;
 		}
 		uintptr_t functionOffset = (uintptr_t)(binary->map->function_start->position.addr+memOffset+pageZero);
@@ -363,14 +371,16 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 			uint64_t memOffset;
 			if (binary->memory_ref) {
 				memOffset = (uint64_t)_dyld_get_image_vmaddr_slide(binary->image_index);
-			} else {
+			}
+			else {
 				memOffset = (uint64_t)(binary->header) - binaryOffset;
 			}
 			if (SDMBinaryIs64Bit(binary->header)) {
 				flags = ((struct loader_section_64 *)(textSectionOffset))->info.flags;
 				size = ((struct loader_section_64 *)(textSectionOffset))->position.size;
 				address = (uint64_t)PtrAdd(memOffset, ((struct section_64 *)textSectionOffset)->addr);
-			} else {
+			}
+			else {
 				flags = ((struct loader_section_32 *)(textSectionOffset))->info.flags;
 				size = ((struct loader_section_32 *)(textSectionOffset))->position.size;
 				address = (uint64_t)PtrAdd(memOffset, ((struct section *)textSectionOffset)->addr);
@@ -392,7 +402,8 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 				uint64_t loaded;
 				if (binary->memory_ref) {
 					loaded = (uint64_t)dladdr((void*)(address), &info);
-				} else {
+				}
+				else {
 					loaded = address;
 				}
 				if (loaded) {
@@ -404,7 +415,8 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 								uint32_t result = 0;
 								if (isIntel64bitArch) {
 									result = (uint32_t)memcmp((void*)(address+offset), &(Intel_x86_64bit_StackSetup[0]), Intel_x86_64bit_StackSetupLength);
-								} else {
+								}
+								else {
 									result = (uint32_t)memcmp((void*)(address+offset), &(Intel_x86_32bit_StackSetup[0]), Intel_x86_32bit_StackSetupLength);
 								}
 								if (!result) {
@@ -428,7 +440,8 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 							}
 						}
 					}
-				} else {
+				}
+				else {
 					printf("Image for address (%08llx) is not loaded\n",address);
 				}
 			}
@@ -624,7 +637,8 @@ uint8_t SDMIsBinaryFat(char *path) {
 	bool in_memory = SDMIsBinaryLoaded(path, binary);
 	if (in_memory) {
 		fat = loader_binary_arch_slim_type;
-	} else {
+	}
+	else {
 		struct stat fs;
 		int status = stat(path, &fs);
 		if (status == 0) {
@@ -634,7 +648,8 @@ uint8_t SDMIsBinaryFat(char *path) {
 				read(fd, &header, sizeof(uint32_t));
 				if (header == FAT_CIGAM || header == FAT_MAGIC) {
 					fat = loader_binary_arch_fat_type;
-				} else {
+				}
+				else {
 					fat = loader_binary_arch_slim_type;
 				}
 			}
@@ -658,7 +673,8 @@ struct loader_binary * SDMLoadBinaryWithPath(char *path, uint8_t target_arch) {
 	binary->name = path;
 	if (binary->memory_ref) {
 		is_loaded = true;
-	} else {
+	}
+	else {
 		binary->image_index = k32BitMask;
 		is_loaded = SDMLoadBinaryFromFile(binary, path, target_arch);
 	}
@@ -672,13 +688,15 @@ struct loader_binary * SDMLoadBinaryWithPath(char *path, uint8_t target_arch) {
 		bool is64Bit = SDMBinaryIs64Bit(binary->header);
 		if (is64Bit) {
 			loadedObjc = SDMMapObjcClasses64(binary);
-		} else {
+		}
+		else {
 			loadedObjc = SDMMapObjcClasses32(binary);
 		}
 		if (loadedObjc) {
 			SDMSTMapMethodsToSubroutines(binary);
 		}
-	} else {
+	}
+	else {
 		SDMReleaseBinary(binary);
 		binary = NULL;
 	}
@@ -715,13 +733,15 @@ CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct lo
 				uint32_t next = i + 1;
 				if (next < binary->map->subroutine_map->count) {
 					range.length = ((binary->map->subroutine_map->subroutine[next].offset) - range.offset);
-				} else {
+				}
+				else {
 					uint64_t size, address;
 					uint64_t memOffset = SDMCalculateVMSlide(binary);
 					if (SDMBinaryIs64Bit(binary->header)) {
 						size = ((struct loader_section_64 *)(subroutine->section_offset))->position.size;
 						address = ((struct loader_section_64 *)(subroutine->section_offset))->position.addr + memOffset;
-					} else {
+					}
+					else {
 						size = ((struct loader_section_32 *)(subroutine->section_offset))->position.size;
 						address = ((struct loader_section_32 *)(subroutine->section_offset))->position.addr + memOffset;
 					}
