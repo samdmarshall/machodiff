@@ -1,0 +1,714 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		22F25AF718BB901700CE8160 /* AArch64BaseInfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AArch64BaseInfo.c; sourceTree = "<group>"; };
+		22F25AF818BB901700CE8160 /* AArch64BaseInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AArch64BaseInfo.h; sourceTree = "<group>"; };
+		22F25AF918BB901700CE8160 /* AArch64Disassembler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AArch64Disassembler.c; sourceTree = "<group>"; };
+		22F25AFA18BB901700CE8160 /* AArch64Disassembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AArch64Disassembler.h; sourceTree = "<group>"; };
+		22F25AFB18BB901700CE8160 /* AArch64GenAsmWriter.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = AArch64GenAsmWriter.inc; sourceTree = "<group>"; };
+		22F25AFC18BB901700CE8160 /* AArch64GenDisassemblerTables.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = AArch64GenDisassemblerTables.inc; sourceTree = "<group>"; };
+		22F25AFD18BB901700CE8160 /* AArch64GenInstrInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = AArch64GenInstrInfo.inc; sourceTree = "<group>"; };
+		22F25AFE18BB901700CE8160 /* AArch64GenRegisterInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = AArch64GenRegisterInfo.inc; sourceTree = "<group>"; };
+		22F25AFF18BB901700CE8160 /* AArch64GenSubtargetInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = AArch64GenSubtargetInfo.inc; sourceTree = "<group>"; };
+		22F25B0018BB901700CE8160 /* AArch64InstPrinter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AArch64InstPrinter.c; sourceTree = "<group>"; };
+		22F25B0118BB901700CE8160 /* AArch64InstPrinter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AArch64InstPrinter.h; sourceTree = "<group>"; };
+		22F25B0218BB901700CE8160 /* AArch64Mapping.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AArch64Mapping.c; sourceTree = "<group>"; };
+		22F25B0318BB901700CE8160 /* AArch64Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AArch64Mapping.h; sourceTree = "<group>"; };
+		22F25B0418BB901700CE8160 /* AArch64Module.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AArch64Module.c; sourceTree = "<group>"; };
+		22F25B0618BB901700CE8160 /* ARMAddressingModes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMAddressingModes.h; sourceTree = "<group>"; };
+		22F25B0718BB901700CE8160 /* ARMBaseInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMBaseInfo.h; sourceTree = "<group>"; };
+		22F25B0818BB901700CE8160 /* ARMDisassembler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ARMDisassembler.c; sourceTree = "<group>"; };
+		22F25B0918BB901700CE8160 /* ARMDisassembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMDisassembler.h; sourceTree = "<group>"; };
+		22F25B0A18BB901700CE8160 /* ARMGenAsmWriter.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = ARMGenAsmWriter.inc; sourceTree = "<group>"; };
+		22F25B0B18BB901700CE8160 /* ARMGenDisassemblerTables.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = ARMGenDisassemblerTables.inc; sourceTree = "<group>"; };
+		22F25B0C18BB901700CE8160 /* ARMGenInstrInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = ARMGenInstrInfo.inc; sourceTree = "<group>"; };
+		22F25B0D18BB901700CE8160 /* ARMGenRegisterInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = ARMGenRegisterInfo.inc; sourceTree = "<group>"; };
+		22F25B0E18BB901700CE8160 /* ARMGenSubtargetInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = ARMGenSubtargetInfo.inc; sourceTree = "<group>"; };
+		22F25B0F18BB901700CE8160 /* ARMInstPrinter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ARMInstPrinter.c; sourceTree = "<group>"; };
+		22F25B1018BB901700CE8160 /* ARMInstPrinter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMInstPrinter.h; sourceTree = "<group>"; };
+		22F25B1118BB901700CE8160 /* ARMMapping.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ARMMapping.c; sourceTree = "<group>"; };
+		22F25B1218BB901700CE8160 /* ARMMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMMapping.h; sourceTree = "<group>"; };
+		22F25B1318BB901700CE8160 /* ARMModule.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ARMModule.c; sourceTree = "<group>"; };
+		22F25B1518BB901700CE8160 /* MipsDisassembler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MipsDisassembler.c; sourceTree = "<group>"; };
+		22F25B1618BB901700CE8160 /* MipsDisassembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MipsDisassembler.h; sourceTree = "<group>"; };
+		22F25B1718BB901700CE8160 /* MipsGenAsmWriter.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = MipsGenAsmWriter.inc; sourceTree = "<group>"; };
+		22F25B1818BB901700CE8160 /* MipsGenDisassemblerTables.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = MipsGenDisassemblerTables.inc; sourceTree = "<group>"; };
+		22F25B1918BB901700CE8160 /* MipsGenInstrInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = MipsGenInstrInfo.inc; sourceTree = "<group>"; };
+		22F25B1A18BB901700CE8160 /* MipsGenRegisterInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = MipsGenRegisterInfo.inc; sourceTree = "<group>"; };
+		22F25B1B18BB901700CE8160 /* MipsGenSubtargetInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = MipsGenSubtargetInfo.inc; sourceTree = "<group>"; };
+		22F25B1C18BB901700CE8160 /* MipsInstPrinter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MipsInstPrinter.c; sourceTree = "<group>"; };
+		22F25B1D18BB901700CE8160 /* MipsInstPrinter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MipsInstPrinter.h; sourceTree = "<group>"; };
+		22F25B1E18BB901700CE8160 /* MipsMapping.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MipsMapping.c; sourceTree = "<group>"; };
+		22F25B1F18BB901700CE8160 /* MipsMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MipsMapping.h; sourceTree = "<group>"; };
+		22F25B2018BB901700CE8160 /* MipsModule.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MipsModule.c; sourceTree = "<group>"; };
+		22F25B2218BB901700CE8160 /* PPCDisassembler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = PPCDisassembler.c; sourceTree = "<group>"; };
+		22F25B2318BB901700CE8160 /* PPCDisassembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPCDisassembler.h; sourceTree = "<group>"; };
+		22F25B2418BB901700CE8160 /* PPCGenAsmWriter.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = PPCGenAsmWriter.inc; sourceTree = "<group>"; };
+		22F25B2518BB901700CE8160 /* PPCGenDisassemblerTables.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = PPCGenDisassemblerTables.inc; sourceTree = "<group>"; };
+		22F25B2618BB901700CE8160 /* PPCGenInstrInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = PPCGenInstrInfo.inc; sourceTree = "<group>"; };
+		22F25B2718BB901700CE8160 /* PPCGenRegisterInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = PPCGenRegisterInfo.inc; sourceTree = "<group>"; };
+		22F25B2818BB901700CE8160 /* PPCGenSubtargetInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = PPCGenSubtargetInfo.inc; sourceTree = "<group>"; };
+		22F25B2918BB901700CE8160 /* PPCInstPrinter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = PPCInstPrinter.c; sourceTree = "<group>"; };
+		22F25B2A18BB901700CE8160 /* PPCInstPrinter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPCInstPrinter.h; sourceTree = "<group>"; };
+		22F25B2B18BB901700CE8160 /* PPCMapping.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = PPCMapping.c; sourceTree = "<group>"; };
+		22F25B2C18BB901700CE8160 /* PPCMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPCMapping.h; sourceTree = "<group>"; };
+		22F25B2D18BB901700CE8160 /* PPCModule.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = PPCModule.c; sourceTree = "<group>"; };
+		22F25B2E18BB901700CE8160 /* PPCPredicates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPCPredicates.h; sourceTree = "<group>"; };
+		22F25B3018BB901700CE8160 /* X86ATTInstPrinter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = X86ATTInstPrinter.c; sourceTree = "<group>"; };
+		22F25B3118BB901700CE8160 /* X86Disassembler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = X86Disassembler.c; sourceTree = "<group>"; };
+		22F25B3218BB901700CE8160 /* X86Disassembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X86Disassembler.h; sourceTree = "<group>"; };
+		22F25B3318BB901700CE8160 /* X86DisassemblerDecoder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = X86DisassemblerDecoder.c; sourceTree = "<group>"; };
+		22F25B3418BB901700CE8160 /* X86DisassemblerDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X86DisassemblerDecoder.h; sourceTree = "<group>"; };
+		22F25B3518BB901700CE8160 /* X86DisassemblerDecoderCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X86DisassemblerDecoderCommon.h; sourceTree = "<group>"; };
+		22F25B3618BB901700CE8160 /* X86GenAsmWriter.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = X86GenAsmWriter.inc; sourceTree = "<group>"; };
+		22F25B3718BB901700CE8160 /* X86GenAsmWriter1.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = X86GenAsmWriter1.inc; sourceTree = "<group>"; };
+		22F25B3818BB901700CE8160 /* X86GenDisassemblerTables.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = X86GenDisassemblerTables.inc; sourceTree = "<group>"; };
+		22F25B3918BB901700CE8160 /* X86GenInstrInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = X86GenInstrInfo.inc; sourceTree = "<group>"; };
+		22F25B3A18BB901700CE8160 /* X86GenRegisterInfo.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = X86GenRegisterInfo.inc; sourceTree = "<group>"; };
+		22F25B3B18BB901700CE8160 /* X86InstPrinter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X86InstPrinter.h; sourceTree = "<group>"; };
+		22F25B3C18BB901700CE8160 /* X86IntelInstPrinter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = X86IntelInstPrinter.c; sourceTree = "<group>"; };
+		22F25B3D18BB901700CE8160 /* X86Mapping.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = X86Mapping.c; sourceTree = "<group>"; };
+		22F25B3E18BB901700CE8160 /* X86Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X86Mapping.h; sourceTree = "<group>"; };
+		22F25B3F18BB901700CE8160 /* X86Module.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = X86Module.c; sourceTree = "<group>"; };
+		22F25B4118BB901700CE8160 /* bindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = bindings.xcodeproj; sourceTree = "<group>"; };
+		22F25B4418BB901700CE8160 /* const_generator.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = const_generator.py; sourceTree = "<group>"; };
+		22F25B4618BB901700CE8160 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		22F25B4818BB901700CE8160 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		22F25B4918BB901700CE8160 /* Arm.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = Arm.java; sourceTree = "<group>"; };
+		22F25B4A18BB901700CE8160 /* Arm64.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = Arm64.java; sourceTree = "<group>"; };
+		22F25B4B18BB901700CE8160 /* Arm64_const.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = Arm64_const.java; sourceTree = "<group>"; };
+		22F25B4C18BB901700CE8160 /* Arm_const.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = Arm_const.java; sourceTree = "<group>"; };
+		22F25B4D18BB901700CE8160 /* Capstone.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = Capstone.java; sourceTree = "<group>"; };
+		22F25B4E18BB901700CE8160 /* Mips.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = Mips.java; sourceTree = "<group>"; };
+		22F25B4F18BB901700CE8160 /* Mips_const.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = Mips_const.java; sourceTree = "<group>"; };
+		22F25B5018BB901700CE8160 /* Ppc.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = Ppc.java; sourceTree = "<group>"; };
+		22F25B5118BB901700CE8160 /* Ppc_const.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = Ppc_const.java; sourceTree = "<group>"; };
+		22F25B5218BB901700CE8160 /* X86.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = X86.java; sourceTree = "<group>"; };
+		22F25B5318BB901700CE8160 /* X86_const.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = X86_const.java; sourceTree = "<group>"; };
+		22F25B5418BB901700CE8160 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		22F25B5518BB901700CE8160 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		22F25B5618BB901700CE8160 /* run.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = run.sh; sourceTree = "<group>"; };
+		22F25B5718BB901700CE8160 /* Test.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = Test.java; sourceTree = "<group>"; };
+		22F25B5818BB901700CE8160 /* TestArm.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = TestArm.java; sourceTree = "<group>"; };
+		22F25B5918BB901700CE8160 /* TestArm64.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = TestArm64.java; sourceTree = "<group>"; };
+		22F25B5A18BB901700CE8160 /* TestMips.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = TestMips.java; sourceTree = "<group>"; };
+		22F25B5B18BB901700CE8160 /* TestPpc.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = TestPpc.java; sourceTree = "<group>"; };
+		22F25B5C18BB901700CE8160 /* TestX86.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = TestX86.java; sourceTree = "<group>"; };
+		22F25B5D18BB901700CE8160 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		22F25B5F18BB901700CE8160 /* arm.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = arm.ml; sourceTree = "<group>"; };
+		22F25B6018BB901700CE8160 /* arm64.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = arm64.ml; sourceTree = "<group>"; };
+		22F25B6118BB901700CE8160 /* capstone.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = capstone.ml; sourceTree = "<group>"; };
+		22F25B6218BB901700CE8160 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		22F25B6318BB901700CE8160 /* mips.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mips.ml; sourceTree = "<group>"; };
+		22F25B6418BB901700CE8160 /* ocaml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ocaml.c; sourceTree = "<group>"; };
+		22F25B6518BB901700CE8160 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		22F25B6618BB901700CE8160 /* test.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.ml; sourceTree = "<group>"; };
+		22F25B6718BB901700CE8160 /* test_arm.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_arm.ml; sourceTree = "<group>"; };
+		22F25B6818BB901700CE8160 /* test_arm64.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_arm64.ml; sourceTree = "<group>"; };
+		22F25B6918BB901700CE8160 /* test_detail.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_detail.ml; sourceTree = "<group>"; };
+		22F25B6A18BB901700CE8160 /* test_mips.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_mips.ml; sourceTree = "<group>"; };
+		22F25B6B18BB901700CE8160 /* test_x86.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_x86.ml; sourceTree = "<group>"; };
+		22F25B6C18BB901700CE8160 /* x86.ml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = x86.ml; sourceTree = "<group>"; };
+		22F25B6F18BB901700CE8160 /* __init__.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		22F25B7018BB901700CE8160 /* arm.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = arm.py; sourceTree = "<group>"; };
+		22F25B7118BB901700CE8160 /* arm64.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = arm64.py; sourceTree = "<group>"; };
+		22F25B7218BB901700CE8160 /* arm64_const.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = arm64_const.py; sourceTree = "<group>"; };
+		22F25B7318BB901700CE8160 /* arm_const.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = arm_const.py; sourceTree = "<group>"; };
+		22F25B7418BB901700CE8160 /* capstone.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = capstone.py; sourceTree = "<group>"; };
+		22F25B7518BB901700CE8160 /* mips.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = mips.py; sourceTree = "<group>"; };
+		22F25B7618BB901700CE8160 /* mips_const.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = mips_const.py; sourceTree = "<group>"; };
+		22F25B7718BB901700CE8160 /* ppc.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ppc.py; sourceTree = "<group>"; };
+		22F25B7818BB901700CE8160 /* ppc_const.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ppc_const.py; sourceTree = "<group>"; };
+		22F25B7918BB901700CE8160 /* x86.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = x86.py; sourceTree = "<group>"; };
+		22F25B7A18BB901700CE8160 /* x86_const.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = x86_const.py; sourceTree = "<group>"; };
+		22F25B7B18BB901700CE8160 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		22F25B7D18BB901700CE8160 /* ccapstone.pxd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ccapstone.pxd; sourceTree = "<group>"; };
+		22F25B7E18BB901700CE8160 /* ccapstone.pyx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ccapstone.pyx; sourceTree = "<group>"; };
+		22F25B7F18BB901700CE8160 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		22F25B8018BB901700CE8160 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		22F25B8118BB901700CE8160 /* setup.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
+		22F25B8218BB901700CE8160 /* setup_cython.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = setup_cython.py; sourceTree = "<group>"; };
+		22F25B8318BB901700CE8160 /* test.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test.py; sourceTree = "<group>"; };
+		22F25B8418BB901700CE8160 /* test_arm.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test_arm.py; sourceTree = "<group>"; };
+		22F25B8518BB901700CE8160 /* test_arm64.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test_arm64.py; sourceTree = "<group>"; };
+		22F25B8618BB901700CE8160 /* test_detail.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test_detail.py; sourceTree = "<group>"; };
+		22F25B8718BB901700CE8160 /* test_mips.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test_mips.py; sourceTree = "<group>"; };
+		22F25B8818BB901700CE8160 /* test_ppc.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test_ppc.py; sourceTree = "<group>"; };
+		22F25B8918BB901700CE8160 /* test_x86.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test_x86.py; sourceTree = "<group>"; };
+		22F25B8A18BB901700CE8160 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChangeLog; path = capstone/ChangeLog; sourceTree = "<group>"; };
+		22F25B8B18BB901700CE8160 /* COMPILE.TXT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = COMPILE.TXT; path = capstone/COMPILE.TXT; sourceTree = "<group>"; };
+		22F25B8C18BB901700CE8160 /* CONFIG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CONFIG; path = capstone/CONFIG; sourceTree = "<group>"; };
+		22F25B8D18BB901700CE8160 /* config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = config.mk; path = capstone/config.mk; sourceTree = "<group>"; };
+		22F25B8E18BB901700CE8160 /* CREDITS.TXT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CREDITS.TXT; path = capstone/CREDITS.TXT; sourceTree = "<group>"; };
+		22F25B8F18BB901700CE8160 /* cs_priv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cs_priv.h; path = capstone/cs_priv.h; sourceTree = "<group>"; };
+		22F25B9018BB901700CE8160 /* cs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cs.c; path = capstone/cs.c; sourceTree = "<group>"; };
+		22F25B9218BB901700CE8160 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		22F25B9318BB901700CE8160 /* HACK.TXT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = HACK.TXT; path = capstone/HACK.TXT; sourceTree = "<group>"; };
+		22F25B9518BB901700CE8160 /* arm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arm.h; sourceTree = "<group>"; };
+		22F25B9618BB901700CE8160 /* arm64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arm64.h; sourceTree = "<group>"; };
+		22F25B9718BB901700CE8160 /* capstone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = capstone.h; sourceTree = "<group>"; };
+		22F25B9818BB901700CE8160 /* mips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mips.h; sourceTree = "<group>"; };
+		22F25B9918BB901700CE8160 /* ppc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ppc.h; sourceTree = "<group>"; };
+		22F25B9A18BB901700CE8160 /* x86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x86.h; sourceTree = "<group>"; };
+		22F25B9B18BB901700CE8160 /* LEB128.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LEB128.h; path = capstone/LEB128.h; sourceTree = "<group>"; };
+		22F25B9C18BB901700CE8160 /* LICENSE_LLVM.TXT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE_LLVM.TXT; path = capstone/LICENSE_LLVM.TXT; sourceTree = "<group>"; };
+		22F25B9D18BB901700CE8160 /* LICENSE.TXT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE.TXT; path = capstone/LICENSE.TXT; sourceTree = "<group>"; };
+		22F25B9E18BB901700CE8160 /* make.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = make.sh; path = capstone/make.sh; sourceTree = "<group>"; };
+		22F25B9F18BB901700CE8160 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = capstone/Makefile; sourceTree = "<group>"; };
+		22F25BA018BB901700CE8160 /* MathExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MathExtras.h; path = capstone/MathExtras.h; sourceTree = "<group>"; };
+		22F25BA118BB901700CE8160 /* MCDisassembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCDisassembler.h; path = capstone/MCDisassembler.h; sourceTree = "<group>"; };
+		22F25BA218BB901700CE8160 /* MCFixedLenDisassembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCFixedLenDisassembler.h; path = capstone/MCFixedLenDisassembler.h; sourceTree = "<group>"; };
+		22F25BA318BB901700CE8160 /* MCInst.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MCInst.c; path = capstone/MCInst.c; sourceTree = "<group>"; };
+		22F25BA418BB901700CE8160 /* MCInst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCInst.h; path = capstone/MCInst.h; sourceTree = "<group>"; };
+		22F25BA518BB901700CE8160 /* MCInstrDesc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MCInstrDesc.c; path = capstone/MCInstrDesc.c; sourceTree = "<group>"; };
+		22F25BA618BB901700CE8160 /* MCInstrDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCInstrDesc.h; path = capstone/MCInstrDesc.h; sourceTree = "<group>"; };
+		22F25BA718BB901700CE8160 /* MCRegisterInfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MCRegisterInfo.c; path = capstone/MCRegisterInfo.c; sourceTree = "<group>"; };
+		22F25BA818BB901700CE8160 /* MCRegisterInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCRegisterInfo.h; path = capstone/MCRegisterInfo.h; sourceTree = "<group>"; };
+		22F25BA918BB901700CE8160 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README; path = capstone/README; sourceTree = "<group>"; };
+		22F25BAA18BB901700CE8160 /* RELEASE_NOTES */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = RELEASE_NOTES; path = capstone/RELEASE_NOTES; sourceTree = "<group>"; };
+		22F25BAB18BB901700CE8160 /* SStream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SStream.c; path = capstone/SStream.c; sourceTree = "<group>"; };
+		22F25BAC18BB901700CE8160 /* SStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SStream.h; path = capstone/SStream.h; sourceTree = "<group>"; };
+		22F25BAD18BB901700CE8160 /* SubtargetFeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubtargetFeature.h; path = capstone/SubtargetFeature.h; sourceTree = "<group>"; };
+		22F25BAF18BB901700CE8160 /* benchmark.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = benchmark.py; sourceTree = "<group>"; };
+		22F25BB018BB901700CE8160 /* compile_all.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = compile_all.sh; sourceTree = "<group>"; };
+		22F25BB118BB901700CE8160 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		22F25BB218BB901700CE8160 /* test_all.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = test_all.sh; sourceTree = "<group>"; };
+		22F25BB318BB901700CE8160 /* test_c.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = test_c.sh; sourceTree = "<group>"; };
+		22F25BB418BB901700CE8160 /* test_python.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = test_python.sh; sourceTree = "<group>"; };
+		22F25BB618BB901700CE8160 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		22F25BB718BB901700CE8160 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		22F25BB818BB901700CE8160 /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
+		22F25BB918BB901700CE8160 /* test_arm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_arm.c; sourceTree = "<group>"; };
+		22F25BBA18BB901700CE8160 /* test_arm64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_arm64.c; sourceTree = "<group>"; };
+		22F25BBB18BB901700CE8160 /* test_detail.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_detail.c; sourceTree = "<group>"; };
+		22F25BBC18BB901700CE8160 /* test_mips.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_mips.c; sourceTree = "<group>"; };
+		22F25BBD18BB901700CE8160 /* test_ppc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_ppc.c; sourceTree = "<group>"; };
+		22F25BBE18BB901700CE8160 /* test_x86.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_x86.c; sourceTree = "<group>"; };
+		22F25BBF18BB901700CE8160 /* tests.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = tests.xcodeproj; sourceTree = "<group>"; };
+		22F25BC218BB901700CE8160 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = TODO; path = capstone/TODO; sourceTree = "<group>"; };
+		22F25BC318BB901700CE8160 /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utils.c; path = capstone/utils.c; sourceTree = "<group>"; };
+		22F25BC418BB901700CE8160 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = utils.h; path = capstone/utils.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		22D8E3F018BB8D3800BD9B63 = {
+			isa = PBXGroup;
+			children = (
+				22F25AF518BB901700CE8160 /* arch */,
+				22F25B4018BB901700CE8160 /* bindings */,
+				22F25B8A18BB901700CE8160 /* ChangeLog */,
+				22F25B8B18BB901700CE8160 /* COMPILE.TXT */,
+				22F25B8C18BB901700CE8160 /* CONFIG */,
+				22F25B8D18BB901700CE8160 /* config.mk */,
+				22F25B8E18BB901700CE8160 /* CREDITS.TXT */,
+				22F25B8F18BB901700CE8160 /* cs_priv.h */,
+				22F25B9018BB901700CE8160 /* cs.c */,
+				22F25B9118BB901700CE8160 /* docs */,
+				22F25B9318BB901700CE8160 /* HACK.TXT */,
+				22F25B9418BB901700CE8160 /* include */,
+				22F25B9B18BB901700CE8160 /* LEB128.h */,
+				22F25B9C18BB901700CE8160 /* LICENSE_LLVM.TXT */,
+				22F25B9D18BB901700CE8160 /* LICENSE.TXT */,
+				22F25B9E18BB901700CE8160 /* make.sh */,
+				22F25B9F18BB901700CE8160 /* Makefile */,
+				22F25BA018BB901700CE8160 /* MathExtras.h */,
+				22F25BA118BB901700CE8160 /* MCDisassembler.h */,
+				22F25BA218BB901700CE8160 /* MCFixedLenDisassembler.h */,
+				22F25BA318BB901700CE8160 /* MCInst.c */,
+				22F25BA418BB901700CE8160 /* MCInst.h */,
+				22F25BA518BB901700CE8160 /* MCInstrDesc.c */,
+				22F25BA618BB901700CE8160 /* MCInstrDesc.h */,
+				22F25BA718BB901700CE8160 /* MCRegisterInfo.c */,
+				22F25BA818BB901700CE8160 /* MCRegisterInfo.h */,
+				22F25BA918BB901700CE8160 /* README */,
+				22F25BAA18BB901700CE8160 /* RELEASE_NOTES */,
+				22F25BAB18BB901700CE8160 /* SStream.c */,
+				22F25BAC18BB901700CE8160 /* SStream.h */,
+				22F25BAD18BB901700CE8160 /* SubtargetFeature.h */,
+				22F25BAE18BB901700CE8160 /* suite */,
+				22F25BB518BB901700CE8160 /* tests */,
+				22F25BC218BB901700CE8160 /* TODO */,
+				22F25BC318BB901700CE8160 /* utils.c */,
+				22F25BC418BB901700CE8160 /* utils.h */,
+			);
+			sourceTree = "<group>";
+		};
+		22F25AF518BB901700CE8160 /* arch */ = {
+			isa = PBXGroup;
+			children = (
+				22F25AF618BB901700CE8160 /* AArch64 */,
+				22F25B0518BB901700CE8160 /* ARM */,
+				22F25B1418BB901700CE8160 /* Mips */,
+				22F25B2118BB901700CE8160 /* PowerPC */,
+				22F25B2F18BB901700CE8160 /* X86 */,
+			);
+			name = arch;
+			path = capstone/arch;
+			sourceTree = "<group>";
+		};
+		22F25AF618BB901700CE8160 /* AArch64 */ = {
+			isa = PBXGroup;
+			children = (
+				22F25AF718BB901700CE8160 /* AArch64BaseInfo.c */,
+				22F25AF818BB901700CE8160 /* AArch64BaseInfo.h */,
+				22F25AF918BB901700CE8160 /* AArch64Disassembler.c */,
+				22F25AFA18BB901700CE8160 /* AArch64Disassembler.h */,
+				22F25AFB18BB901700CE8160 /* AArch64GenAsmWriter.inc */,
+				22F25AFC18BB901700CE8160 /* AArch64GenDisassemblerTables.inc */,
+				22F25AFD18BB901700CE8160 /* AArch64GenInstrInfo.inc */,
+				22F25AFE18BB901700CE8160 /* AArch64GenRegisterInfo.inc */,
+				22F25AFF18BB901700CE8160 /* AArch64GenSubtargetInfo.inc */,
+				22F25B0018BB901700CE8160 /* AArch64InstPrinter.c */,
+				22F25B0118BB901700CE8160 /* AArch64InstPrinter.h */,
+				22F25B0218BB901700CE8160 /* AArch64Mapping.c */,
+				22F25B0318BB901700CE8160 /* AArch64Mapping.h */,
+				22F25B0418BB901700CE8160 /* AArch64Module.c */,
+			);
+			path = AArch64;
+			sourceTree = "<group>";
+		};
+		22F25B0518BB901700CE8160 /* ARM */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B0618BB901700CE8160 /* ARMAddressingModes.h */,
+				22F25B0718BB901700CE8160 /* ARMBaseInfo.h */,
+				22F25B0818BB901700CE8160 /* ARMDisassembler.c */,
+				22F25B0918BB901700CE8160 /* ARMDisassembler.h */,
+				22F25B0A18BB901700CE8160 /* ARMGenAsmWriter.inc */,
+				22F25B0B18BB901700CE8160 /* ARMGenDisassemblerTables.inc */,
+				22F25B0C18BB901700CE8160 /* ARMGenInstrInfo.inc */,
+				22F25B0D18BB901700CE8160 /* ARMGenRegisterInfo.inc */,
+				22F25B0E18BB901700CE8160 /* ARMGenSubtargetInfo.inc */,
+				22F25B0F18BB901700CE8160 /* ARMInstPrinter.c */,
+				22F25B1018BB901700CE8160 /* ARMInstPrinter.h */,
+				22F25B1118BB901700CE8160 /* ARMMapping.c */,
+				22F25B1218BB901700CE8160 /* ARMMapping.h */,
+				22F25B1318BB901700CE8160 /* ARMModule.c */,
+			);
+			path = ARM;
+			sourceTree = "<group>";
+		};
+		22F25B1418BB901700CE8160 /* Mips */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B1518BB901700CE8160 /* MipsDisassembler.c */,
+				22F25B1618BB901700CE8160 /* MipsDisassembler.h */,
+				22F25B1718BB901700CE8160 /* MipsGenAsmWriter.inc */,
+				22F25B1818BB901700CE8160 /* MipsGenDisassemblerTables.inc */,
+				22F25B1918BB901700CE8160 /* MipsGenInstrInfo.inc */,
+				22F25B1A18BB901700CE8160 /* MipsGenRegisterInfo.inc */,
+				22F25B1B18BB901700CE8160 /* MipsGenSubtargetInfo.inc */,
+				22F25B1C18BB901700CE8160 /* MipsInstPrinter.c */,
+				22F25B1D18BB901700CE8160 /* MipsInstPrinter.h */,
+				22F25B1E18BB901700CE8160 /* MipsMapping.c */,
+				22F25B1F18BB901700CE8160 /* MipsMapping.h */,
+				22F25B2018BB901700CE8160 /* MipsModule.c */,
+			);
+			path = Mips;
+			sourceTree = "<group>";
+		};
+		22F25B2118BB901700CE8160 /* PowerPC */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B2218BB901700CE8160 /* PPCDisassembler.c */,
+				22F25B2318BB901700CE8160 /* PPCDisassembler.h */,
+				22F25B2418BB901700CE8160 /* PPCGenAsmWriter.inc */,
+				22F25B2518BB901700CE8160 /* PPCGenDisassemblerTables.inc */,
+				22F25B2618BB901700CE8160 /* PPCGenInstrInfo.inc */,
+				22F25B2718BB901700CE8160 /* PPCGenRegisterInfo.inc */,
+				22F25B2818BB901700CE8160 /* PPCGenSubtargetInfo.inc */,
+				22F25B2918BB901700CE8160 /* PPCInstPrinter.c */,
+				22F25B2A18BB901700CE8160 /* PPCInstPrinter.h */,
+				22F25B2B18BB901700CE8160 /* PPCMapping.c */,
+				22F25B2C18BB901700CE8160 /* PPCMapping.h */,
+				22F25B2D18BB901700CE8160 /* PPCModule.c */,
+				22F25B2E18BB901700CE8160 /* PPCPredicates.h */,
+			);
+			path = PowerPC;
+			sourceTree = "<group>";
+		};
+		22F25B2F18BB901700CE8160 /* X86 */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B3018BB901700CE8160 /* X86ATTInstPrinter.c */,
+				22F25B3118BB901700CE8160 /* X86Disassembler.c */,
+				22F25B3218BB901700CE8160 /* X86Disassembler.h */,
+				22F25B3318BB901700CE8160 /* X86DisassemblerDecoder.c */,
+				22F25B3418BB901700CE8160 /* X86DisassemblerDecoder.h */,
+				22F25B3518BB901700CE8160 /* X86DisassemblerDecoderCommon.h */,
+				22F25B3618BB901700CE8160 /* X86GenAsmWriter.inc */,
+				22F25B3718BB901700CE8160 /* X86GenAsmWriter1.inc */,
+				22F25B3818BB901700CE8160 /* X86GenDisassemblerTables.inc */,
+				22F25B3918BB901700CE8160 /* X86GenInstrInfo.inc */,
+				22F25B3A18BB901700CE8160 /* X86GenRegisterInfo.inc */,
+				22F25B3B18BB901700CE8160 /* X86InstPrinter.h */,
+				22F25B3C18BB901700CE8160 /* X86IntelInstPrinter.c */,
+				22F25B3D18BB901700CE8160 /* X86Mapping.c */,
+				22F25B3E18BB901700CE8160 /* X86Mapping.h */,
+				22F25B3F18BB901700CE8160 /* X86Module.c */,
+			);
+			path = X86;
+			sourceTree = "<group>";
+		};
+		22F25B4018BB901700CE8160 /* bindings */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B4118BB901700CE8160 /* bindings.xcodeproj */,
+				22F25B4418BB901700CE8160 /* const_generator.py */,
+				22F25B4518BB901700CE8160 /* java */,
+				22F25B5D18BB901700CE8160 /* Makefile */,
+				22F25B5E18BB901700CE8160 /* ocaml */,
+				22F25B6D18BB901700CE8160 /* python */,
+			);
+			name = bindings;
+			path = capstone/bindings;
+			sourceTree = "<group>";
+		};
+		22F25B4218BB901700CE8160 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		22F25B4518BB901700CE8160 /* java */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B4618BB901700CE8160 /* .gitignore */,
+				22F25B4718BB901700CE8160 /* capstone */,
+				22F25B5418BB901700CE8160 /* Makefile */,
+				22F25B5518BB901700CE8160 /* README */,
+				22F25B5618BB901700CE8160 /* run.sh */,
+				22F25B5718BB901700CE8160 /* Test.java */,
+				22F25B5818BB901700CE8160 /* TestArm.java */,
+				22F25B5918BB901700CE8160 /* TestArm64.java */,
+				22F25B5A18BB901700CE8160 /* TestMips.java */,
+				22F25B5B18BB901700CE8160 /* TestPpc.java */,
+				22F25B5C18BB901700CE8160 /* TestX86.java */,
+			);
+			path = java;
+			sourceTree = "<group>";
+		};
+		22F25B4718BB901700CE8160 /* capstone */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B4818BB901700CE8160 /* .gitignore */,
+				22F25B4918BB901700CE8160 /* Arm.java */,
+				22F25B4A18BB901700CE8160 /* Arm64.java */,
+				22F25B4B18BB901700CE8160 /* Arm64_const.java */,
+				22F25B4C18BB901700CE8160 /* Arm_const.java */,
+				22F25B4D18BB901700CE8160 /* Capstone.java */,
+				22F25B4E18BB901700CE8160 /* Mips.java */,
+				22F25B4F18BB901700CE8160 /* Mips_const.java */,
+				22F25B5018BB901700CE8160 /* Ppc.java */,
+				22F25B5118BB901700CE8160 /* Ppc_const.java */,
+				22F25B5218BB901700CE8160 /* X86.java */,
+				22F25B5318BB901700CE8160 /* X86_const.java */,
+			);
+			path = capstone;
+			sourceTree = "<group>";
+		};
+		22F25B5E18BB901700CE8160 /* ocaml */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B5F18BB901700CE8160 /* arm.ml */,
+				22F25B6018BB901700CE8160 /* arm64.ml */,
+				22F25B6118BB901700CE8160 /* capstone.ml */,
+				22F25B6218BB901700CE8160 /* Makefile */,
+				22F25B6318BB901700CE8160 /* mips.ml */,
+				22F25B6418BB901700CE8160 /* ocaml.c */,
+				22F25B6518BB901700CE8160 /* README */,
+				22F25B6618BB901700CE8160 /* test.ml */,
+				22F25B6718BB901700CE8160 /* test_arm.ml */,
+				22F25B6818BB901700CE8160 /* test_arm64.ml */,
+				22F25B6918BB901700CE8160 /* test_detail.ml */,
+				22F25B6A18BB901700CE8160 /* test_mips.ml */,
+				22F25B6B18BB901700CE8160 /* test_x86.ml */,
+				22F25B6C18BB901700CE8160 /* x86.ml */,
+			);
+			path = ocaml;
+			sourceTree = "<group>";
+		};
+		22F25B6D18BB901700CE8160 /* python */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B6E18BB901700CE8160 /* capstone */,
+				22F25B7B18BB901700CE8160 /* Makefile */,
+				22F25B7C18BB901700CE8160 /* pyx */,
+				22F25B8018BB901700CE8160 /* README */,
+				22F25B8118BB901700CE8160 /* setup.py */,
+				22F25B8218BB901700CE8160 /* setup_cython.py */,
+				22F25B8318BB901700CE8160 /* test.py */,
+				22F25B8418BB901700CE8160 /* test_arm.py */,
+				22F25B8518BB901700CE8160 /* test_arm64.py */,
+				22F25B8618BB901700CE8160 /* test_detail.py */,
+				22F25B8718BB901700CE8160 /* test_mips.py */,
+				22F25B8818BB901700CE8160 /* test_ppc.py */,
+				22F25B8918BB901700CE8160 /* test_x86.py */,
+			);
+			path = python;
+			sourceTree = "<group>";
+		};
+		22F25B6E18BB901700CE8160 /* capstone */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B6F18BB901700CE8160 /* __init__.py */,
+				22F25B7018BB901700CE8160 /* arm.py */,
+				22F25B7118BB901700CE8160 /* arm64.py */,
+				22F25B7218BB901700CE8160 /* arm64_const.py */,
+				22F25B7318BB901700CE8160 /* arm_const.py */,
+				22F25B7418BB901700CE8160 /* capstone.py */,
+				22F25B7518BB901700CE8160 /* mips.py */,
+				22F25B7618BB901700CE8160 /* mips_const.py */,
+				22F25B7718BB901700CE8160 /* ppc.py */,
+				22F25B7818BB901700CE8160 /* ppc_const.py */,
+				22F25B7918BB901700CE8160 /* x86.py */,
+				22F25B7A18BB901700CE8160 /* x86_const.py */,
+			);
+			path = capstone;
+			sourceTree = "<group>";
+		};
+		22F25B7C18BB901700CE8160 /* pyx */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B7D18BB901700CE8160 /* ccapstone.pxd */,
+				22F25B7E18BB901700CE8160 /* ccapstone.pyx */,
+				22F25B7F18BB901700CE8160 /* README */,
+			);
+			path = pyx;
+			sourceTree = "<group>";
+		};
+		22F25B9118BB901700CE8160 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B9218BB901700CE8160 /* README */,
+			);
+			name = docs;
+			path = capstone/docs;
+			sourceTree = "<group>";
+		};
+		22F25B9418BB901700CE8160 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				22F25B9518BB901700CE8160 /* arm.h */,
+				22F25B9618BB901700CE8160 /* arm64.h */,
+				22F25B9718BB901700CE8160 /* capstone.h */,
+				22F25B9818BB901700CE8160 /* mips.h */,
+				22F25B9918BB901700CE8160 /* ppc.h */,
+				22F25B9A18BB901700CE8160 /* x86.h */,
+			);
+			name = include;
+			path = capstone/include;
+			sourceTree = "<group>";
+		};
+		22F25BAE18BB901700CE8160 /* suite */ = {
+			isa = PBXGroup;
+			children = (
+				22F25BAF18BB901700CE8160 /* benchmark.py */,
+				22F25BB018BB901700CE8160 /* compile_all.sh */,
+				22F25BB118BB901700CE8160 /* README */,
+				22F25BB218BB901700CE8160 /* test_all.sh */,
+				22F25BB318BB901700CE8160 /* test_c.sh */,
+				22F25BB418BB901700CE8160 /* test_python.sh */,
+			);
+			name = suite;
+			path = capstone/suite;
+			sourceTree = "<group>";
+		};
+		22F25BB518BB901700CE8160 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				22F25BB618BB901700CE8160 /* Makefile */,
+				22F25BB718BB901700CE8160 /* README */,
+				22F25BB818BB901700CE8160 /* test.c */,
+				22F25BB918BB901700CE8160 /* test_arm.c */,
+				22F25BBA18BB901700CE8160 /* test_arm64.c */,
+				22F25BBB18BB901700CE8160 /* test_detail.c */,
+				22F25BBC18BB901700CE8160 /* test_mips.c */,
+				22F25BBD18BB901700CE8160 /* test_ppc.c */,
+				22F25BBE18BB901700CE8160 /* test_x86.c */,
+				22F25BBF18BB901700CE8160 /* tests.xcodeproj */,
+			);
+			name = tests;
+			path = capstone/tests;
+			sourceTree = "<group>";
+		};
+		22F25BC018BB901700CE8160 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		221E02F518BBAB1E00EA4571 /* capstone */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "${ACTION}";
+			buildConfigurationList = 221E02F618BBAB1E00EA4571 /* Build configuration list for PBXLegacyTarget "capstone" */;
+			buildPhases = (
+			);
+			buildToolPath = "./capstone-build.sh";
+			buildWorkingDirectory = "${PROJECT_DIR}";
+			dependencies = (
+			);
+			name = capstone;
+			passBuildSettingsInEnvironment = 1;
+			productName = capstone;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		22D8E3F118BB8D3800BD9B63 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
+			buildConfigurationList = 22D8E3F418BB8D3800BD9B63 /* Build configuration list for PBXProject "capstone" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 22D8E3F018BB8D3800BD9B63;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 22F25B4218BB901700CE8160 /* Products */;
+					ProjectRef = 22F25B4118BB901700CE8160 /* bindings.xcodeproj */;
+				},
+				{
+					ProductGroup = 22F25BC018BB901700CE8160 /* Products */;
+					ProjectRef = 22F25BBF18BB901700CE8160 /* tests.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				221E02F518BBAB1E00EA4571 /* capstone */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		221E02F718BBAB1E00EA4571 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		221E02F818BBAB1E00EA4571 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		22D8E3F518BB8D3800BD9B63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+			};
+			name = Debug;
+		};
+		22D8E3F618BB8D3800BD9B63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		221E02F618BBAB1E00EA4571 /* Build configuration list for PBXLegacyTarget "capstone" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				221E02F718BBAB1E00EA4571 /* Debug */,
+				221E02F818BBAB1E00EA4571 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		22D8E3F418BB8D3800BD9B63 /* Build configuration list for PBXProject "capstone" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22D8E3F518BB8D3800BD9B63 /* Debug */,
+				22D8E3F618BB8D3800BD9B63 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 22D8E3F118BB8D3800BD9B63 /* Project object */;
+}

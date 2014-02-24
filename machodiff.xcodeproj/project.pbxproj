@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		221E02DB18BB972700EA4571 /* libcapstone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 221E02DA18BB972700EA4571 /* libcapstone.a */; };
 		22345EFA18B95AE100FC106D /* diff.c in Sources */ = {isa = PBXBuildFile; fileRef = 22345EF918B95AE100FC106D /* diff.c */; };
 		22345EFC18B95EC300FC106D /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22345EFB18B95EC200FC106D /* libobjc.dylib */; };
 		2234603818BA822000FC106D /* compare.c in Sources */ = {isa = PBXBuildFile; fileRef = 2234603718BA822000FC106D /* compare.c */; };
@@ -17,6 +18,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		221E02D418BB95BB00EA4571 /* arm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arm.h; sourceTree = "<group>"; };
+		221E02D518BB95BB00EA4571 /* arm64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arm64.h; sourceTree = "<group>"; };
+		221E02D618BB95BB00EA4571 /* capstone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = capstone.h; sourceTree = "<group>"; };
+		221E02D718BB95BB00EA4571 /* mips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mips.h; sourceTree = "<group>"; };
+		221E02D818BB95BB00EA4571 /* ppc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ppc.h; sourceTree = "<group>"; };
+		221E02D918BB95BB00EA4571 /* x86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x86.h; sourceTree = "<group>"; };
+		221E02DA18BB972700EA4571 /* libcapstone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcapstone.a; path = ../Universal/libcapstone.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22345EF818B95AD100FC106D /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
 		22345EF918B95AE100FC106D /* diff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = diff.c; sourceTree = "<group>"; };
 		22345EFB18B95EC200FC106D /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
@@ -41,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				221E02DB18BB972700EA4571 /* libcapstone.a in Frameworks */,
 				22345EFC18B95EC300FC106D /* libobjc.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -48,9 +57,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		221E02D318BB95BB00EA4571 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				221E02D418BB95BB00EA4571 /* arm.h */,
+				221E02D518BB95BB00EA4571 /* arm64.h */,
+				221E02D618BB95BB00EA4571 /* capstone.h */,
+				221E02D718BB95BB00EA4571 /* mips.h */,
+				221E02D818BB95BB00EA4571 /* ppc.h */,
+				221E02D918BB95BB00EA4571 /* x86.h */,
+			);
+			name = include;
+			path = capstone/include;
+			sourceTree = "<group>";
+		};
 		22B7478718B8F5310019BC58 = {
 			isa = PBXGroup;
 			children = (
+				221E02D318BB95BB00EA4571 /* include */,
 				22B7479518B8F5310019BC58 /* machodiff */,
 				22B7479218B8F5310019BC58 /* Link */,
 				22B7479118B8F5310019BC58 /* Products */,
@@ -68,6 +92,7 @@
 		22B7479218B8F5310019BC58 /* Link */ = {
 			isa = PBXGroup;
 			children = (
+				221E02DA18BB972700EA4571 /* libcapstone.a */,
 				22345EFB18B95EC200FC106D /* libobjc.dylib */,
 			);
 			name = Link;
@@ -104,6 +129,22 @@
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		221E02E518BBA65400EA4571 /* capstone-32 */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 221E02E618BBA65400EA4571 /* Build configuration list for PBXLegacyTarget "capstone-32" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			dependencies = (
+			);
+			name = "capstone-32";
+			passBuildSettingsInEnvironment = 1;
+			productName = "capstone-32";
+		};
+/* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
 		22B7478F18B8F5310019BC58 /* machodiff */ = {
@@ -144,6 +185,7 @@
 			projectRoot = "";
 			targets = (
 				22B7478F18B8F5310019BC58 /* machodiff */,
+				221E02E518BBA65400EA4571 /* capstone-32 */,
 			);
 		};
 /* End PBXProject section */
@@ -165,6 +207,34 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		221E02E718BBA65400EA4571 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUGGING_SYMBOLS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		221E02E818BBA65400EA4571 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		22B7479A18B8F5310019BC58 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -256,6 +326,7 @@
 					"$(SDKROOT)/usr/lib/system",
 					"$(SDKROOT)/usr/lib/system/introspection",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/build/Universal",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
@@ -283,6 +354,7 @@
 					"$(SDKROOT)/usr/lib/system",
 					"$(SDKROOT)/usr/lib/system/introspection",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/build/Universal",
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-all_load";
@@ -294,6 +366,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		221E02E618BBA65400EA4571 /* Build configuration list for PBXLegacyTarget "capstone-32" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				221E02E718BBA65400EA4571 /* Debug */,
+				221E02E818BBA65400EA4571 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		22B7478B18B8F5310019BC58 /* Build configuration list for PBXProject "machodiff" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

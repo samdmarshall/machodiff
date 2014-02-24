@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:capstone-build.sh">
+   </FileRef>
+   <FileRef
+      location = "group:capstone.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:machodiff.xcodeproj">
    </FileRef>
 </Workspace>
