@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		221E02DB18BB972700EA4571 /* libcapstone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 221E02DA18BB972700EA4571 /* libcapstone.a */; };
+		221E02FB18BBBC5800EA4571 /* arch.c in Sources */ = {isa = PBXBuildFile; fileRef = 221E02FA18BBBC5800EA4571 /* arch.c */; };
 		22345EFA18B95AE100FC106D /* diff.c in Sources */ = {isa = PBXBuildFile; fileRef = 22345EF918B95AE100FC106D /* diff.c */; };
 		22345EFC18B95EC300FC106D /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22345EFB18B95EC200FC106D /* libobjc.dylib */; };
 		2234603818BA822000FC106D /* compare.c in Sources */ = {isa = PBXBuildFile; fileRef = 2234603718BA822000FC106D /* compare.c */; };
@@ -25,6 +26,8 @@
 		221E02D818BB95BB00EA4571 /* ppc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ppc.h; sourceTree = "<group>"; };
 		221E02D918BB95BB00EA4571 /* x86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x86.h; sourceTree = "<group>"; };
 		221E02DA18BB972700EA4571 /* libcapstone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcapstone.a; path = ../Universal/libcapstone.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		221E02F918BBBC5100EA4571 /* arch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arch.h; sourceTree = "<group>"; };
+		221E02FA18BBBC5800EA4571 /* arch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arch.c; sourceTree = "<group>"; };
 		22345EF818B95AD100FC106D /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
 		22345EF918B95AE100FC106D /* diff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = diff.c; sourceTree = "<group>"; };
 		22345EFB18B95EC200FC106D /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
@@ -124,6 +127,8 @@
 				22345EF918B95AE100FC106D /* diff.c */,
 				2234603618BA821800FC106D /* compare.h */,
 				2234603718BA822000FC106D /* compare.c */,
+				221E02F918BBBC5100EA4571 /* arch.h */,
+				221E02FA18BBBC5800EA4571 /* arch.c */,
 			);
 			name = "mach-o";
 			sourceTree = "<group>";
@@ -179,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22B747C118B903710019BC58 /* objc_lexer.c in Sources */,
+				221E02FB18BBBC5800EA4571 /* arch.c in Sources */,
 				22B747C218B903710019BC58 /* objc_runtime.c in Sources */,
 				22B747C018B903710019BC58 /* loader.c in Sources */,
 				2234603818BA822000FC106D /* compare.c in Sources */,

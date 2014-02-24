@@ -14,6 +14,7 @@
 #include <string.h>
 #include <dispatch/dispatch.h>
 #include <inttypes.h>
+#include "arch.h"
 
 // SDM: this will give some variation due to the approximation in unique when parsing dynamically created block_ref symbols in a binary.
 void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one, struct loader_binary *input_two) {
@@ -55,7 +56,10 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 		cs_insn *insn;
 		size_t count;
 		
-		if (cs_open(CS_ARCH_X86, CS_MODE_64, &handle) == CS_ERR_OK) {
+		cs_arch arch_type = SDM_CS_ArchType(&(input_one->header->arch), 0);
+		cs_mode mode_type = SDM_CS_ModeType(&(input_one->header->arch), 0);
+		
+		if (cs_open(arch_type, mode_type, &handle) == CS_ERR_OK) {
 			count = cs_disasm_ex(handle, Ptr(subroutine_range.offset), subroutine_range.length, offset, 0, &insn);
 			if (count > 0) {
 				size_t j;

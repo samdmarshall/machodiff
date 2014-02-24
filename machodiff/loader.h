@@ -26,6 +26,8 @@
 #define kSubFormatter "%lx"
 #define kSubName "sub_%lx"
 
+#define EndianFix(type, value) ((type == loader_endian_little_type) ? SDMSwapEndian32(value) : value);
+
 enum loader_endian_type {
 	loader_endian_invalid_type = 0,
 	loader_endian_little_type,

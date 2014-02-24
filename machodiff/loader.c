@@ -22,6 +22,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <dlfcn.h>
+#include "arch.h"
 
 #pragma mark -
 #pragma mark Private Types
@@ -35,11 +36,6 @@ static uint8_t Intel_x86_64bit_StackSetup[Intel_x86_64bit_StackSetupLength] = {0
 #pragma mark -
 #pragma mark Private Function Declaration
 
-#ifndef CPU_SUBTYPE_ARM_V8
-#define CPU_SUBTYPE_ARM_V8		((cpu_subtype_t) 13)
-#endif
-
-#define EndianFix(type, value) ((type == loader_endian_little_type) ? SDMSwapEndian32(value) : value);
 
 struct loader_map *SDMCreateBinaryMap(struct loader_generic_header *header);
 
@@ -504,37 +500,34 @@ void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary) {
 
 bool SDMMatchArchToCPU(struct loader_arch *arch, uint8_t target_arch, uint8_t endian_type) {
 	bool result = false;
-	cpu_type_t type = (cpu_type_t)EndianFix(endian_type, (uint32_t)arch->cputype);
-	if ((type & CPU_TYPE_X86) == CPU_TYPE_X86) {
-		uint32_t subtype = (uint32_t)EndianFix(endian_type, (uint32_t)arch->subtype);
-		if (((subtype & CPU_SUBTYPE_X86_ALL) == CPU_SUBTYPE_X86_ALL) && target_arch == loader_arch_x86_64_type) {
+	if (SDMArchCPU_X86(arch, endian_type)) {
+		if (SDMArchCPUSUB_X86_64(arch, target_arch, endian_type)) {
 			result = true;
 		}
-		else if (((subtype & CPU_SUBTYPE_LIB64) != CPU_SUBTYPE_LIB64) && ((subtype & CPU_SUBTYPE_I386_ALL) == CPU_SUBTYPE_I386_ALL) && target_arch == loader_arch_i386_type) {
-			result = true;
-		}
-	}
-	else if ((type & CPU_TYPE_ARM) == CPU_TYPE_ARM) {
-		cpu_subtype_t subtype = (cpu_subtype_t)EndianFix(endian_type, (uint32_t)arch->subtype);
-		if ((subtype & CPU_SUBTYPE_ARM_V6) == CPU_SUBTYPE_ARM_V6 && target_arch == loader_arch_armv6_type) {
-			result = true;
-		}
-		else if ((subtype & CPU_SUBTYPE_ARM_V7) == CPU_SUBTYPE_ARM_V7 && target_arch == loader_arch_armv7_type) {
-			result = true;
-		}
-		else if ((subtype & CPU_SUBTYPE_ARM_V7S) == CPU_SUBTYPE_ARM_V7S && target_arch == loader_arch_armv7s_type) {
-			result = true;
-		}
-		else if ((subtype & CPU_SUBTYPE_ARM_V8) == CPU_SUBTYPE_ARM_V8 && target_arch == loader_arch_arm64_type) {
+		else if (SDMArchCPUSUB_I386(arch, target_arch, endian_type)) {
 			result = true;
 		}
 	}
-	else if ((type & CPU_TYPE_POWERPC) == CPU_TYPE_POWERPC) {
+	else if (SDMArchCPU_ARM(arch, endian_type)) {
+		if (SDMArchCPUSUB_ARMV6(arch, target_arch, endian_type)) {
+			result = true;
+		}
+		else if (SDMArchCPUSUB_ARMV7(arch, target_arch, endian_type)) {
+			result = true;
+		}
+		else if (SDMArchCPUSUB_ARMV7S(arch, target_arch, endian_type)) {
+			result = true;
+		}
+		else if (SDMArchCPUSUB_ARM64(arch, target_arch, endian_type)) {
+			result = true;
+		}
+	}
+	else if (SDMArchCPU_PPC(arch, endian_type)) {
 		if (target_arch == loader_arch_ppc_type) {
 			result = true;
 		}
 	}
-	else if ((type & CPU_TYPE_POWERPC64) == CPU_TYPE_POWERPC64) {
+	else if (SDMArchCPU_PPC64(arch, endian_type)) {
 		if (target_arch == loader_arch_ppc64_type) {
 			result = true;
 		}
