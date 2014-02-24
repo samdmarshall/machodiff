@@ -507,7 +507,7 @@ bool SDMMatchArchToCPU(struct loader_arch *arch, uint8_t target_arch, uint8_t en
 	cpu_type_t type = (cpu_type_t)EndianFix(endian_type, (uint32_t)arch->cputype);
 	if ((type & CPU_TYPE_X86) == CPU_TYPE_X86) {
 		uint32_t subtype = (uint32_t)EndianFix(endian_type, (uint32_t)arch->subtype);
-		if (((subtype & CPU_SUBTYPE_LIB64) == CPU_SUBTYPE_LIB64) && ((subtype & CPU_SUBTYPE_X86_ALL) == CPU_SUBTYPE_X86_ALL) && target_arch == loader_arch_x86_64_type) {
+		if (((subtype & CPU_SUBTYPE_X86_ALL) == CPU_SUBTYPE_X86_ALL) && target_arch == loader_arch_x86_64_type) {
 			result = true;
 		}
 		else if (((subtype & CPU_SUBTYPE_LIB64) != CPU_SUBTYPE_LIB64) && ((subtype & CPU_SUBTYPE_I386_ALL) == CPU_SUBTYPE_I386_ALL) && target_arch == loader_arch_i386_type) {
@@ -576,9 +576,9 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 						if (found_arch) {
 							uint32_t fat_size = EndianFix(binary->endian_type, arch_header->size)
 							uint32_t fat_offset = EndianFix(binary->endian_type, arch_header->offset);
-							binary->header = calloc(1, fat_size);
+							binary->header = calloc(fat_size, sizeof(char));
 							binary->file_offset = fat_offset;
-							lseek(fd, offset, SEEK_SET);
+							lseek(fd, fat_offset, SEEK_SET);
 							read(fd, binary->header, fat_size);
 							result = true;
 							break;

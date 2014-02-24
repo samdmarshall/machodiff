@@ -165,7 +165,7 @@ int main(int argc, const char * argv[]) {
 		struct loader_binary *input_two = SDMLoadTarget(input_args[1], options_enabled[OptionsArch]);
 		
 		bool status = SDMMakeNewFolderAtPath(output_arg, 0700);
-		if (status) {
+		if (status && input_one && input_two) {
 			SDMPerformComparison(input_one, input_two, output_arg);
 		}
 		
