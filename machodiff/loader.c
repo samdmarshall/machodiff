@@ -45,8 +45,8 @@ struct loader_map *SDMCreateBinaryMap(struct loader_generic_header *header);
 
 bool SDMIsBinaryLoaded(char *path, struct loader_binary *binary);
 bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t target_arch);
-bool SDMMatchArchToCPU(struct loader_arch_header *arch_header, uint8_t target_arch, uint8_t endian_type);
-uint8_t SDMGetBinaryEndianness(uint32_t magic);
+bool SDMMatchArchToCPU(struct loader_arch *arch, uint8_t target_arch, uint8_t endian_type);
+uint8_t SDMGetFatBinaryEndianness(uint32_t magic);
 
 uint64_t SDMCalculateVMSlide(struct loader_binary *binary);
 uint64_t SDMComputeFslide(struct loader_segment_map *segment_map, bool is64Bit);
@@ -494,11 +494,11 @@ void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary) {
 	printf("Mapped %i Symbols to Subroutines\n",counter);
 }
 
-bool SDMMatchArchToCPU(struct loader_arch_header *arch_header, uint8_t target_arch, uint8_t endian_type) {
+bool SDMMatchArchToCPU(struct loader_arch *arch, uint8_t target_arch, uint8_t endian_type) {
 	bool result = false;
-	cpu_type_t type = (cpu_type_t)EndianFix(endian_type, (uint32_t)arch_header->arch.cputype);
+	cpu_type_t type = (cpu_type_t)EndianFix(endian_type, (uint32_t)arch->cputype);
 	if ((type & CPU_TYPE_X86) == CPU_TYPE_X86) {
-		uint32_t subtype = (uint32_t)EndianFix(endian_type, (uint32_t)arch_header->arch.subtype);
+		uint32_t subtype = (uint32_t)EndianFix(endian_type, (uint32_t)arch->subtype);
 		if (((subtype & CPU_SUBTYPE_LIB64) == CPU_SUBTYPE_LIB64) && ((subtype & CPU_SUBTYPE_X86_ALL) == CPU_SUBTYPE_X86_ALL) && target_arch == loader_arch_x86_64_type) {
 			result = true;
 		}
@@ -507,7 +507,7 @@ bool SDMMatchArchToCPU(struct loader_arch_header *arch_header, uint8_t target_ar
 		}
 	}
 	else if ((type & CPU_TYPE_ARM) == CPU_TYPE_ARM) {
-		cpu_subtype_t subtype = (cpu_subtype_t)EndianFix(endian_type, (uint32_t)arch_header->arch.subtype);
+		cpu_subtype_t subtype = (cpu_subtype_t)EndianFix(endian_type, (uint32_t)arch->subtype);
 		if ((subtype & CPU_SUBTYPE_ARM_V6) == CPU_SUBTYPE_ARM_V6 && target_arch == loader_arch_armv6_type) {
 			result = true;
 		}
@@ -534,7 +534,7 @@ bool SDMMatchArchToCPU(struct loader_arch_header *arch_header, uint8_t target_ar
 	return result;
 }
 
-uint8_t SDMGetBinaryEndianness(uint32_t magic) {
+uint8_t SDMGetFatBinaryEndianness(uint32_t magic) {
 	uint8_t type = loader_endian_invalid_type;
 	if (magic == FAT_MAGIC) {
 		type = loader_endian_big_type;
@@ -555,26 +555,43 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 			if (fd != 0xff) {
 				off_t size = fs.st_size;
 				off_t offset = 0;
-				struct loader_fat_header *whole_binary = mmap(NULL, (unsigned long)size, PROT_READ, MAP_PRIVATE, fd, offset);
-				binary->endian_type = SDMGetBinaryEndianness(whole_binary->magic.magic);
-				offset += sizeof(struct loader_fat_header);
-				uint32_t arch_count = EndianFix(binary->endian_type, whole_binary->n_arch);
-				for (uint32_t arch_index = 0; arch_index < arch_count; arch_index++) {
-					struct loader_arch_header *arch_header = (struct loader_arch_header *)PtrAdd(whole_binary, offset);
-					bool found_arch = SDMMatchArchToCPU(arch_header, target_arch, binary->endian_type);
-					if (found_arch) {
-						uint32_t size = EndianFix(binary->endian_type, arch_header->size)
-						uint32_t offset = EndianFix(binary->endian_type, arch_header->offset);
-						binary->header = calloc(1, size);
-						binary->file_offset = offset;
-						lseek(fd, offset, SEEK_SET);
-						read(fd, binary->header, size);
-						result = true;
-						break;
+				struct loader_magic *binary_magic = mmap(NULL, (unsigned long)size, PROT_READ, MAP_PRIVATE, fd, offset);
+				
+				if (binary_magic->magic == FAT_MAGIC || SDMSwapEndian32(binary_magic->magic) == FAT_MAGIC) {
+					struct loader_fat_header *fat_binary = (struct loader_fat_header *)binary_magic;
+					binary->endian_type = SDMGetFatBinaryEndianness(fat_binary->magic.magic);
+					offset += sizeof(struct loader_fat_header);
+					uint32_t arch_count = EndianFix(binary->endian_type, fat_binary->n_arch);
+					for (uint32_t arch_index = 0; arch_index < arch_count; arch_index++) {
+						struct loader_arch_header *arch_header = (struct loader_arch_header *)PtrAdd(fat_binary, offset);
+						bool found_arch = SDMMatchArchToCPU(&(arch_header->arch), target_arch, binary->endian_type);
+						if (found_arch) {
+							uint32_t fat_size = EndianFix(binary->endian_type, arch_header->size)
+							uint32_t fat_offset = EndianFix(binary->endian_type, arch_header->offset);
+							binary->header = calloc(1, fat_size);
+							binary->file_offset = fat_offset;
+							lseek(fd, offset, SEEK_SET);
+							read(fd, binary->header, fat_size);
+							result = true;
+							break;
+						}
+						offset += sizeof(struct loader_arch_header);
 					}
-					offset += sizeof(struct loader_arch_header);
 				}
-				munmap(whole_binary, (size_t)size);
+				else {
+					struct loader_generic_header *slim_binary = (struct loader_generic_header *)binary_magic;
+					
+					bool found_arch = SDMMatchArchToCPU(&(slim_binary->arch), target_arch, binary->endian_type);
+					if (found_arch) {
+						binary->header = calloc((uint32_t)size, sizeof(char));
+						binary->file_offset = 0;
+						lseek(fd, offset, SEEK_SET);
+						read(fd, binary->header, (uint32_t)size);
+						result = true;
+					}
+				}
+				
+				munmap(binary_magic, (size_t)size);
 			}
 			close(fd);
 		}
