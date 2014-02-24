@@ -12,6 +12,8 @@
 #include "objc_runtime.h"
 #include <string.h>
 
+void SDMSTObjc2ClassPopulate(struct loader_objc_class *newClass, struct loader_objc_2_class *cls, CoreRange dataRange, uint64_t offset, uint8_t class_type);
+
 struct loader_objc_class* SDMSTObjc1CreateClassFromProtocol(struct loader_objc_map *objcData, struct loader_objc_1_procotol *prot, uint64_t offset) {
 	struct loader_objc_class *newClass = calloc(1, sizeof(struct loader_objc_class));
 	if (prot) {
@@ -124,52 +126,64 @@ void SDMSTObjc1CreateClassFromSymbol(struct loader_objc_map *objcData, struct lo
 	}
 }
 
-struct loader_objc_class* SDMSTObjc2ClassCreateFromClass(struct loader_objc_2_class *cls, struct loader_objc_2_class *parentClass, CoreRange dataRange, uint64_t offset) {
+void SDMSTObjc2ClassPopulate(struct loader_objc_class *newClass, struct loader_objc_2_class *cls, CoreRange dataRange, uint64_t offset, uint8_t class_type) {
+	struct loader_objc_2_class_data *data = (struct loader_objc_2_class_data *)PtrAdd(cls->data, offset);
+	cls->data = data;
+	newClass->className = Ptr(PtrAdd(data->name, offset));
+	
+	if (data->ivar) {
+		struct loader_objc_2_class_ivar_info *ivarInfo = ((struct loader_objc_2_class_ivar_info *)PtrAdd(data->ivar, offset));
+		if (ivarInfo && (uint64_t)ivarInfo != offset) {
+			newClass->ivarCount = ivarInfo->count;
+			newClass->ivar = calloc(newClass->ivarCount, sizeof(struct loader_objc_ivar));
+			struct loader_objc_2_class_ivar *ivarOffset = (struct loader_objc_2_class_ivar *)PtrAdd(ivarInfo, sizeof(struct loader_objc_2_class_ivar_info));
+			for (uint32_t i = 0; i < newClass->ivarCount; i++) {
+				newClass->ivar[i].name = Ptr(PtrAdd(offset, ivarOffset[i].name));
+				newClass->ivar[i].type = Ptr(PtrAdd(offset, ivarOffset[i].type));
+				newClass->ivar[i].offset = (uintptr_t)(ivarOffset[i].offset);
+			}
+		}
+	}
+	
+	if (data->method) {
+		struct loader_objc_2_class_method_info *methodInfo = ((struct loader_objc_2_class_method_info *)PtrAdd(data->method, offset));
+		if (methodInfo && (uint64_t)methodInfo != offset) {
+			newClass->methodCount = methodInfo->count;
+			newClass->method = calloc(newClass->methodCount, sizeof(struct loader_objc_method));
+			struct loader_objc_2_class_method *methodOffset = (struct loader_objc_2_class_method *)PtrAdd(methodInfo, sizeof(struct loader_objc_2_class_method_info));
+			for (uint32_t i = 0; i < newClass->methodCount; i++) {
+				newClass->method[i].name = Ptr(PtrAdd(offset, methodOffset[i].name));
+				newClass->method[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
+				newClass->method[i].offset = (uintptr_t)(methodOffset[i].imp);
+				newClass->method[i].method_type = (class_type == loader_objc_2_class_metaclass_type ? loader_objc_method_class_type : loader_objc_method_instance_type);
+			}
+		}
+	}
+	
+	if (data->protocol) {
+		struct loader_objc_2_class_protocol_info *protocolInfo = ((struct loader_objc_2_class_protocol_info *)PtrAdd(data->protocol, offset));
+		if (protocolInfo && (uint64_t)protocolInfo != offset) {
+			newClass->protocolCount = (uint32_t)(protocolInfo->count);
+			newClass->protocol = calloc(newClass->protocolCount, sizeof(struct loader_objc_protocol));
+			struct  loader_objc_2_class_protocol *protocolOffset = (struct  loader_objc_2_class_protocol *)PtrAdd(protocolInfo, sizeof(struct loader_objc_2_class_protocol_info));
+			for (uint32_t i = 0; i < newClass->protocolCount; i++) {
+				newClass->protocol[i].offset = (uintptr_t)(protocolOffset[i].offset);
+			}
+		}
+	}
+}
+
+struct loader_objc_class* SDMSTObjc2ClassCreateFromClass(struct loader_objc_2_class *cls, struct loader_objc_2_class *parentClass, CoreRange dataRange, uint64_t offset, uint8_t class_type) {
 	struct loader_objc_class *newClass = calloc(1, sizeof(struct loader_objc_class));
-	if (cls != parentClass && cls->isa != NULL) {
+	if (cls != parentClass) {
+		SDMSTObjc2ClassPopulate(newClass, cls, dataRange, offset, class_type);
+		
 		if ((PtrAdd(offset, cls->isa >= Ptr(dataRange.offset)) && (PtrAdd(offset, cls->isa) < (PtrAdd(offset, (dataRange.offset + dataRange.length)))))) {
-			newClass->superCls = SDMSTObjc2ClassCreateFromClass((cls->isa),cls, dataRange, offset);
-			struct loader_objc_2_class_data *data = (struct loader_objc_2_class_data *)PtrAdd(cls->data, offset);
-			newClass->className = Ptr(PtrAdd(data->name, offset));
-			
-			struct loader_objc_2_class_ivar_info *ivarInfo = ((struct loader_objc_2_class_ivar_info *)PtrAdd(data->ivar, offset));
-			if (ivarInfo && (uint64_t)ivarInfo != offset) {
-				newClass->ivarCount = ivarInfo->count;
-				newClass->ivar = calloc(newClass->ivarCount, sizeof(struct loader_objc_ivar));
-				struct loader_objc_2_class_ivar *ivarOffset = (struct loader_objc_2_class_ivar *)PtrAdd(ivarInfo, sizeof(struct loader_objc_2_class_ivar_info));
-				for (uint32_t i = 0; i < newClass->ivarCount; i++) {
-					newClass->ivar[i].name = Ptr(PtrAdd(offset, ivarOffset[i].name));
-					newClass->ivar[i].type = Ptr(PtrAdd(offset, ivarOffset[i].type));
-					newClass->ivar[i].offset = (uintptr_t)(ivarOffset[i].offset);
-				}
-			}
-			
-			struct loader_objc_2_class_method_info *methodInfo = ((struct loader_objc_2_class_method_info *)PtrAdd(data->method, offset));
-			if (methodInfo && (uint64_t)methodInfo != offset) {
-				newClass->methodCount = methodInfo->count;
-				newClass->method = calloc(newClass->methodCount, sizeof(struct loader_objc_method));
-				struct loader_objc_2_class_method *methodOffset = (struct loader_objc_2_class_method *)PtrAdd(methodInfo, sizeof(struct loader_objc_2_class_method_info));
-				for (uint32_t i = 0; i < newClass->methodCount; i++) {
-					newClass->method[i].name = Ptr(PtrAdd(offset, methodOffset[i].name));
-					newClass->method[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
-					newClass->method[i].offset = (uintptr_t)(methodOffset[i].imp);
-					newClass->method[i].method_type = loader_objc_method_instance_type; // SDM: class methods don't seem to exist in this section?
-				}
-			}
-			
-			struct loader_objc_2_class_protocol_info *protocolInfo = ((struct loader_objc_2_class_protocol_info *)PtrAdd(data->protocol, offset));
-			if (protocolInfo && (uint64_t)protocolInfo != offset) {
-				newClass->protocolCount = (uint32_t)(protocolInfo->count);
-				newClass->protocol = calloc(newClass->protocolCount, sizeof(struct loader_objc_protocol));
-				struct  loader_objc_2_class_protocol *protocolOffset = (struct  loader_objc_2_class_protocol *)PtrAdd(protocolInfo, sizeof(struct loader_objc_2_class_protocol_info));
-				for (uint32_t i = 0; i < newClass->protocolCount; i++) {
-					newClass->protocol[i].offset = (uintptr_t)(protocolOffset[i].offset);
-				}
-			}
+			struct loader_objc_2_class *isa = (struct loader_objc_2_class *)PtrAdd((cls->isa), offset);
+			newClass->superCls = SDMSTObjc2ClassCreateFromClass(isa, cls, dataRange, offset, loader_objc_2_class_metaclass_type);
 		}
 	}
 	return newClass;
 }
-
 
 #endif

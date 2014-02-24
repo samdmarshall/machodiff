@@ -9,6 +9,12 @@
 #ifndef loader_objc2_runtime_h
 #define loader_objc2_runtime_h
 
+enum loader_objc_2_class_type {
+	loader_objc_2_class_invalid_type = 0,
+	loader_objc_2_class_class_type,
+	loader_objc_2_class_metaclass_type
+};
+
 #define kObjc2SelRef "__objc_selrefs"
 #define kObjc2MsgRefs "__objc_msgrefs"
 #define kObjc2ClassRefs "__objc_classrefs"
