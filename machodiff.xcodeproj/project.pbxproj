@@ -61,9 +61,9 @@
 		22B7478718B8F5310019BC58 = {
 			isa = PBXGroup;
 			children = (
-				22D8E3E718BAF4F700BD9B63 /* include */,
+				22D8E3EF18BAFF5C00BD9B63 /* capstone */,
 				22B7479518B8F5310019BC58 /* machodiff */,
-				22B7479218B8F5310019BC58 /* Frameworks */,
+				22B7479218B8F5310019BC58 /* Link */,
 				22B7479118B8F5310019BC58 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -76,13 +76,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		22B7479218B8F5310019BC58 /* Frameworks */ = {
+		22B7479218B8F5310019BC58 /* Link */ = {
 			isa = PBXGroup;
 			children = (
-				22D8E3E518BAF4DA00BD9B63 /* libcapstone.a */,
 				22345EFB18B95EC200FC106D /* libobjc.dylib */,
 			);
-			name = Frameworks;
+			name = Link;
 			sourceTree = "<group>";
 		};
 		22B7479518B8F5310019BC58 /* machodiff */ = {
@@ -127,6 +126,15 @@
 				22D8E3EE18BAF4F700BD9B63 /* x86.h */,
 			);
 			path = include;
+			sourceTree = "<group>";
+		};
+		22D8E3EF18BAFF5C00BD9B63 /* capstone */ = {
+			isa = PBXGroup;
+			children = (
+				22D8E3E518BAF4DA00BD9B63 /* libcapstone.a */,
+				22D8E3E718BAF4F700BD9B63 /* include */,
+			);
+			name = capstone;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
