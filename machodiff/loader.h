@@ -15,6 +15,7 @@
 #include <mach/vm_prot.h>
 #include "util.h"
 #include "objc_runtime.h"
+#include "capstone.h"
 
 #pragma mark -
 #pragma mark Private Types

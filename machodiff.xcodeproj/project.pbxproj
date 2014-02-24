@@ -14,6 +14,7 @@
 		22B747C018B903710019BC58 /* loader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747B818B903710019BC58 /* loader.c */; };
 		22B747C118B903710019BC58 /* objc_lexer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747BA18B903710019BC58 /* objc_lexer.c */; };
 		22B747C218B903710019BC58 /* objc_runtime.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747BC18B903710019BC58 /* objc_runtime.c */; };
+		22D8E3E618BAF4DA00BD9B63 /* libcapstone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22D8E3E518BAF4DA00BD9B63 /* libcapstone.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,11 +23,7 @@
 		22345EFB18B95EC200FC106D /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
 		2234603618BA821800FC106D /* compare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = compare.h; sourceTree = "<group>"; };
 		2234603718BA822000FC106D /* compare.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compare.c; sourceTree = "<group>"; };
-		2234603918BA838B00FC106D /* libdispatch.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdispatch.dylib; path = usr/lib/system/libdispatch.dylib; sourceTree = SDKROOT; };
-		2234603B18BA839C00FC106D /* libdispatch.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdispatch.dylib; path = usr/lib/system/introspection/libdispatch.dylib; sourceTree = SDKROOT; };
-		2234603D18BA843C00FC106D /* libSystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.dylib; path = usr/lib/libSystem.dylib; sourceTree = SDKROOT; };
 		22B7479018B8F5310019BC58 /* machodiff */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = machodiff; sourceTree = BUILT_PRODUCTS_DIR; };
-		22B7479318B8F5310019BC58 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		22B7479618B8F5310019BC58 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		22B7479818B8F5310019BC58 /* machodiff.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = machodiff.1; sourceTree = "<group>"; };
 		22B747B318B903080019BC58 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
@@ -38,6 +35,14 @@
 		22B747BD18B903710019BC58 /* objc_runtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objc_runtime.h; sourceTree = "<group>"; };
 		22B747BE18B903710019BC58 /* objc1_runtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objc1_runtime.h; sourceTree = "<group>"; };
 		22B747BF18B903710019BC58 /* objc2_runtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objc2_runtime.h; sourceTree = "<group>"; };
+		22D8E3E518BAF4DA00BD9B63 /* libcapstone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcapstone.a; sourceTree = "<group>"; };
+		22D8E3E818BAF4F700BD9B63 /* arm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arm.h; sourceTree = "<group>"; };
+		22D8E3E918BAF4F700BD9B63 /* arm64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arm64.h; sourceTree = "<group>"; };
+		22D8E3EA18BAF4F700BD9B63 /* capstone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = capstone.h; sourceTree = "<group>"; };
+		22D8E3EB18BAF4F700BD9B63 /* diet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = diet.h; sourceTree = "<group>"; };
+		22D8E3EC18BAF4F700BD9B63 /* mips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mips.h; sourceTree = "<group>"; };
+		22D8E3ED18BAF4F700BD9B63 /* ppc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ppc.h; sourceTree = "<group>"; };
+		22D8E3EE18BAF4F700BD9B63 /* x86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x86.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22D8E3E618BAF4DA00BD9B63 /* libcapstone.a in Frameworks */,
 				22345EFC18B95EC300FC106D /* libobjc.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,6 +61,7 @@
 		22B7478718B8F5310019BC58 = {
 			isa = PBXGroup;
 			children = (
+				22D8E3E718BAF4F700BD9B63 /* include */,
 				22B7479518B8F5310019BC58 /* machodiff */,
 				22B7479218B8F5310019BC58 /* Frameworks */,
 				22B7479118B8F5310019BC58 /* Products */,
@@ -72,11 +79,8 @@
 		22B7479218B8F5310019BC58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2234603D18BA843C00FC106D /* libSystem.dylib */,
-				2234603B18BA839C00FC106D /* libdispatch.dylib */,
-				2234603918BA838B00FC106D /* libdispatch.dylib */,
+				22D8E3E518BAF4DA00BD9B63 /* libcapstone.a */,
 				22345EFB18B95EC200FC106D /* libobjc.dylib */,
-				22B7479318B8F5310019BC58 /* CoreFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -109,6 +113,20 @@
 				2234603718BA822000FC106D /* compare.c */,
 			);
 			name = "mach-o";
+			sourceTree = "<group>";
+		};
+		22D8E3E718BAF4F700BD9B63 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				22D8E3E818BAF4F700BD9B63 /* arm.h */,
+				22D8E3E918BAF4F700BD9B63 /* arm64.h */,
+				22D8E3EA18BAF4F700BD9B63 /* capstone.h */,
+				22D8E3EB18BAF4F700BD9B63 /* diet.h */,
+				22D8E3EC18BAF4F700BD9B63 /* mips.h */,
+				22D8E3ED18BAF4F700BD9B63 /* ppc.h */,
+				22D8E3EE18BAF4F700BD9B63 /* x86.h */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -252,6 +270,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
@@ -262,6 +281,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 					"$(SDKROOT)/usr/lib/system/introspection",
+					"$(PROJECT_DIR)",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
@@ -276,6 +296,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
@@ -286,6 +307,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 					"$(SDKROOT)/usr/lib/system/introspection",
+					"$(PROJECT_DIR)",
 				);
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
