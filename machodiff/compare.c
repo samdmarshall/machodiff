@@ -49,7 +49,7 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 				printf("offset: %lx %lx\n",offset,calculated_offset);
 			}
 		} else {
-			printf("%s\n",subroutine_name);
+			printf("%s\n",SDMSTDemangleSymbolName(subroutine_name));
 			offset = calculated_offset;
 		}
 		

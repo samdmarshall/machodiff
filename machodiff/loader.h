@@ -254,4 +254,6 @@ struct loader_subroutine* SDMFindSubroutineFromName(struct loader_binary *binary
 
 CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct loader_binary *binary);
 
+char* SDMSTDemangleSymbolName(char *name);
+
 #endif

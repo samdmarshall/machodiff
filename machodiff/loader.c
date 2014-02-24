@@ -59,7 +59,10 @@ uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, st
 void SDMSTMapMethodsToSubroutines(struct loader_binary *binary);
 void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary);
 
+char* SDMSTDemangleSymbolNameRealloc(char *name, char *component, uint32_t component_length);
+
 bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName);
+bool SDMSTDemangleSymbolCPPNamePeekComponent(char *name);
 
 void SDMReleaseMap(struct loader_map *map);
 
@@ -598,6 +601,72 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 		}
 	}
 	return result;
+}
+
+char* SDMSTDemangleSymbolNameRealloc(char *name, char *component, uint32_t component_length) {
+	uint32_t length = (uint32_t)strlen(name);
+	name = realloc(name, sizeof(char)*(length+1+component_length));
+	memset(&(name[length]), 0, sizeof(char)*(component_length+1));
+	strncpy(&(name[length]), component, component_length);
+	return name;
+}
+
+bool SDMSTDemangleSymbolCPPNamePeekComponent(char *name) {
+	bool status = false;
+	uint32_t component_length = 0;
+	int found_length = sscanf(name, "%d", &component_length);
+	if (found_length == 1) {
+		status = true;
+	}
+	return status;
+}
+
+char* SDMSTDemangleSymbolName(char *name) {
+	uint32_t counter = 1;
+	char *clean_name = calloc(1, sizeof(char));
+	if (memcmp(name, "_", sizeof(char)) == 0) {
+		if (memcmp(&(name[1]), "_Z", sizeof(char[2])) == 0) {
+			// SDM: C++ name
+			
+			counter += 2;
+			
+			bool nested = ((memcmp(&(name[counter]), "N", sizeof(char)) == 0) ? true : false);
+			if (nested) {
+				counter++;
+			}
+			
+			while (counter < strlen(name)) {
+				uint32_t component_length = 0;
+				int found_length = sscanf(&(name[counter]), "%d", &component_length);
+				if (found_length == 1) {
+					counter += GetDigitsOfNumber(component_length);
+					clean_name = SDMSTDemangleSymbolNameRealloc(clean_name, &(name[counter]), component_length);
+					bool another_component = SDMSTDemangleSymbolCPPNamePeekComponent(&(name[counter+component_length]));
+					if (nested && another_component) {
+						clean_name = SDMSTDemangleSymbolNameRealloc(clean_name, "::", 2);
+					}
+					counter += component_length;
+				}
+				else {
+					counter++;
+				}
+			}
+			
+			
+		}
+		else {
+			// SDM: C name
+			uint32_t size = sizeof(char)*(uint32_t)strlen(name);
+			clean_name = realloc(clean_name, size);
+			memcpy(clean_name, &(name[counter]), size);
+		}
+	}
+	else {
+		uint32_t size = sizeof(char)*(uint32_t)strlen(name);
+		clean_name = realloc(clean_name, size);
+		memcpy(clean_name, name, size);
+	}
+	return clean_name;
 }
 
 bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName) {
