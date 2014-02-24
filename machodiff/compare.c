@@ -41,13 +41,16 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 			unnamed_subroutine = true;
 		}
 		
+		uintptr_t calculated_offset = (uintptr_t)(input_one->map->subroutine_map->subroutine[index].offset - (SDMBinaryIs64Bit(input_one->header) ? (uint64_t)input_one->header : 0));
+		
 		if (unnamed_subroutine) {
 			int has_offset = sscanf(subroutine_name, kSubName, &offset);
 			if (has_offset == 1) {
-				printf("offset: %lx %llx\n",offset,(input_one->map->subroutine_map->subroutine[index].offset - (SDMBinaryIs64Bit(input_one->header) ? (uint64_t)input_one->header : 0)));
+				printf("offset: %lx %lx\n",offset,calculated_offset);
 			}
 		} else {
 			printf("%s\n",subroutine_name);
+			offset = calculated_offset;
 		}
 		
 		CoreRange subroutine_range = SDMSTRangeOfSubroutine(&(input_one->map->subroutine_map->subroutine[index]), input_one);
