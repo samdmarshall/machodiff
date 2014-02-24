@@ -130,22 +130,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXLegacyTarget section */
-		221E02E518BBA65400EA4571 /* capstone-32 */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 221E02E618BBA65400EA4571 /* Build configuration list for PBXLegacyTarget "capstone-32" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			dependencies = (
-			);
-			name = "capstone-32";
-			passBuildSettingsInEnvironment = 1;
-			productName = "capstone-32";
-		};
-/* End PBXLegacyTarget section */
-
 /* Begin PBXNativeTarget section */
 		22B7478F18B8F5310019BC58 /* machodiff */ = {
 			isa = PBXNativeTarget;
@@ -185,7 +169,6 @@
 			projectRoot = "";
 			targets = (
 				22B7478F18B8F5310019BC58 /* machodiff */,
-				221E02E518BBA65400EA4571 /* capstone-32 */,
 			);
 		};
 /* End PBXProject section */
@@ -207,34 +190,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		221E02E718BBA65400EA4571 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUGGING_SYMBOLS = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		221E02E818BBA65400EA4571 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		22B7479A18B8F5310019BC58 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -366,14 +321,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		221E02E618BBA65400EA4571 /* Build configuration list for PBXLegacyTarget "capstone-32" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				221E02E718BBA65400EA4571 /* Debug */,
-				221E02E818BBA65400EA4571 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
 		22B7478B18B8F5310019BC58 /* Build configuration list for PBXProject "machodiff" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
