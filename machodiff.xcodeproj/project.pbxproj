@@ -285,6 +285,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";
 			};
@@ -310,6 +311,7 @@
 					"$(PROJECT_DIR)",
 				);
 				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";
 			};
