@@ -28,6 +28,19 @@ struct loader_objc_class* SDMSTObjc1CreateClassFromCategory(struct loader_objc_m
 	return newClass;
 }
 
+uint8_t SDMSTGetObjc1MethodType(struct loader_objc_map *objcData, struct loader_objc_1_class_method *method, uint64_t offset) {
+	uint8_t type = loader_objc_method_invalid_type;
+	
+	if ((uint64_t)method >= (offset+objcData->instMRange.offset) && (uint64_t)method < (offset+(objcData->instMRange.offset+objcData->instMRange.length))) {
+		type = loader_objc_method_instance_type;
+	}
+	else if ((uint64_t)method >= (offset+objcData->clsMRange.offset) && (uint64_t)method < (offset+(objcData->clsMRange.offset+objcData->clsMRange.length))) {
+		type = loader_objc_method_class_type;
+	}
+	
+	return type;
+}
+
 struct loader_objc_class* SDMSTObjc1CreateClassFromClass(struct loader_objc_map *objcData, struct loader_objc_1_class *cls, uint64_t offset) {
 	struct loader_objc_class *newClass = calloc(1, sizeof(struct loader_objc_class));
 	if (cls) {
@@ -67,6 +80,7 @@ struct loader_objc_class* SDMSTObjc1CreateClassFromClass(struct loader_objc_map 
 					newClass->method[i].name = Ptr(PtrAdd(offset, methodOffset[i].name));
 					newClass->method[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
 					newClass->method[i].offset = (uintptr_t)(methodOffset[i].imp);
+					newClass->method[i].method_type = SDMSTGetObjc1MethodType(objcData, methodOffset, PtrHighPointer(offset));
 				}
 			}
 			
@@ -139,6 +153,7 @@ struct loader_objc_class* SDMSTObjc2ClassCreateFromClass(struct loader_objc_2_cl
 					newClass->method[i].name = Ptr(PtrAdd(offset, methodOffset[i].name));
 					newClass->method[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
 					newClass->method[i].offset = (uintptr_t)(methodOffset[i].imp);
+					newClass->method[i].method_type = loader_objc_method_instance_type; // SDM: class methods don't seem to exist in this section?
 				}
 			}
 			

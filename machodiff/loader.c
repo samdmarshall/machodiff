@@ -463,10 +463,12 @@ void SDMSTMapMethodsToSubroutines(struct loader_binary *binary) {
 				for (uint32_t subroutine_index = 0; subroutine_index < binary->map->subroutine_map->count; subroutine_index++) {
 					if ((method->offset & k32BitMask) == ((binary->map->subroutine_map->subroutine[subroutine_index].offset + (SDMBinaryIs64Bit(binary->header) ? -(uint64_t)binary->header : 0x1000)))) {
 						
-						// SDM: perform unique mapping in here
-						// CLASS
-						// +/-
-						// METHOD
+						uint32_t name_length = (uint32_t)strlen(class->className)+1+(uint32_t)strlen(method->name);
+						char *new_name = calloc(1+name_length, sizeof(char));
+						char method_type = (method->method_type == loader_objc_method_instance_type ? '-' : (method->method_type == loader_objc_method_class_type ? '+' : '?'));
+						sprintf(new_name, "%s%c%s",class->className,method_type,method->name);
+						binary->map->subroutine_map->subroutine[subroutine_index].name = realloc(binary->map->subroutine_map->subroutine[subroutine_index].name, name_length+1);
+						memcpy(binary->map->subroutine_map->subroutine[subroutine_index].name, new_name, name_length);
 						
 						counter++;
 					}
@@ -482,8 +484,9 @@ void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary) {
 	for (uint32_t i = 0; i < binary->map->symbol_table->count; i++) {
 		for (uint32_t j = 0; j < binary->map->subroutine_map->count; j++) {
 			if (binary->map->symbol_table->symbol[i].offset == (binary->map->subroutine_map->subroutine[j].offset - (uint64_t)binary->header)) {
-				binary->map->subroutine_map->subroutine[j].name = realloc(binary->map->subroutine_map->subroutine[j].name, sizeof(char)*(strlen(binary->map->symbol_table->symbol[i].symbol_name)+0x1));
-				memcpy(binary->map->subroutine_map->subroutine[j].name, binary->map->symbol_table->symbol[i].symbol_name, sizeof(char)*strlen(binary->map->symbol_table->symbol[i].symbol_name));
+				uint32_t name_length = sizeof(char)*(uint32_t)strlen(binary->map->symbol_table->symbol[i].symbol_name);
+				binary->map->subroutine_map->subroutine[j].name = realloc(binary->map->subroutine_map->subroutine[j].name, name_length+0x1);
+				memcpy(binary->map->subroutine_map->subroutine[j].name, binary->map->symbol_table->symbol[i].symbol_name, name_length);
 				counter++;
 			}
 		}
