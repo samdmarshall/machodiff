@@ -298,7 +298,7 @@
 					"$(PROJECT_DIR)/build/Universal",
 				);
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-fextended-identifiers";
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";
@@ -325,7 +325,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/build/Universal",
 				);
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-fextended-identifiers";
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";

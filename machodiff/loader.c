@@ -225,7 +225,11 @@ bool SDMMapObjcClasses32(struct loader_binary * binary) {
 		for (uint32_t index = 0; index < section_count; index++) {
 			char *sectionName = Ptr(section->name.sectname);
 			if (strncmp(sectionName, kObjc1ModuleInfo, sizeof(char[16])) == 0) {
-				module = (struct loader_objc_module_raw *)PtrAdd(binary->header, section->info.offset);
+				uint32_t offset = section->info.offset;
+				if (section->info.offset != (section->position.addr & k32BitMask)) {
+					offset = (section->position.addr & k32BitMask);
+				}
+				module = (struct loader_objc_module_raw *)PtrAdd(binary->header, offset);
 				module_count = (section->position.size)/sizeof(struct loader_objc_module_raw);
 			}
 			if (strncmp(sectionName, kObjc1Class, sizeof(char[16])) == 0) {
@@ -283,7 +287,11 @@ bool SDMMapObjcClasses64(struct loader_binary * binary) {
 		if (binary->objc->clsCount) {
 			binary->objc->cls = calloc(binary->objc->clsCount, sizeof(struct loader_objc_class));
 			for (uint32_t index = 0; index < binary->objc->clsCount; index++) {
-				uint64_t *classes = (uint64_t*)PtrAdd(mem_offset, section->info.offset);
+				uint32_t offset = section->info.offset;
+				if (section->info.offset != (section->position.addr & k32BitMask)) {
+					offset = (section->position.addr & k32BitMask);
+				}
+				uint64_t *classes = (uint64_t*)PtrAdd(mem_offset, offset);
 				struct loader_objc_2_class *cls = (struct loader_objc_2_class *)PtrAdd((mem_offset & k32BitMask), classes[index]);
 				struct loader_objc_class *objclass = SDMSTObjc2ClassCreateFromClass(cls, 0, data_range, (mem_offset & k32BitMask), loader_objc_2_class_class_type);
 				memcpy(&(binary->objc->cls[index]), objclass, sizeof(struct loader_objc_class));
@@ -450,9 +458,10 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 
 uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, struct loader_binary *binary) {
 	uint32_t counter = 0;
+	
 	for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {
 		struct loader_objc_method *method = &(class->method[method_index]);
-		
+		printf("%s %s\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name));
 		for (uint32_t subroutine_index = 0; subroutine_index < binary->map->subroutine_map->count; subroutine_index++) {
 			if ((method->offset & k32BitMask) == ((binary->map->subroutine_map->subroutine[subroutine_index].offset + (SDMBinaryIs64Bit(binary->header) ? -(uint64_t)binary->header : 0x1000)))) {
 				
@@ -475,7 +484,7 @@ void SDMSTMapMethodsToSubroutines(struct loader_binary *binary) {
 		uint32_t counter = 0;
 		for (uint32_t class_index = 0; class_index < binary->objc->clsCount; class_index++) {
 			struct loader_objc_class *class = &(binary->objc->cls[class_index]);
-			
+			printf("Class: %s\n",class->className);
 			counter += SDMSTMapMethodsOfClassToSubroutines(class, binary);
 			counter += SDMSTMapMethodsOfClassToSubroutines(class->superCls, binary);
 		}
