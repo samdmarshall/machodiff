@@ -77,7 +77,7 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 			printf("ERROR: Failed to disassemble given code!\n");
 		}
 		
-		cs_close(handle);
+		cs_close(&handle);
 		
 	}
 }

@@ -156,9 +156,10 @@ char* SDMSTObjcCreateMethodDescription(struct loader_objc_lexer_type *type, char
 			CoreRange methodArgRange = SDMSTObjcGetTokenRangeFromOffset(name, offset, kObjcSelEncoding);
 			char *argName = calloc(1, sizeof(char)*((uint32_t)methodArgRange.length+1));
 			memcpy(argName, &(name[offset]), (uint32_t)methodArgRange.length);
-			uint32_t formatLength = (uint32_t)(8+strlen(argName)+strlen(type->token[counter+3].type)+GetDigitsOfNumber(counter));
+			char *argType = (type->token[counter+3].typeName != NULL && (strncmp(type->token[counter+3].typeName, "?", sizeof(char)) != 0) ? type->token[counter+3].typeName : type->token[counter+3].type);
+			uint32_t formatLength = (uint32_t)(8+strlen(argName)+strlen(argType)+GetDigitsOfNumber(counter));
 			char *formatName = calloc(1, sizeof(char)*formatLength);
-			sprintf(formatName,"%s:(%s)_arg%01i",argName,type->token[counter+3].type,counter);
+			sprintf(formatName,"%s:(%s)_arg%01i",argName,argType,counter);
 			description = realloc(description, sizeof(char)*(strlen(description)+formatLength));
 			memcpy(&(description[strlen(description)]), formatName, formatLength);
 			free(formatName);
@@ -220,9 +221,9 @@ uint32_t SDMSTParseToken(struct loader_objc_lexer_type *decode, char *type, uint
 	if (index != k32BitMask && index < kObjcTypeEncodingCount) {
 		decode->token[decode->tokenCount].typeClass = SDMObjcLexerConvertIndexToToken(index);
 		decode->token[decode->tokenCount].type = ObjcTypeEncodingNames[index];
-		if (decode->token[decode->tokenCount].typeName == 0) {
-			decode->token[decode->tokenCount].typeName = "";
-		}
+		//if (decode->token[decode->tokenCount].typeName == 0) {
+			decode->token[decode->tokenCount].typeName = 0;
+		//}
 		switch (decode->token[decode->tokenCount].typeClass) {
 			case ObjcCharEncoding: {
 				decode->tokenCount++;
@@ -340,7 +341,7 @@ uint32_t SDMSTParseToken(struct loader_objc_lexer_type *decode, char *type, uint
 				break;
 			};
 			case ObjcUnknownEncoding: {
-				decode->token[decode->tokenCount].typeName = "";
+				decode->token[decode->tokenCount].typeName = 0;
 				decode->tokenCount++;
 				decode->token = realloc(decode->token, sizeof(struct loader_objc_lexer_token)*(decode->tokenCount+1));
 				break;
@@ -368,7 +369,7 @@ uint32_t SDMSTParseToken(struct loader_objc_lexer_type *decode, char *type, uint
 				decode->token[decode->tokenCount].pointerCount++;
 			}
 			if (strncmp(&(type[offset]), kObjcUnknownEncoding, sizeof(char)) == 0) {
-				decode->token[decode->tokenCount].typeName = "";
+				decode->token[decode->tokenCount].typeName = 0;
 			}
 			if (strncmp(&(type[offset]), kObjcStructTokenStart, sizeof(char)) == 0) {
 				uint64_t next = offset+1;
@@ -411,8 +412,8 @@ uint32_t SDMSTParseToken(struct loader_objc_lexer_type *decode, char *type, uint
 				memcpy(arrayTypeString, &(type[arrayTypeRange.offset]), arrayTypeRange.length);
 				struct loader_objc_lexer_type *arrayType = SDMSTObjcDecodeType(arrayTypeString);
 				char *typeAssignment = ObjcTypeEncodingNames[SDMObjcLexerConvertTokenToIndex(ObjcUnknownEncoding)];
-				if (arrayType->token[arrayType->tokenCount].type) {
-					typeAssignment = arrayType->token[arrayType->tokenCount].type;
+				if (arrayType->token[arrayType->tokenCount - 1].type) {
+					typeAssignment = arrayType->token[arrayType->tokenCount - 1].type;
 				}
 				uint32_t typeLength = (uint32_t)strlen(typeAssignment);
 				
@@ -422,9 +423,11 @@ uint32_t SDMSTParseToken(struct loader_objc_lexer_type *decode, char *type, uint
 				decode->token[decode->tokenCount].childrenCount = 1;
 				decode->token[decode->tokenCount].children = calloc(1, sizeof(struct loader_objc_lexer_token));
 				memcpy(decode->token[decode->tokenCount].children, &(arrayType->token[0]), sizeof(struct loader_objc_lexer_token));
-				uint64_t arrayTypeNameLength = strlen(arrayType->token[0].typeName);
-				char *name = calloc(1, sizeof(char)*((uint32_t)arrayTypeNameLength+1));
-				memcpy(name, arrayType->token[0].typeName, arrayTypeNameLength);
+				
+				uint32_t newArrayLength = (uint32_t)(typeAssignment + 2 + (uint32_t)GetDigitsOfNumber(stackSize));
+				char *name = calloc(1, sizeof(char)*(newArrayLength));
+				memcpy(name, decode->token[decode->tokenCount].type, newArrayLength);
+				sprintf(&(name[strlen(typeAssignment)]), "[%lld]", stackSize);
 				decode->token[decode->tokenCount].typeName = name;
 				parsedLength += arrayTypeRange.length + stackRange.length;
 				free(arrayType);

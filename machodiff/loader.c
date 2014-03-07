@@ -461,7 +461,9 @@ uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, st
 	
 	for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {
 		struct loader_objc_method *method = &(class->method[method_index]);
+		
 		printf("%s %s\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name));
+		
 		for (uint32_t subroutine_index = 0; subroutine_index < binary->map->subroutine_map->count; subroutine_index++) {
 			if ((method->offset & k32BitMask) == ((binary->map->subroutine_map->subroutine[subroutine_index].offset + (SDMBinaryIs64Bit(binary->header) ? -(uint64_t)binary->header : 0x1000)))) {
 				
