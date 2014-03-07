@@ -55,6 +55,8 @@ bool SDMMapObjcClasses64(struct loader_binary *binary);
 void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary);
 void SDMSTFindSubroutines(struct loader_binary *binary);
 
+void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_objc_class *class);
+
 uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, struct loader_binary *binary);
 void SDMSTMapMethodsToSubroutines(struct loader_binary *binary);
 void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary);
@@ -300,6 +302,11 @@ bool SDMMapObjcClasses64(struct loader_binary * binary) {
 		}
 	}
 	result = (binary->objc->cls ? true : false);
+	if (result) {
+		if (binary->map->subroutine_map->count == 0) {
+			
+		}
+	}
 	return result;
 }
 
@@ -452,8 +459,79 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 			}
 			textSectionOffset += (SDMBinaryIs64Bit(binary->header) ? sizeof(struct loader_section_64) : sizeof(struct loader_section_32));
 		}
+		if (binary->map->subroutine_map->count == 0) {
+			if (binary->objc->clsCount) {
+				for (uint32_t index = 0; index < binary->objc->clsCount; index++) {
+					struct loader_objc_class *class = &(binary->objc->cls[index]);
+					SDMSTCreateSubroutinesForClass(binary, class);
+					SDMSTCreateSubroutinesForClass(binary, class->superCls);
+				}
+			}
+		}
 		printf("Found %i subroutines\n",binary->map->subroutine_map->count);
 	}
+}
+
+void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_objc_class *class) {
+	uint32_t textSections = 0, flags = 0;
+	uint64_t pageZero = 0, size = 0, address = 0;
+	if (SDMBinaryIs64Bit(binary->header)) {
+		textSections = ((struct loader_segment_64 *)(binary->map->segment_map->text))->info.nsects;
+		pageZero = ((struct loader_segment_64 *)(binary->map->segment_map->text))->data.vm_position.addr;
+	}
+	else {
+		textSections = ((struct loader_segment_32 *)(binary->map->segment_map->text))->info.nsects;
+		pageZero = ((struct loader_segment_32 *)(binary->map->segment_map->text))->data.vm_position.addr;
+	}
+	pageZero += binary->file_offset;
+	uint64_t binaryOffset = pageZero;
+	uintptr_t textSectionOffset = (uintptr_t)(binary->map->segment_map->text);
+	if (SDMBinaryIs64Bit(binary->header)) {
+		textSectionOffset += sizeof(struct loader_segment_64);
+	}
+	else {
+		textSectionOffset += sizeof(struct loader_segment_32);
+	}
+
+	uint64_t memOffset;
+	if (binary->memory_ref) {
+		memOffset = (uint64_t)_dyld_get_image_vmaddr_slide(binary->image_index);
+	}
+	else {
+		memOffset = (uint64_t)(binary->header) - binaryOffset;
+	}
+	if (SDMBinaryIs64Bit(binary->header)) {
+		flags = ((struct loader_section_64 *)(textSectionOffset))->info.flags;
+		size = ((struct loader_section_64 *)(textSectionOffset))->position.size;
+		address = (uint64_t)PtrAdd(memOffset, ((struct section_64 *)textSectionOffset)->addr);
+	}
+	else {
+		flags = ((struct loader_section_32 *)(textSectionOffset))->info.flags;
+		size = ((struct loader_section_32 *)(textSectionOffset))->position.size;
+		address = (uint64_t)PtrAdd(memOffset, ((struct section *)textSectionOffset)->addr);
+	}
+	
+	for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {
+		struct loader_objc_method *method = &(class->method[method_index]);
+						
+		char *buffer = calloc(1024, sizeof(char));
+		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, ((binary->map->subroutine_map->count+1)*sizeof(struct loader_subroutine)));
+		struct loader_subroutine *subroutine = (struct loader_subroutine *)calloc(1, sizeof(struct loader_subroutine));
+		subroutine->offset = (uintptr_t)(address+(method->offset) - (address-memOffset));
+			
+		sprintf(buffer, kSubFormatter, subroutine->offset);
+		subroutine->name = calloc(5 + (strlen(buffer)), sizeof(char));
+		sprintf(subroutine->name, kSubName, subroutine->offset);
+		
+		subroutine->section_offset = textSectionOffset;
+			
+		memcpy(&(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count]), subroutine, sizeof(struct loader_subroutine));
+		free(subroutine);
+		free(buffer);
+		binary->map->subroutine_map->count++;
+		
+	}
+	
 }
 
 uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, struct loader_binary *binary) {
@@ -462,10 +540,10 @@ uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, st
 	for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {
 		struct loader_objc_method *method = &(class->method[method_index]);
 		
-		printf("%s %s\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name));
+		//printf("%s %s\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name));
 		
 		for (uint32_t subroutine_index = 0; subroutine_index < binary->map->subroutine_map->count; subroutine_index++) {
-			if ((method->offset & k32BitMask) == ((binary->map->subroutine_map->subroutine[subroutine_index].offset + (SDMBinaryIs64Bit(binary->header) ? -(uint64_t)binary->header : 0x1000)))) {
+			if ((method->offset & k32BitMask) == ((binary->map->subroutine_map->subroutine[subroutine_index].offset + (SDMBinaryIs64Bit(binary->header) ? -(uint64_t)((uintptr_t)binary->header) : 0x1000)))) {
 				
 				uint32_t name_length = (uint32_t)strlen(class->className)+1+(uint32_t)strlen(method->name);
 				char *new_name = calloc(1+name_length, sizeof(char));
@@ -486,7 +564,7 @@ void SDMSTMapMethodsToSubroutines(struct loader_binary *binary) {
 		uint32_t counter = 0;
 		for (uint32_t class_index = 0; class_index < binary->objc->clsCount; class_index++) {
 			struct loader_objc_class *class = &(binary->objc->cls[class_index]);
-			printf("Class: %s\n",class->className);
+			//printf("Class: %s\n",class->className);
 			counter += SDMSTMapMethodsOfClassToSubroutines(class, binary);
 			counter += SDMSTMapMethodsOfClassToSubroutines(class->superCls, binary);
 		}
@@ -716,9 +794,7 @@ struct loader_binary * SDMLoadBinaryWithPath(char *path, uint8_t target_arch) {
 	if (is_loaded) {
 		binary->map = SDMCreateBinaryMap(binary->header);
 		SDMGenerateSymbols(binary);
-		SDMSTFindSubroutines(binary);
-		SDMSTMapSymbolsToSubroutines(binary);
-
+		
 		bool loadedObjc = false;
 		bool is64Bit = SDMBinaryIs64Bit(binary->header);
 		if (is64Bit) {
@@ -727,6 +803,8 @@ struct loader_binary * SDMLoadBinaryWithPath(char *path, uint8_t target_arch) {
 		else {
 			loadedObjc = SDMMapObjcClasses32(binary);
 		}
+		SDMSTFindSubroutines(binary);
+		SDMSTMapSymbolsToSubroutines(binary);
 		if (loadedObjc) {
 			SDMSTMapMethodsToSubroutines(binary);
 		}
