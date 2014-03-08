@@ -117,7 +117,7 @@ char* SDMSTObjcPointersForToken(struct loader_objc_lexer_token *token) {
 	char *pointers = calloc(1, sizeof(char)*(token->pointerCount+1));
 	if (token->pointerCount) {
 		for (uint32_t i = 0; i < token->pointerCount; i++) {
-			pointers = strcat(pointers, "*");
+			strlcat(pointers, "*", sizeof(char));
 		}
 	}
 	return pointers;

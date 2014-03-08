@@ -473,14 +473,11 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 }
 
 void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_objc_class *class) {
-	uint32_t textSections = 0, flags = 0;
-	uint64_t pageZero = 0, size = 0, address = 0;
+	uint64_t pageZero = 0, address = 0;
 	if (SDMBinaryIs64Bit(binary->header)) {
-		textSections = ((struct loader_segment_64 *)(binary->map->segment_map->text))->info.nsects;
 		pageZero = ((struct loader_segment_64 *)(binary->map->segment_map->text))->data.vm_position.addr;
 	}
 	else {
-		textSections = ((struct loader_segment_32 *)(binary->map->segment_map->text))->info.nsects;
 		pageZero = ((struct loader_segment_32 *)(binary->map->segment_map->text))->data.vm_position.addr;
 	}
 	pageZero += binary->file_offset;
@@ -501,13 +498,9 @@ void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_
 		memOffset = (uint64_t)(binary->header) - binaryOffset;
 	}
 	if (SDMBinaryIs64Bit(binary->header)) {
-		flags = ((struct loader_section_64 *)(textSectionOffset))->info.flags;
-		size = ((struct loader_section_64 *)(textSectionOffset))->position.size;
 		address = (uint64_t)PtrAdd(memOffset, ((struct section_64 *)textSectionOffset)->addr);
 	}
 	else {
-		flags = ((struct loader_section_32 *)(textSectionOffset))->info.flags;
-		size = ((struct loader_section_32 *)(textSectionOffset))->position.size;
 		address = (uint64_t)PtrAdd(memOffset, ((struct section *)textSectionOffset)->addr);
 	}
 	
@@ -545,10 +538,12 @@ uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, st
 		for (uint32_t subroutine_index = 0; subroutine_index < binary->map->subroutine_map->count; subroutine_index++) {
 			if (PtrLowPointer(method->offset) == ((binary->map->subroutine_map->subroutine[subroutine_index].offset + (SDMBinaryIs64Bit(binary->header) ? -(uint64_t)((uintptr_t)binary->header) : 0x1000)))) {
 				
-				uint32_t name_length = (uint32_t)strlen(class->className)+5+(uint32_t)strlen(method->name);
+				char *method_name = method->name;
+				
+				uint32_t name_length = (uint32_t)strlen(class->className)+5+(uint32_t)strlen(method_name);
 				char *new_name = calloc(1+name_length, sizeof(char));
 				char method_type = (method->method_type == loader_objc_method_instance_type ? '-' : (method->method_type == loader_objc_method_class_type ? '+' : '?'));
-				sprintf(new_name, "%c[%s %s]",method_type,class->className,method->name);
+				sprintf(new_name, "%c[%s %s]",method_type,class->className,method_name);
 				binary->map->subroutine_map->subroutine[subroutine_index].name = realloc(binary->map->subroutine_map->subroutine[subroutine_index].name, name_length+1);
 				memcpy(binary->map->subroutine_map->subroutine[subroutine_index].name, new_name, name_length);
 				
@@ -658,7 +653,7 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 						if (found_arch) {
 							uint32_t fat_size = EndianFix(binary->endian_type, arch_header->size)
 							uint32_t fat_offset = EndianFix(binary->endian_type, arch_header->offset);
-							binary->header = calloc(fat_size, sizeof(char));
+							binary->header = (struct loader_generic_header *)calloc(fat_size, sizeof(char));
 							binary->file_offset = fat_offset;
 							lseek(fd, fat_offset, SEEK_SET);
 							read(fd, binary->header, fat_size);
@@ -673,7 +668,7 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 					
 					bool found_arch = SDMMatchArchToCPU(&(slim_binary->arch), target_arch, binary->endian_type);
 					if (found_arch) {
-						binary->header = calloc((uint32_t)size, sizeof(char));
+						binary->header = (struct loader_generic_header *)calloc((uint32_t)size, sizeof(char));
 						binary->file_offset = 0;
 						lseek(fd, offset, SEEK_SET);
 						read(fd, binary->header, (uint32_t)size);
