@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <dlfcn.h>
 #include "arch.h"
+#include "reader.h"
 
 #pragma mark -
 #pragma mark Private Types
@@ -306,29 +307,13 @@ bool SDMMapObjcClasses64(struct loader_binary * binary) {
 		}
 	}
 	result = (binary->objc->cls ? true : false);
-	if (result) {
-		if (binary->map->subroutine_map->count == 0) {
-			
-		}
-	}
 	return result;
 }
 
 void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary) {
-	uint8_t *pointer = *fPointer;
-	uint32_t bitCount = 0x0;
-	uintptr_t offset = 0x0;
-	do {
-		uint32_t slice = (*pointer & 0x7f);
-		if (bitCount < 0x40) {
-			offset |= (slice << bitCount);
-			bitCount += 0x7;
-		}
-		else {
-			break;
-		}
-	} while ((*pointer++ & 0x80) != 0);
-	
+	Pointer pointer = PtrCast(*fPointer, Pointer);
+	uint64_t offset = read_uleb128(pointer, PtrCast(fPointer, Pointer*));
+
 	if (offset) {
 		char *buffer = calloc(1024, sizeof(char));
 		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, sizeof(struct loader_subroutine)*(binary->map->subroutine_map->count+0x1));
@@ -341,7 +326,6 @@ void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary) 
 		free(buffer);
 		binary->map->subroutine_map->count++;
 	}
-	*fPointer = pointer;
 }
 
 void SDMSTFindSubroutines(struct loader_binary *binary) {
