@@ -170,7 +170,7 @@ void SDMGenerateSymbols(struct loader_binary * binary) {
 	uintptr_t symbol_address = 0;
 	binary->map->symbol_table->symbol = calloc(1, sizeof(struct loader_symbol));
 	binary->map->symbol_table->count = 0;
-	struct symtab_command *symtab_cmd = PtrCast(binary->map->symbol_table->symtab, struct symtab_command *);
+	struct loader_symtab_cmd *symtab_cmd = PtrCast(binary->map->symbol_table->symtab, struct loader_symtab_cmd *);
 	bool is64Bit = SDMBinaryIs64Bit(binary->header);
 	uint64_t fslide = SDMComputeFslide(binary->map->segment_map, is64Bit);//(binary->memory_ref == true ? SDMComputeFslide(binary->map->segment_map, is64Bit) : 0);
 	if (symtab_cmd != NULL) {
@@ -196,7 +196,7 @@ void SDMGenerateSymbols(struct loader_binary * binary) {
 						symbol->stub = false;
 					}
 					else {
-						symbol->symbol_name = calloc(1 + strlen(kStubName) + ((binary->map->symbol_table->count==0) ? 1 : (uint32_t)log10(binary->map->symbol_table->count) + 0x1), sizeof(char));
+						symbol->symbol_name = calloc(1 + strlen(kStubName) + GetDigitsOfNumber(binary->map->symbol_table->count), sizeof(char));
 						sprintf(symbol->symbol_name, "%s%llu", kStubName, binary->map->symbol_table->count);
 						symbol->stub = true;
 					}
@@ -394,12 +394,12 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 			if (SDMBinaryIs64Bit(binary->header)) {
 				flags = ((struct loader_section_64 *)(textSectionOffset))->info.flags;
 				size = ((struct loader_section_64 *)(textSectionOffset))->position.size;
-				address = (uint64_t)PtrAdd(memOffset, ((struct section_64 *)textSectionOffset)->addr);
+				address = (uint64_t)PtrAdd(memOffset, ((struct loader_section_64 *)textSectionOffset)->position.addr);
 			}
 			else {
 				flags = ((struct loader_section_32 *)(textSectionOffset))->info.flags;
 				size = ((struct loader_section_32 *)(textSectionOffset))->position.size;
-				address = (uint64_t)PtrAdd(memOffset, ((struct section *)textSectionOffset)->addr);
+				address = (uint64_t)PtrAdd(memOffset, ((struct loader_section_32 *)textSectionOffset)->position.addr);
 			}
 			if (hasLCFunctionStarts && binary->map->subroutine_map->count) {
 				for (uint32_t j = 0; j < binary->map->subroutine_map->count; j++) {
@@ -502,10 +502,10 @@ void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_
 		memOffset = (uint64_t)(binary->header) - binaryOffset;
 	}
 	if (SDMBinaryIs64Bit(binary->header)) {
-		address = (uint64_t)PtrAdd(memOffset, ((struct section_64 *)textSectionOffset)->addr);
+		address = (uint64_t)PtrAdd(memOffset, ((struct loader_section_64 *)textSectionOffset)->position.addr);
 	}
 	else {
-		address = (uint64_t)PtrAdd(memOffset, ((struct section *)textSectionOffset)->addr);
+		address = (uint64_t)PtrAdd(memOffset, ((struct loader_section_32 *)textSectionOffset)->position.addr);
 	}
 	
 	for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {

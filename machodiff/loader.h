@@ -199,6 +199,14 @@ struct loader_symtab {
 	uint64_t count;
 } ATR_PACK;
 
+struct loader_symtab_cmd {
+	struct loader_loadcmd cmd;
+	uint32_t	symoff;
+	uint32_t	nsyms;
+	uint32_t	stroff;
+	uint32_t	strsize;
+} ATR_PACK;
+
 struct loader_dependency_map {
 	uintptr_t *dependency;
 	uint32_t count;
