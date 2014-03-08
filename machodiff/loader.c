@@ -333,10 +333,10 @@ void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary) 
 		char *buffer = calloc(1024, sizeof(char));
 		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, sizeof(struct loader_subroutine)*(binary->map->subroutine_map->count+0x1));
 		struct loader_subroutine *subroutine = &(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count]);
-		subroutine->offset = offset + (binary->map->subroutine_map->count ? binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count-0x1].offset : 0x0);
-		sprintf(buffer, kSubFormatter, (subroutine->offset));
+		subroutine->offset = (uintptr_t)PtrAdd(offset, (binary->map->subroutine_map->count ? PtrCast(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count-0x1].offset, uintptr_t) : PtrCast(binary->header, uintptr_t)));
+		sprintf(buffer, kSubFormatter, (uintptr_t)PtrSub(subroutine->offset, binary->header));
 		subroutine->name = calloc((5 + strlen(buffer)), sizeof(char));
-		sprintf(subroutine->name, kSubName, (subroutine->offset));
+		sprintf(subroutine->name, kSubName, (uintptr_t)PtrSub(subroutine->offset, binary->header));
 		subroutine->section_offset = k32BitMask;
 		free(buffer);
 		binary->map->subroutine_map->count++;
