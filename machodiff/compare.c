@@ -50,8 +50,8 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 				printf("offset: %lx %lx\n",offset,calculated_offset);
 			}
 		} else {
-			printf("%s\n",SDMSTDemangleSymbolName(subroutine_name));
 			offset = calculated_offset;
+			printf("%s %lx\n",SDMSTDemangleSymbolName(subroutine_name),offset);
 		}
 		
 		CoreRange subroutine_range = SDMSTRangeOfSubroutine(&(input_one->map->subroutine_map->subroutine[index]), input_one);

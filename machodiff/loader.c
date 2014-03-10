@@ -66,6 +66,9 @@ bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName);
 
 void SDMReleaseMap(struct loader_map *map);
 
+Pointer SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit);
+bool SDMSTTEXTHasEH_Frame(struct loader_segment *text, bool is64Bit, Pointer *eh_frame);
+
 #pragma mark -
 #pragma mark Private Function Definitions
 
@@ -120,6 +123,9 @@ struct loader_map * SDMCreateBinaryMap(struct loader_generic_header *header) {
 				struct loader_segment *segment = PtrCast(loadCmd, struct loader_segment *);
 				if ((map->segment_map->text == NULL) && !strncmp(SEG_TEXT,segment->segname,sizeof(segment->segname))) {
 					map->segment_map->text = segment;
+					Pointer offset = NULL;
+					bool result = SDMSTTEXTHasEH_Frame(segment, SDMBinaryIs64Bit(header), &offset);
+					printf("test: %p %s\n", offset, result ? "yes" : "no");
 				}
 				if ((map->segment_map->link == NULL) && !strncmp(SEG_LINKEDIT,segment->segname,sizeof(segment->segname))) {
 					map->segment_map->link = segment;
@@ -725,6 +731,47 @@ void SDMReleaseMap(struct loader_map *map) {
 	}
 }
 
+Pointer SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit) {
+	Pointer result = NULL;
+	Pointer offset = (Pointer)text;
+	uint32_t sections_count = 0;
+	if (is64Bit) {
+		struct loader_segment_64 *text_segment = PtrCast(text, struct loader_segment_64 *);
+		sections_count = text_segment->info.nsects;
+		offset = (Pointer)PtrAdd(offset, sizeof(struct loader_segment_64));
+		for (uint32_t index = 0; index < sections_count; index++) {
+			struct loader_section_64 *text_section = (struct loader_section_64 *)offset;
+			if (strncmp(text_section->name.sectname, EH_FRAME, sizeof(char[16])) == 0) {
+				result = offset;
+				break;
+			}
+			offset = (Pointer)PtrAdd(offset, sizeof(struct loader_section_64));
+		}
+	}
+	else {
+		struct loader_segment_32 *text_segment = PtrCast(text, struct loader_segment_32 *);
+		sections_count = text_segment->info.nsects;
+		offset = (Pointer)PtrAdd(offset, sizeof(struct loader_segment_32));
+		for (uint32_t index = 0; index < sections_count; index++) {
+			struct loader_section_32 *text_section = (struct loader_section_32 *)offset;
+			if (strncmp(text_section->name.sectname, EH_FRAME, sizeof(char[16])) == 0) {
+				result = offset;
+				break;
+			}
+			offset = (Pointer)PtrAdd(offset, sizeof(struct loader_section_32));
+		}
+	}
+	if (sections_count == 0) {
+		result = NULL;
+	}
+	return result;
+}
+
+bool SDMSTTEXTHasEH_Frame(struct loader_segment *text, bool is64Bit, Pointer *eh_frame) {
+	*eh_frame = SDMSTEH_FramePointer(text, is64Bit);
+	return (*eh_frame != NULL ? true : false);
+}
+
 #pragma mark -
 #pragma mark Public Function Definitions
 
@@ -830,6 +877,7 @@ CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct lo
 				uint32_t next = i + 1;
 				if (next < binary->map->subroutine_map->count) {
 					range.length = ((binary->map->subroutine_map->subroutine[next].offset) - range.offset);
+					// SDM: validate against __eh_frame
 				}
 				else {
 					uint64_t size, address;

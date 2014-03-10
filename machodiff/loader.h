@@ -14,11 +14,14 @@
 #include <mach/machine.h>
 #include <mach/vm_prot.h>
 #include "util.h"
+#include "eh_frame.h"
 #include "objc_runtime.h"
 #include "capstone.h"
 
 #pragma mark -
 #pragma mark Private Types
+
+#define EH_FRAME "__eh_frame"
 
 #define kStubName "__sdmst_stub_"
 
