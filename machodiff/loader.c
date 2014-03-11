@@ -462,6 +462,7 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 		}
 		
 		if (binary->map->subroutine_map->count == 0) {
+			// SDM: checking eh_frame for symbols
 			if (binary->map->frame_map->count) {
 				for (uint32_t index = 0; index < binary->map->frame_map->count; index++) {
 					struct loader_eh_frame *frame = &(binary->map->frame_map->frame[index]);
@@ -471,6 +472,7 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 				}
 			}
 			
+			// SDM: checking objc for methods
 			if (binary->objc->clsCount) {
 				for (uint32_t index = 0; index < binary->objc->clsCount; index++) {
 					struct loader_objc_class *class = &(binary->objc->cls[index]);
@@ -484,6 +486,7 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 }
 
 void SDMSTCreateSubtroutineForFrame(struct loader_binary *binary, struct loader_eh_frame *frame) {
+#warning SDM - Make sure we are not creating duplicate subroutines
 	/*
 	char *buffer = calloc(1024, sizeof(char));
 	binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, ((binary->map->subroutine_map->count+1)*sizeof(struct loader_subroutine)));
@@ -509,6 +512,7 @@ void SDMSTCreateSubtroutineForFrame(struct loader_binary *binary, struct loader_
 }
 
 void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_objc_class *class) {
+#warning SDM - Make sure we are not creating duplicate subroutines
 	uint64_t pageZero = 0, address = 0;
 	if (SDMBinaryIs64Bit(binary->header)) {
 		pageZero = ((struct loader_segment_64 *)(binary->map->segment_map->text))->data.vm_position.addr;
