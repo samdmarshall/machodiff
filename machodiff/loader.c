@@ -56,6 +56,7 @@ bool SDMMapObjcClasses64(struct loader_binary *binary);
 Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary);
 void SDMSTFindSubroutines(struct loader_binary *binary);
 
+void SDMSTCreateSubtroutineForFrame(struct loader_binary *binary, struct loader_eh_frame *frame);
 void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_objc_class *class);
 
 uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, struct loader_binary *binary);
@@ -459,7 +460,17 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 			}
 			textSectionOffset += (SDMBinaryIs64Bit(binary->header) ? sizeof(struct loader_section_64) : sizeof(struct loader_section_32));
 		}
+		
 		if (binary->map->subroutine_map->count == 0) {
+			if (binary->map->frame_map->count) {
+				for (uint32_t index = 0; index < binary->map->frame_map->count; index++) {
+					struct loader_eh_frame *frame = &(binary->map->frame_map->frame[index]);
+					if (frame->type == loader_eh_frame_fde_type) {
+						SDMSTCreateSubtroutineForFrame(binary, frame);
+					}
+				}
+			}
+			
 			if (binary->objc->clsCount) {
 				for (uint32_t index = 0; index < binary->objc->clsCount; index++) {
 					struct loader_objc_class *class = &(binary->objc->cls[index]);
@@ -470,6 +481,31 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 		}
 		printf("Found %i subroutines\n",binary->map->subroutine_map->count);
 	}
+}
+
+void SDMSTCreateSubtroutineForFrame(struct loader_binary *binary, struct loader_eh_frame *frame) {
+	/*
+	char *buffer = calloc(1024, sizeof(char));
+	binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, ((binary->map->subroutine_map->count+1)*sizeof(struct loader_subroutine)));
+	struct loader_subroutine *subroutine = (struct loader_subroutine *)calloc(1, sizeof(struct loader_subroutine));
+	subroutine->offset = (uintptr_t)(address+(method->offset) - (address-memOffset));
+	
+	char *buffer = calloc(1024, sizeof(char));
+	binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, ((binary->map->subroutine_map->count+1)*sizeof(struct loader_subroutine)));
+	struct loader_subroutine *subroutine = (struct loader_subroutine *)calloc(1, sizeof(struct loader_subroutine));
+	subroutine->offset = (uintptr_t)(address+(method->offset) - (address-memOffset));
+	
+	sprintf(buffer, kSubFormatter, subroutine->offset);
+	subroutine->name = calloc(5 + (strlen(buffer)), sizeof(char));
+	sprintf(subroutine->name, kSubName, subroutine->offset);
+	
+	subroutine->section_offset = textSectionOffset;
+	
+	memcpy(&(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count]), subroutine, sizeof(struct loader_subroutine));
+	free(subroutine);
+	free(buffer);
+	binary->map->subroutine_map->count++;
+	*/
 }
 
 void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_objc_class *class) {

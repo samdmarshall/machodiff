@@ -83,6 +83,8 @@ struct loader_eh_frame_fde {
 	
 	uint64_t instructions_length;
 	Pointer initial_instructions;
+	
+	struct loader_eh_frame *relevant_cie;
 };
 
 struct loader_eh_frame {
