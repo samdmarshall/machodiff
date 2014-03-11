@@ -323,7 +323,7 @@ Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary
 	Pointer pointer = NULL;
 	uint64_t offset = 0;
 	pointer = read_uleb128(PtrCast(*fPointer, uint8_t*), &offset);
-
+	
 	if (offset) {
 		char *buffer = calloc(1024, sizeof(char));
 		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, sizeof(struct loader_subroutine)*(binary->map->subroutine_map->count+0x1));
@@ -370,11 +370,13 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 	if (SDMBinaryIs64Bit(binary->header)) {
 		flags = ((struct loader_section_64 *)(textSectionOffset))->info.flags;
 		size = ((struct loader_section_64 *)(textSectionOffset))->position.size;
+		
 		address = (uint64_t)PtrAdd(memOffset, ((struct loader_section_64 *)textSectionOffset)->position.addr);
 	}
 	else {
 		flags = ((struct loader_section_32 *)(textSectionOffset))->info.flags;
 		size = ((struct loader_section_32 *)(textSectionOffset))->position.size;
+		
 		address = (uint64_t)PtrAdd(memOffset, ((struct loader_section_32 *)textSectionOffset)->position.addr);
 	}
 	
@@ -531,10 +533,12 @@ uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, st
 		for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {
 			struct loader_objc_method *method = &(class->method[method_index]);
 			
-			//printf("%s %s\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name));
+			//printf("%s %s %lx\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name),method->offset);
 			
 			for (uint32_t subroutine_index = 0; subroutine_index < binary->map->subroutine_map->count; subroutine_index++) {
-				if (PtrLowPointer(method->offset) == ((binary->map->subroutine_map->subroutine[subroutine_index].offset + (SDMBinaryIs64Bit(binary->header) ? -(uint64_t)((uintptr_t)binary->header) : 0x1000)))) {
+				uint32_t method_offset = PtrLowPointer(method->offset);
+				uint32_t subroutine_offset = (((uint32_t)binary->map->subroutine_map->subroutine[subroutine_index].offset - ((uint32_t)((uintptr_t)binary->header)) + (uint32_t)(SDMBinaryIs64Bit(binary->header) ? 0 : 0x1000)));
+				if (method_offset == subroutine_offset) {
 					
 					char *method_name = method->name;
 					

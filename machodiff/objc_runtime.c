@@ -60,36 +60,43 @@ struct loader_objc_class* SDMSTObjc1CreateClassFromClass(struct loader_objc_map 
 			}
 			newClass->className = Ptr(PtrAdd(offset, cls->name));
 			
-			struct loader_objc_1_class_ivar_info *ivarInfo = (struct loader_objc_1_class_ivar_info *)PtrAdd(offset, cls->ivars);
-			if (ivarInfo) {
-				newClass->ivarCount = ivarInfo->count;
-				newClass->ivar = calloc(newClass->ivarCount, sizeof(struct loader_objc_ivar));
-				struct loader_objc_1_class_ivar *ivarOffset = (struct loader_objc_1_class_ivar *)PtrAdd(ivarInfo, sizeof(struct loader_objc_1_class_ivar_info));
-				for (uint32_t i = 0; i < newClass->ivarCount; i++) {
-					newClass->ivar[i].name = Ptr(PtrAdd(offset, ivarOffset[i].name));
-					newClass->ivar[i].type = Ptr(PtrAdd(offset, ivarOffset[i].type));
-					newClass->ivar[i].offset = (uintptr_t)(ivarOffset[i].offset);
-				}
-				
-			}
-						
-			struct loader_objc_1_class_method_info *methodInfo = (struct loader_objc_1_class_method_info *)PtrAdd(offset, cls->methods);
-			if (methodInfo && (((uint64_t)methodInfo >= (uint64_t)PtrAdd(PtrHighPointer(offset), objcData->classRange.offset) && (uint64_t)methodInfo < (uint64_t)PtrAdd(PtrHighPointer(offset), (objcData->clsMRange.offset + (uint64_t)objcData->clsMRange.length))) || ((uint64_t)methodInfo >= (uint64_t)PtrAdd(PtrHighPointer(offset), objcData->instMRange.offset) && (uint64_t)methodInfo < (uint64_t)PtrAdd(PtrHighPointer(offset), (objcData->instMRange.offset + objcData->instMRange.length))))) {
-				newClass->methodCount = methodInfo->count;
-				newClass->method = calloc(newClass->methodCount, sizeof(struct loader_objc_method));
-				struct loader_objc_1_class_method *methodOffset = (struct loader_objc_1_class_method *)PtrAdd(methodInfo, sizeof(struct loader_objc_1_class_method_info));
-				for (uint32_t i = 0; i < newClass->methodCount; i++) {
-					newClass->method[i].name = Ptr(PtrAdd(offset, methodOffset[i].name));
-					newClass->method[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
-					newClass->method[i].offset = (uintptr_t)(methodOffset[i].imp);
-					newClass->method[i].method_type = SDMSTGetObjc1MethodType(objcData, methodOffset, PtrHighPointer(offset));
+			if (cls->ivars) {
+				struct loader_objc_1_class_ivar_info *ivarInfo = (struct loader_objc_1_class_ivar_info *)PtrAdd(offset, cls->ivars);
+				if (ivarInfo) {
+					newClass->ivarCount = ivarInfo->count;
+					newClass->ivar = calloc(newClass->ivarCount, sizeof(struct loader_objc_ivar));
+					struct loader_objc_1_class_ivar *ivarOffset = (struct loader_objc_1_class_ivar *)PtrAdd(ivarInfo, sizeof(struct loader_objc_1_class_ivar_info));
+					for (uint32_t i = 0; i < newClass->ivarCount; i++) {
+						newClass->ivar[i].name = Ptr(PtrAdd(offset, ivarOffset[i].name));
+						newClass->ivar[i].type = Ptr(PtrAdd(offset, ivarOffset[i].type));
+						newClass->ivar[i].offset = (uintptr_t)(ivarOffset[i].offset);
+					}
+					
 				}
 			}
 			
-			struct loader_objc_1_procotol *protocolInfo = (struct loader_objc_1_procotol *)PtrAdd(offset, cls->protocols);
-			if (protocolInfo) {
-				
+			if (cls->methods) {
+				struct loader_objc_1_class_method_info *methodInfo = (struct loader_objc_1_class_method_info *)PtrAdd(offset, cls->methods);
+				if (methodInfo && (((uint64_t)methodInfo >= (uint64_t)PtrAdd(PtrHighPointer(offset), objcData->classRange.offset) && (uint64_t)methodInfo < (uint64_t)PtrAdd(PtrHighPointer(offset), (objcData->clsMRange.offset + (uint64_t)objcData->clsMRange.length))) || ((uint64_t)methodInfo >= (uint64_t)PtrAdd(PtrHighPointer(offset), objcData->instMRange.offset) && (uint64_t)methodInfo < (uint64_t)PtrAdd(PtrHighPointer(offset), (objcData->instMRange.offset + objcData->instMRange.length))))) {
+					newClass->methodCount = methodInfo->count;
+					newClass->method = calloc(newClass->methodCount, sizeof(struct loader_objc_method));
+					struct loader_objc_1_class_method *methodOffset = (struct loader_objc_1_class_method *)PtrAdd(methodInfo, sizeof(struct loader_objc_1_class_method_info));
+					for (uint32_t i = 0; i < newClass->methodCount; i++) {
+						newClass->method[i].name = Ptr(PtrAdd(offset, methodOffset[i].name));
+						newClass->method[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
+						newClass->method[i].offset = (uintptr_t)(methodOffset[i].imp);
+						newClass->method[i].method_type = SDMSTGetObjc1MethodType(objcData, methodOffset, PtrHighPointer(offset));
+					}
+				}
 			}
+			
+			if (cls->protocols) {
+				struct loader_objc_1_procotol *protocolInfo = (struct loader_objc_1_procotol *)PtrAdd(offset, cls->protocols);
+				if (protocolInfo) {
+					
+				}
+			}
+			
 		}
 	}
 	return newClass;
