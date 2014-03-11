@@ -21,8 +21,6 @@
 #pragma mark -
 #pragma mark Private Types
 
-#define EH_FRAME "__eh_frame"
-
 #define kStubName "__sdmst_stub_"
 
 #define kSubPrefix "sub_"
@@ -237,6 +235,7 @@ struct loader_map {
 	struct loader_dependency_map *dependency_map;
 	struct loader_function_start *function_start;
 	struct loader_subroutine_map *subroutine_map;
+	struct loader_eh_frame_map *frame_map;
 } ATR_PACK;
 
 struct loader_binary {

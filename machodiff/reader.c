@@ -11,11 +11,11 @@
 
 #include "reader.h"
 
-uint64_t read_uleb128(Pointer addr, Pointer *new_addr) {
+Pointer read_uleb128(uint8_t *addr, uint64_t *value) {
 	uint32_t bitCount = 0x0;
-	uint64_t offset = 0x0;
+	uintptr_t offset = 0x0;
 	do {
-		uint64_t slice = (*addr & 0x7f);
+		uint32_t slice = ((uint8_t)*addr & 0x7f);
 		if (bitCount < 0x40) {
 			offset |= (slice << bitCount);
 			bitCount += 0x7;
@@ -25,16 +25,17 @@ uint64_t read_uleb128(Pointer addr, Pointer *new_addr) {
 		}
 	} while ((*addr++ & 0x80) != 0);
 	
-	*new_addr = addr;
+
+	*value = offset;
 	
-	return offset;
+	return PtrCast(addr, Pointer);
 }
 
-int64_t read_sleb128(Pointer addr, Pointer *new_addr) {
+Pointer read_sleb128(uint8_t *addr, int64_t *value) {
 	uint32_t bitCount = 0x0;
 	int64_t offset = 0x0;
 	do {
-		int64_t slice = (*addr & 0x7f);
+		uint8_t slice = (*addr & 0x7f);
 		offset |= (slice << bitCount);
 		bitCount += 0x7;
 	} while ((*addr++ & 0x80) != 0);
@@ -43,9 +44,57 @@ int64_t read_sleb128(Pointer addr, Pointer *new_addr) {
 		offset |= (-1LL) << bitCount;
 	}
 	
-	*new_addr = addr;
+	*value = offset;
 	
-	return offset;
+	return PtrCast(addr, Pointer);
+}
+
+Pointer read_uint64(Pointer addr, uint64_t *value) {
+	uint64_t read = (uint64_t)addr[0];
+	*value = read;
+	return (Pointer)PtrAdd(addr, sizeof(uint64_t));
+}
+
+Pointer read_int64(Pointer addr, int64_t *value) {
+	int64_t read = (int64_t)addr[0];
+	*value = read;
+	return (Pointer)PtrAdd(addr, sizeof(int64_t));
+}
+
+Pointer read_uint32(Pointer addr, uint32_t *value) {
+	uint32_t read = (uint32_t)addr[0];
+	*value = read;
+	return (Pointer)PtrAdd(addr, sizeof(uint32_t));
+}
+
+Pointer read_int32(Pointer addr, int32_t *value) {
+	int32_t read = (int32_t)addr[0];
+	*value = read;
+	return (Pointer)PtrAdd(addr, sizeof(int32_t));
+}
+
+Pointer read_uint16(Pointer addr, uint16_t *value) {
+	uint16_t read = (uint16_t)addr[0];
+	*value = read;
+	return (Pointer)PtrAdd(addr, sizeof(uint16_t));
+}
+
+Pointer read_int16(Pointer addr, int16_t *value) {
+	int16_t read = (int16_t)addr[0];
+	*value = read;
+	return (Pointer)PtrAdd(addr, sizeof(int16_t));
+}
+
+Pointer read_uint8(Pointer addr, uint8_t *value) {
+	uint8_t read = (uint8_t)addr[0];
+	*value = read;
+	return (Pointer)PtrAdd(addr, sizeof(uint8_t));
+}
+
+Pointer read_int8(Pointer addr, int8_t *value) {
+	int8_t read = (int8_t)addr[0];
+	*value = read;
+	return (Pointer)PtrAdd(addr, sizeof(int8_t));
 }
 
 #endif

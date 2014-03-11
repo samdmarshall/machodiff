@@ -53,7 +53,7 @@ void SDMGenerateSymbols(struct loader_binary *binary);
 bool SDMMapObjcClasses32(struct loader_binary *binary);
 bool SDMMapObjcClasses64(struct loader_binary *binary);
 
-void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary);
+Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary);
 void SDMSTFindSubroutines(struct loader_binary *binary);
 
 void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_objc_class *class);
@@ -66,8 +66,8 @@ bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName);
 
 void SDMReleaseMap(struct loader_map *map);
 
-Pointer SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit);
-bool SDMSTTEXTHasEH_Frame(struct loader_segment *text, bool is64Bit, Pointer *eh_frame);
+CoreRange SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit, uint64_t header_offset);
+bool SDMSTTEXTHasEH_Frame(struct loader_segment *text, bool is64Bit, uint64_t header_offset, CoreRange *eh_frame);
 
 #pragma mark -
 #pragma mark Private Function Definitions
@@ -123,9 +123,12 @@ struct loader_map * SDMCreateBinaryMap(struct loader_generic_header *header) {
 				struct loader_segment *segment = PtrCast(loadCmd, struct loader_segment *);
 				if ((map->segment_map->text == NULL) && !strncmp(SEG_TEXT,segment->segname,sizeof(segment->segname))) {
 					map->segment_map->text = segment;
-					Pointer offset = NULL;
-					bool result = SDMSTTEXTHasEH_Frame(segment, SDMBinaryIs64Bit(header), &offset);
-					printf("test: %p %s\n", offset, result ? "yes" : "no");
+					CoreRange offset = {0,0};
+					bool is64bit = SDMBinaryIs64Bit(header);
+					bool result = SDMSTTEXTHasEH_Frame(segment, is64bit, (uint64_t)header, &offset);
+					if (result) {
+						map->frame_map = SDMSTParseCallFrame(offset, is64bit);
+					}
 				}
 				if ((map->segment_map->link == NULL) && !strncmp(SEG_LINKEDIT,segment->segname,sizeof(segment->segname))) {
 					map->segment_map->link = segment;
@@ -316,9 +319,10 @@ bool SDMMapObjcClasses64(struct loader_binary * binary) {
 	return result;
 }
 
-void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary) {
-	Pointer pointer = PtrCast(*fPointer, Pointer);
-	uint64_t offset = read_uleb128(pointer, PtrCast(fPointer, Pointer*));
+Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary) {
+	Pointer pointer = NULL;
+	uint64_t offset = 0;
+	pointer = read_uleb128(PtrCast(*fPointer, uint8_t*), &offset);
 
 	if (offset) {
 		char *buffer = calloc(1024, sizeof(char));
@@ -332,6 +336,7 @@ void SDMSTFindFunctionAddress(uint8_t **fPointer, struct loader_binary *binary) 
 		free(buffer);
 		binary->map->subroutine_map->count++;
 	}
+	return pointer;
 }
 
 void SDMSTFindSubroutines(struct loader_binary *binary) {
@@ -340,6 +345,8 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 	binary->map->subroutine_map->count = 0;
 	uint32_t textSections = 0, flags = 0;
 	uint64_t pageZero = 0, size = 0, address = 0;
+	uintptr_t textSectionOffset = (uintptr_t)(binary->map->segment_map->text);
+
 	if (SDMBinaryIs64Bit(binary->header)) {
 		textSections = ((struct loader_segment_64 *)(binary->map->segment_map->text))->info.nsects;
 		pageZero = ((struct loader_segment_64 *)(binary->map->segment_map->text))->data.vm_position.addr;
@@ -348,49 +355,46 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 		textSections = ((struct loader_segment_32 *)(binary->map->segment_map->text))->info.nsects;
 		pageZero = ((struct loader_segment_32 *)(binary->map->segment_map->text))->data.vm_position.addr;
 	}
+	
 	pageZero += binary->file_offset;
 	uint64_t binaryOffset = pageZero;
-	uintptr_t textSectionOffset = (uintptr_t)(binary->map->segment_map->text);
+
+	uint64_t memOffset = 0;
+	if (binary->memory_ref) {
+		memOffset = (uint64_t)_dyld_get_image_vmaddr_slide(binary->image_index);
+	}
+	else {
+		memOffset = (uint64_t)(binary->header) - binaryOffset;
+	}
+	
+	if (SDMBinaryIs64Bit(binary->header)) {
+		flags = ((struct loader_section_64 *)(textSectionOffset))->info.flags;
+		size = ((struct loader_section_64 *)(textSectionOffset))->position.size;
+		address = (uint64_t)PtrAdd(memOffset, ((struct loader_section_64 *)textSectionOffset)->position.addr);
+	}
+	else {
+		flags = ((struct loader_section_32 *)(textSectionOffset))->info.flags;
+		size = ((struct loader_section_32 *)(textSectionOffset))->position.size;
+		address = (uint64_t)PtrAdd(memOffset, ((struct loader_section_32 *)textSectionOffset)->position.addr);
+	}
+	
 	if (SDMBinaryIs64Bit(binary->header)) {
 		textSectionOffset += sizeof(struct loader_segment_64);
 	}
 	else {
 		textSectionOffset += sizeof(struct loader_segment_32);
 	}
+	
 	if (binary->map->function_start) {
 		hasLCFunctionStarts = true;
-		uint64_t memOffset;
-		if (binary->memory_ref) {
-			memOffset = SDMCalculateVMSlide(binary);
-		}
-		else {
-			memOffset = (uint64_t)(binary->header) - binaryOffset;
-		}
 		uintptr_t functionOffset = (uintptr_t)(binary->map->function_start->position.addr+memOffset+pageZero);
-		uint8_t *functionPointer = (uint8_t*)functionOffset;
+		Pointer functionPointer = (Pointer)functionOffset;
 		while ((uintptr_t)functionPointer < (functionOffset + binary->map->function_start->position.size)) {
-			SDMSTFindFunctionAddress(&functionPointer, binary);
+			functionPointer = SDMSTFindFunctionAddress(&functionPointer, binary);
 		}
 	}
 	if (binary->header->arch.cputype == CPU_TYPE_X86_64 || binary->header->arch.cputype == CPU_TYPE_I386) {
 		for (uint32_t i = 0x0; i < textSections; i++) {
-			uint64_t memOffset;
-			if (binary->memory_ref) {
-				memOffset = (uint64_t)_dyld_get_image_vmaddr_slide(binary->image_index);
-			}
-			else {
-				memOffset = (uint64_t)(binary->header) - binaryOffset;
-			}
-			if (SDMBinaryIs64Bit(binary->header)) {
-				flags = ((struct loader_section_64 *)(textSectionOffset))->info.flags;
-				size = ((struct loader_section_64 *)(textSectionOffset))->position.size;
-				address = (uint64_t)PtrAdd(memOffset, ((struct loader_section_64 *)textSectionOffset)->position.addr);
-			}
-			else {
-				flags = ((struct loader_section_32 *)(textSectionOffset))->info.flags;
-				size = ((struct loader_section_32 *)(textSectionOffset))->position.size;
-				address = (uint64_t)PtrAdd(memOffset, ((struct loader_section_32 *)textSectionOffset)->position.addr);
-			}
 			if (hasLCFunctionStarts && binary->map->subroutine_map->count) {
 				for (uint32_t j = 0; j < binary->map->subroutine_map->count; j++) {
 					if (binary->map->subroutine_map->subroutine[j].section_offset == k32BitMask) {
@@ -731,8 +735,8 @@ void SDMReleaseMap(struct loader_map *map) {
 	}
 }
 
-Pointer SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit) {
-	Pointer result = NULL;
+CoreRange SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit, uint64_t header_offset) {
+	CoreRange result = {0,0};
 	Pointer offset = (Pointer)text;
 	uint32_t sections_count = 0;
 	if (is64Bit) {
@@ -742,7 +746,12 @@ Pointer SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit) {
 		for (uint32_t index = 0; index < sections_count; index++) {
 			struct loader_section_64 *text_section = (struct loader_section_64 *)offset;
 			if (strncmp(text_section->name.sectname, EH_FRAME, sizeof(char[16])) == 0) {
-				result = offset;
+				Pointer result_offset = PtrCast(PtrCastSmallPointer(text_section->info.offset), Pointer);
+				uint64_t addr_offset = text_section->position.addr - text_segment->data.vm_position.addr;
+				if (text_section->info.offset != addr_offset) {
+					result_offset = PtrCast(addr_offset, Pointer);
+				}
+				result.offset = (uint64_t)PtrAdd(result_offset, header_offset);
 				break;
 			}
 			offset = (Pointer)PtrAdd(offset, sizeof(struct loader_section_64));
@@ -755,21 +764,26 @@ Pointer SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit) {
 		for (uint32_t index = 0; index < sections_count; index++) {
 			struct loader_section_32 *text_section = (struct loader_section_32 *)offset;
 			if (strncmp(text_section->name.sectname, EH_FRAME, sizeof(char[16])) == 0) {
-				result = offset;
+				Pointer result_offset = PtrCast(PtrCastSmallPointer(text_section->info.offset), Pointer);
+				uint64_t addr_offset = text_section->position.addr - text_segment->data.vm_position.addr;
+				if (text_section->info.offset != addr_offset) {
+					result_offset = PtrCast(addr_offset, Pointer);
+				}
+				result.offset = (uint64_t)PtrAdd(result_offset, header_offset);
 				break;
 			}
 			offset = (Pointer)PtrAdd(offset, sizeof(struct loader_section_32));
 		}
 	}
 	if (sections_count == 0) {
-		result = NULL;
+		result = (CoreRange){0,0};
 	}
 	return result;
 }
 
-bool SDMSTTEXTHasEH_Frame(struct loader_segment *text, bool is64Bit, Pointer *eh_frame) {
-	*eh_frame = SDMSTEH_FramePointer(text, is64Bit);
-	return (*eh_frame != NULL ? true : false);
+bool SDMSTTEXTHasEH_Frame(struct loader_segment *text, bool is64Bit, uint64_t header_offset, CoreRange *eh_frame) {
+	*eh_frame = SDMSTEH_FramePointer(text, is64Bit, header_offset);
+	return ((eh_frame->offset != 0 && eh_frame->length != 0) ? true : false);
 }
 
 #pragma mark -
