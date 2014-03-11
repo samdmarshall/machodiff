@@ -756,6 +756,7 @@ CoreRange SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit, uint64
 					result_offset = PtrCast(addr_offset, Pointer);
 				}
 				result.offset = (uint64_t)PtrAdd(result_offset, header_offset);
+				result.length = (uint64_t)text_section->position.size;
 				break;
 			}
 			offset = (Pointer)PtrAdd(offset, sizeof(struct loader_section_64));
