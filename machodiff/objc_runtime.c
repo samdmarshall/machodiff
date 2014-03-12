@@ -10,7 +10,6 @@
 #define loader_objc_runtime_c
 
 #include "objc_runtime.h"
-#include <string.h>
 
 void SDMSTObjc2ClassPopulate(struct loader_objc_class *newClass, struct loader_objc_2_class *cls, CoreRange dataRange, uint64_t offset, uint8_t class_type);
 

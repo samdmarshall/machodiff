@@ -10,8 +10,6 @@
 #define machodiff_map_c
 
 #include "map.h"
-#include <mach-o/loader.h>
-#include <string.h>
 #include "loader.h"
 
 struct loader_map * SDMCreateBinaryMap(struct loader_generic_header *header) {

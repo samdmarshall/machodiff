@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 
 #define ATR_PACK __attribute__ ((packed))
 #define ATR_FUNC(name) __attribute__ ((ifunc(name)))

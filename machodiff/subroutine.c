@@ -10,11 +10,7 @@
 #define machodiff_subroutine_c
 
 #include "subroutine.h"
-#include <string.h>
-#include <mach-o/loader.h>
-#include <mach-o/dyld.h>
-#include <dlfcn.h>
-
+#include "link_include.h"
 #include "loader.h"
 
 #define Intel_x86_32bit_StackSetupLength 0x3

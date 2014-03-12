@@ -10,7 +10,6 @@
 #define machodiff_eh_frame_c
 
 #include "eh_frame.h"
-#include <string.h>
 
 #define kLength (sizeof(uint32_t))
 #define kExtendedLength (sizeof(uint64_t) + kLength)

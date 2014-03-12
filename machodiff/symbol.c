@@ -11,7 +11,6 @@
 
 #include "symbol.h"
 #include <mach-o/nlist.h>
-#include <string.h>
 #include "loader.h"
 
 void SDMGenerateSymbols(struct loader_binary * binary) {

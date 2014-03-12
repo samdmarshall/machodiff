@@ -10,8 +10,6 @@
 #define machodiff_compare_c
 
 #include "compare.h"
-#include <unistd.h>
-#include <string.h>
 #include <dispatch/dispatch.h>
 #include <inttypes.h>
 #include "arch.h"

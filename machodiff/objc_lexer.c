@@ -11,7 +11,6 @@
 
 #include "objc_lexer.h"
 #include <objc/runtime.h>
-#include <string.h>
 
 #define kObjcTypeEncodingCount 21
 

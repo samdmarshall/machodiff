@@ -10,7 +10,6 @@
 #define machodiff_cpp_lexer_c
 
 #include "cpp_lexer.h"
-#include <string.h>
 
 uint32_t SDMSTParseCPPToken(struct loader_cpp_lexer_type *decode, char *type, uint64_t offset);
 

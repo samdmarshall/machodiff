@@ -11,9 +11,7 @@
 
 #include "objc.h"
 #include "loader.h"
-#include <dlfcn.h>
-#include <string.h>
-#include <mach-o/dyld.h>
+#include "link_include.h"
 
 char* SDMSTCreateNameForMethod(struct loader_objc_method *method, char *class_name) {
 	char *method_name = method->name;

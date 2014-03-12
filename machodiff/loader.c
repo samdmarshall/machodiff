@@ -12,9 +12,9 @@
 #pragma mark -
 #pragma mark #include
 #include "loader.h"
-#include <mach-o/dyld.h>
 #include <sys/mman.h>
 #include "file_include.h"
+#include "link_include.h"
 #include "arch.h"
 #include "reader.h"
 #include "subroutine.h"
