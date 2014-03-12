@@ -12,6 +12,9 @@
 #include "eh_frame.h"
 #include <string.h>
 
+#define kExtendedLength (sizeof(uint64_t) + sizeof(uint32_t))
+#define kLength (sizeof(uint32_t))
+
 static struct loader_eh_frame *last_cie = NULL;
 
 uint64_t SDMSTParseCIEFrame(struct loader_eh_frame *frame, Pointer frame_offset);
@@ -60,7 +63,7 @@ struct loader_eh_frame_map* SDMSTParseCallFrame(CoreRange frame, bool is64bit) {
 					map->frame[map->count].size = loader_eh_frame_32_size;
 				}
 				
-				uint8_t length_size = (frame->length == k32BitMask ? 12 : 4);
+				uint8_t length_size = (frame->length == k32BitMask ? kExtendedLength : kLength);
 				
 				frame_length -= length_size;
 				
@@ -94,7 +97,7 @@ struct loader_eh_frame_map* SDMSTParseCallFrame(CoreRange frame, bool is64bit) {
 uint64_t SDMSTParseCIEFrame(struct loader_eh_frame *frame, Pointer frame_offset) {
 	uint64_t frame_length = 0;
 	
-	uint8_t length_size = (frame->length == k32BitMask ? 12 : 4);
+	uint8_t length_size = (frame->length == k32BitMask ? kExtendedLength : kLength);
 	
 	uint8_t version = 0;
 	frame_offset = read_uint8(frame_offset, &version);
@@ -205,7 +208,7 @@ uint64_t SDMSTParseCIEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset) {
 	uint64_t frame_length = 0;
 	
-	uint8_t length_size = (frame->length == k32BitMask ? 12 : 4);
+	uint8_t length_size = (frame->length == k32BitMask ? kExtendedLength : kLength);
 	
 	switch (frame->type) {
 		case loader_eh_frame_invalid_size: {
@@ -217,10 +220,14 @@ uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 			frame->fde.pc_begin = pc_begin;
 			frame_length += sizeof(uint32_t);
 			
+			// SDM: change encoding
+			
 			uint32_t pc_range = 0;
 			frame_offset = read_uint32(frame_offset, &pc_range);
 			frame->fde.pc_range = pc_range;
 			frame_length += sizeof(uint32_t);
+			
+			// SDM: change encoding
 			
 			break;
 		}
@@ -230,10 +237,14 @@ uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 			frame->fde.pc_begin = pc_begin;
 			frame_length += sizeof(uint64_t);
 			
+			// SDM: change encoding
+			
 			uint64_t pc_range = 0;
 			frame_offset = read_uint64(frame_offset, &pc_range);
 			frame->fde.pc_range = pc_range;
 			frame_length += sizeof(uint64_t);
+			
+			// SDM: change encoding
 			
 			break;
 		}

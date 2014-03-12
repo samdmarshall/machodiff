@@ -471,7 +471,10 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 					}
 				}
 			}
-			
+		}
+		
+		// SDM: we check this again because there might not be an eh_frame was part of the binary, if there is then we just want to map the methods to the known subroutines
+		if (binary->map->subroutine_map->count == 0) {
 			// SDM: checking objc for methods
 			if (binary->objc->clsCount) {
 				for (uint32_t index = 0; index < binary->objc->clsCount; index++) {
@@ -486,33 +489,27 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 }
 
 void SDMSTCreateSubtroutineForFrame(struct loader_binary *binary, struct loader_eh_frame *frame) {
-#warning SDM - Make sure we are not creating duplicate subroutines
-	/*
-	char *buffer = calloc(1024, sizeof(char));
-	binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, ((binary->map->subroutine_map->count+1)*sizeof(struct loader_subroutine)));
-	struct loader_subroutine *subroutine = (struct loader_subroutine *)calloc(1, sizeof(struct loader_subroutine));
-	subroutine->offset = (uintptr_t)(address+(method->offset) - (address-memOffset));
+	
+	uint64_t subroutine_offset = frame->fde.pc_begin;
 	
 	char *buffer = calloc(1024, sizeof(char));
 	binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, ((binary->map->subroutine_map->count+1)*sizeof(struct loader_subroutine)));
 	struct loader_subroutine *subroutine = (struct loader_subroutine *)calloc(1, sizeof(struct loader_subroutine));
-	subroutine->offset = (uintptr_t)(address+(method->offset) - (address-memOffset));
+	subroutine->offset = (uintptr_t)(subroutine_offset);
 	
 	sprintf(buffer, kSubFormatter, subroutine->offset);
 	subroutine->name = calloc(5 + (strlen(buffer)), sizeof(char));
 	sprintf(subroutine->name, kSubName, subroutine->offset);
 	
-	subroutine->section_offset = textSectionOffset;
+	subroutine->section_offset = k32BitMask;
 	
 	memcpy(&(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count]), subroutine, sizeof(struct loader_subroutine));
 	free(subroutine);
 	free(buffer);
 	binary->map->subroutine_map->count++;
-	*/
 }
 
 void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_objc_class *class) {
-#warning SDM - Make sure we are not creating duplicate subroutines
 	uint64_t pageZero = 0, address = 0;
 	if (SDMBinaryIs64Bit(binary->header)) {
 		pageZero = ((struct loader_segment_64 *)(binary->map->segment_map->text))->data.vm_position.addr;
@@ -936,7 +933,19 @@ CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct lo
 				uint32_t next = i + 1;
 				if (next < binary->map->subroutine_map->count) {
 					range.length = ((binary->map->subroutine_map->subroutine[next].offset) - range.offset);
-					// SDM: validate against __eh_frame
+					
+					if (binary->map->frame_map->count) {
+						for (uint32_t index = 0; index < binary->map->frame_map->count; index++) {
+							struct loader_eh_frame *frame = &(binary->map->frame_map->frame[index]);
+							if (frame->type == loader_eh_frame_fde_type) {
+								uint64_t offset = frame->fde.pc_begin;
+								if (offset == range.offset) {
+									range.length = frame->fde.pc_range;
+									break;
+								}
+							}
+						}
+					}
 				}
 				else {
 					uint64_t size, address;
