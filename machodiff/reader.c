@@ -12,13 +12,13 @@
 #include "reader.h"
 
 Pointer read_uleb128(uint8_t *addr, uint64_t *value) {
-	uint32_t bitCount = 0x0;
-	uintptr_t offset = 0x0;
+	uint32_t bitCount = 0;
+	uintptr_t offset = 0;
 	do {
 		uint32_t slice = ((uint8_t)*addr & 0x7f);
 		if (bitCount < 0x40) {
 			offset |= (slice << bitCount);
-			bitCount += 0x7;
+			bitCount += 7;
 		}
 		else {
 			break;
@@ -32,12 +32,12 @@ Pointer read_uleb128(uint8_t *addr, uint64_t *value) {
 }
 
 Pointer read_sleb128(uint8_t *addr, int64_t *value) {
-	uint32_t bitCount = 0x0;
-	int64_t offset = 0x0;
+	uint32_t bitCount = 0;
+	int64_t offset = 0;
 	do {
 		uint8_t slice = (*addr & 0x7f);
 		offset |= (slice << bitCount);
-		bitCount += 0x7;
+		bitCount += 7;
 	} while ((*addr++ & 0x80) != 0);
 	
 	if ((*addr & 0x40) != 0) {

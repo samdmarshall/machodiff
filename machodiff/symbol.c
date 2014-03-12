@@ -34,7 +34,7 @@ void SDMGenerateSymbols(struct loader_binary * binary) {
 					uint32_t *n_value = (uint32_t *)PtrAdd(entry, sizeof(struct loader_generic_nlist));
 					symbol_address = (uintptr_t)*n_value;
 				}
-				binary->map->symbol_table->symbol = realloc(binary->map->symbol_table->symbol, sizeof(struct loader_symbol)*(unsigned long)(binary->map->symbol_table->count+0x1));
+				binary->map->symbol_table->symbol = realloc(binary->map->symbol_table->symbol, sizeof(struct loader_symbol)*(unsigned long)(binary->map->symbol_table->count+1));
 				struct loader_symbol *symbol = (struct loader_symbol *)calloc(1, sizeof(struct loader_symbol));
 				if (symbol) {
 					symbol->symbol_number = symbol_index;
@@ -65,9 +65,9 @@ Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary
 	
 	if (offset) {
 		char *buffer = calloc(1024, sizeof(char));
-		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, sizeof(struct loader_subroutine)*(binary->map->subroutine_map->count+0x1));
+		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, sizeof(struct loader_subroutine)*(binary->map->subroutine_map->count+1));
 		struct loader_subroutine *subroutine = &(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count]);
-		subroutine->offset = (uintptr_t)PtrAdd(offset, (binary->map->subroutine_map->count ? PtrCast(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count-0x1].offset, uintptr_t) : PtrCast(binary->header, uintptr_t)));
+		subroutine->offset = (uintptr_t)PtrAdd(offset, (binary->map->subroutine_map->count ? PtrCast(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count-1].offset, uintptr_t) : PtrCast(binary->header, uintptr_t)));
 		sprintf(buffer, kSubFormatter, (uintptr_t)PtrSub(subroutine->offset, binary->header));
 		subroutine->name = calloc((5 + strlen(buffer)), sizeof(char));
 		sprintf(subroutine->name, kSubName, (uintptr_t)PtrSub(subroutine->offset, binary->header));

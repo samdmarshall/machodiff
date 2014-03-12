@@ -12,8 +12,8 @@
 #include "eh_frame.h"
 #include <string.h>
 
-#define kExtendedLength (sizeof(uint64_t) + sizeof(uint32_t))
 #define kLength (sizeof(uint32_t))
+#define kExtendedLength (sizeof(uint64_t) + kLength)
 
 static struct loader_eh_frame *last_cie = NULL;
 

@@ -12,6 +12,8 @@
 #include "loader_type.h"
 #include "objc_runtime.h"
 
+char* SDMSTCreateNameForMethod(struct loader_objc_method *method, char *class_name);
+
 void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_objc_class *class);
 
 #endif
