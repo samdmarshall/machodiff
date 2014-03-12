@@ -203,7 +203,7 @@ struct loader_subroutine* SDMFindSubroutineFromName(struct loader_binary *binary
 }
 
 CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct loader_binary *binary) {
-	CoreRange range = {0, 0};
+	CoreRange range = CoreRangeCreate(0, 0);
 	if (subroutine) {
 		for (uint32_t i = 0; i < binary->map->subroutine_map->count; i++) {
 			if (binary->map->subroutine_map->subroutine[i].offset == subroutine->offset) {

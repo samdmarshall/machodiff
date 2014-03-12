@@ -49,7 +49,7 @@
 #define kCPPType_destructor "D"
 #define kCPPType_template "I"
 
-#include "loader.h"
+#include "util.h"
 
 struct loader_cpp_lexer_token {
 	char *type;

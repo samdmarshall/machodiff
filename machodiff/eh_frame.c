@@ -279,7 +279,7 @@ uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 }
 
 CoreRange SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit, uint64_t header_offset) {
-	CoreRange result = {0,0};
+	CoreRange result = CoreRangeCreate(0, 0);
 	Pointer offset = (Pointer)text;
 	uint32_t sections_count = 0;
 	if (is64Bit) {
@@ -320,7 +320,7 @@ CoreRange SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit, uint64
 		}
 	}
 	if (sections_count == 0) {
-		result = (CoreRange){0,0};
+		result = CoreRangeCreate(0, 0);
 	}
 	return result;
 }

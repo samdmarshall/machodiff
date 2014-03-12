@@ -39,7 +39,7 @@ struct loader_map * SDMCreateBinaryMap(struct loader_generic_header *header) {
 				struct loader_segment *segment = PtrCast(loadCmd, struct loader_segment *);
 				if ((map->segment_map->text == NULL) && !strncmp(SEG_TEXT,segment->segname,sizeof(segment->segname))) {
 					map->segment_map->text = segment;
-					CoreRange offset = {0,0};
+					CoreRange offset = CoreRangeCreate(0, 0);
 					bool is64bit = SDMBinaryIs64Bit(header);
 					bool result = SDMSTTEXTHasEH_Frame(segment, is64bit, (uint64_t)header, &offset);
 					if (result) {
@@ -214,7 +214,6 @@ void SDMSTMapMethodsToSubroutines(struct loader_binary *binary) {
 		printf("Mapped %i Methods to Subroutines\n",counter);
 	}
 }
-
 
 void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary) {
 	uint32_t counter = 0;
