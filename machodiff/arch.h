@@ -33,4 +33,6 @@ bool SDMArchCPUSUB_ARMV7(struct loader_arch *arch, uint8_t target_arch, uint8_t 
 bool SDMArchCPUSUB_ARMV7S(struct loader_arch *arch, uint8_t target_arch, uint8_t endian_type);
 bool SDMArchCPUSUB_ARM64(struct loader_arch *arch, uint8_t target_arch, uint8_t endian_type);
 
+bool SDMMatchArchToCPU(struct loader_arch *arch, uint8_t target_arch, uint8_t endian_type);
+
 #endif

@@ -267,7 +267,6 @@ uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 		}
 		
 		frame_length += frame->fde.aug_length;
-		
 	}
 	
 	frame->fde.initial_instructions = frame_offset;
@@ -277,6 +276,58 @@ uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 	frame->fde.relevant_cie = last_cie;
 	
 	return frame_length;
+}
+
+CoreRange SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit, uint64_t header_offset) {
+	CoreRange result = {0,0};
+	Pointer offset = (Pointer)text;
+	uint32_t sections_count = 0;
+	if (is64Bit) {
+		struct loader_segment_64 *text_segment = PtrCast(text, struct loader_segment_64 *);
+		sections_count = text_segment->info.nsects;
+		offset = (Pointer)PtrAdd(offset, sizeof(struct loader_segment_64));
+		for (uint32_t index = 0; index < sections_count; index++) {
+			struct loader_section_64 *text_section = (struct loader_section_64 *)offset;
+			if (strncmp(text_section->name.sectname, EH_FRAME, sizeof(char[16])) == 0) {
+				Pointer result_offset = PtrCast(PtrCastSmallPointer(text_section->info.offset), Pointer);
+				uint64_t addr_offset = text_section->position.addr - text_segment->data.vm_position.addr;
+				if (text_section->info.offset != addr_offset) {
+					result_offset = PtrCast(addr_offset, Pointer);
+				}
+				result.offset = (uint64_t)PtrAdd(result_offset, header_offset);
+				result.length = (uint64_t)text_section->position.size;
+				break;
+			}
+			offset = (Pointer)PtrAdd(offset, sizeof(struct loader_section_64));
+		}
+	}
+	else {
+		struct loader_segment_32 *text_segment = PtrCast(text, struct loader_segment_32 *);
+		sections_count = text_segment->info.nsects;
+		offset = (Pointer)PtrAdd(offset, sizeof(struct loader_segment_32));
+		for (uint32_t index = 0; index < sections_count; index++) {
+			struct loader_section_32 *text_section = (struct loader_section_32 *)offset;
+			if (strncmp(text_section->name.sectname, EH_FRAME, sizeof(char[16])) == 0) {
+				Pointer result_offset = PtrCast(PtrCastSmallPointer(text_section->info.offset), Pointer);
+				uint64_t addr_offset = text_section->position.addr - text_segment->data.vm_position.addr;
+				if (text_section->info.offset != addr_offset) {
+					result_offset = PtrCast(addr_offset, Pointer);
+				}
+				result.offset = (uint64_t)PtrAdd(result_offset, header_offset);
+				break;
+			}
+			offset = (Pointer)PtrAdd(offset, sizeof(struct loader_section_32));
+		}
+	}
+	if (sections_count == 0) {
+		result = (CoreRange){0,0};
+	}
+	return result;
+}
+
+bool SDMSTTEXTHasEH_Frame(struct loader_segment *text, bool is64Bit, uint64_t header_offset, CoreRange *eh_frame) {
+	*eh_frame = SDMSTEH_FramePointer(text, is64Bit, header_offset);
+	return ((eh_frame->offset != 0 && eh_frame->length != 0) ? true : false);
 }
 
 #endif

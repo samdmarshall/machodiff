@@ -16,6 +16,7 @@
 #include <inttypes.h>
 #include "arch.h"
 #include "lexer.h"
+#include "subroutine.h"
 
 // SDM: this will give some variation due to the approximation in unique when parsing dynamically created block_ref symbols in a binary.
 void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one, struct loader_binary *input_two) {

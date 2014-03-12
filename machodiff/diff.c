@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include "compare.h"
+#include "subroutine.h"
 
 #define kBufferSize 1024
 

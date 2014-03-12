@@ -153,5 +153,42 @@ bool SDMArchCPUSUB_ARM64(struct loader_arch *arch, uint8_t target_arch, uint8_t 
 	return result;
 }
 
+bool SDMMatchArchToCPU(struct loader_arch *arch, uint8_t target_arch, uint8_t endian_type) {
+	bool result = false;
+	if (SDMArchCPU_X86(arch, endian_type)) {
+		if (SDMArchCPUSUB_X86_64(arch, target_arch, endian_type)) {
+			result = true;
+		}
+		else if (SDMArchCPUSUB_I386(arch, target_arch, endian_type)) {
+			result = true;
+		}
+	}
+	else if (SDMArchCPU_ARM(arch, endian_type)) {
+		if (SDMArchCPUSUB_ARMV6(arch, target_arch, endian_type)) {
+			result = true;
+		}
+		else if (SDMArchCPUSUB_ARMV7(arch, target_arch, endian_type)) {
+			result = true;
+		}
+		else if (SDMArchCPUSUB_ARMV7S(arch, target_arch, endian_type)) {
+			result = true;
+		}
+		else if (SDMArchCPUSUB_ARM64(arch, target_arch, endian_type)) {
+			result = true;
+		}
+	}
+	else if (SDMArchCPU_PPC(arch, endian_type)) {
+		if (target_arch == loader_arch_ppc_type) {
+			result = true;
+		}
+	}
+	else if (SDMArchCPU_PPC64(arch, endian_type)) {
+		if (target_arch == loader_arch_ppc64_type) {
+			result = true;
+		}
+	}
+	return result;
+}
+
 #endif
 

@@ -15,6 +15,9 @@
 		2234603818BA822000FC106D /* compare.c in Sources */ = {isa = PBXBuildFile; fileRef = 2234603718BA822000FC106D /* compare.c */; };
 		22B2BD6718CB7EB1002A4A69 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2BD6618CB7EB1002A4A69 /* reader.c */; };
 		22B2C59018CD4945002A4A69 /* eh_frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C58F18CD4945002A4A69 /* eh_frame.c */; };
+		22B2C5AF18CFE819002A4A69 /* objc.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5AE18CFE819002A4A69 /* objc.c */; };
+		22B2C5B318CFE9A9002A4A69 /* subroutine.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B218CFE9A9002A4A69 /* subroutine.c */; };
+		22B2C5B618CFEBF0002A4A69 /* map.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B518CFEBF0002A4A69 /* map.c */; };
 		22B7479718B8F5310019BC58 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B7479618B8F5310019BC58 /* main.c */; };
 		22B747C018B903710019BC58 /* loader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747B818B903710019BC58 /* loader.c */; };
 		22B747C118B903710019BC58 /* objc_lexer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747BA18B903710019BC58 /* objc_lexer.c */; };
@@ -43,6 +46,13 @@
 		22B2BD6618CB7EB1002A4A69 /* reader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = reader.c; sourceTree = "<group>"; };
 		22B2C58E18CD4938002A4A69 /* eh_frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = eh_frame.h; sourceTree = "<group>"; };
 		22B2C58F18CD4945002A4A69 /* eh_frame.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = eh_frame.c; sourceTree = "<group>"; };
+		22B2C5AD18CFE805002A4A69 /* objc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = objc.h; sourceTree = "<group>"; };
+		22B2C5AE18CFE819002A4A69 /* objc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = objc.c; sourceTree = "<group>"; };
+		22B2C5B018CFE892002A4A69 /* loader_type.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = loader_type.h; sourceTree = "<group>"; };
+		22B2C5B118CFE99A002A4A69 /* subroutine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = subroutine.h; sourceTree = "<group>"; };
+		22B2C5B218CFE9A9002A4A69 /* subroutine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = subroutine.c; sourceTree = "<group>"; };
+		22B2C5B418CFEBE5002A4A69 /* map.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = map.h; sourceTree = "<group>"; };
+		22B2C5B518CFEBF0002A4A69 /* map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = map.c; sourceTree = "<group>"; };
 		22B7479018B8F5310019BC58 /* machodiff */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = machodiff; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B7479618B8F5310019BC58 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		22B7479818B8F5310019BC58 /* machodiff.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = machodiff.1; sourceTree = "<group>"; };
@@ -125,10 +135,19 @@
 		22B747B718B9030D0019BC58 /* mach-o */ = {
 			isa = PBXGroup;
 			children = (
-				22B2C58E18CD4938002A4A69 /* eh_frame.h */,
-				22B2C58F18CD4945002A4A69 /* eh_frame.c */,
+				22B2C5B018CFE892002A4A69 /* loader_type.h */,
 				22B747B918B903710019BC58 /* loader.h */,
 				22B747B818B903710019BC58 /* loader.c */,
+				221E02F918BBBC5100EA4571 /* arch.h */,
+				221E02FA18BBBC5800EA4571 /* arch.c */,
+				22B2C58E18CD4938002A4A69 /* eh_frame.h */,
+				22B2C58F18CD4945002A4A69 /* eh_frame.c */,
+				22B2C5AD18CFE805002A4A69 /* objc.h */,
+				22B2C5AE18CFE819002A4A69 /* objc.c */,
+				22B2C5B118CFE99A002A4A69 /* subroutine.h */,
+				22B2C5B218CFE9A9002A4A69 /* subroutine.c */,
+				22B2C5B418CFEBE5002A4A69 /* map.h */,
+				22B2C5B518CFEBF0002A4A69 /* map.c */,
 				22B747BD18B903710019BC58 /* objc_runtime.h */,
 				22B747BE18B903710019BC58 /* objc1_runtime.h */,
 				22B747BF18B903710019BC58 /* objc2_runtime.h */,
@@ -142,8 +161,6 @@
 				22345EF918B95AE100FC106D /* diff.c */,
 				2234603618BA821800FC106D /* compare.h */,
 				2234603718BA822000FC106D /* compare.c */,
-				221E02F918BBBC5100EA4571 /* arch.h */,
-				221E02FA18BBBC5800EA4571 /* arch.c */,
 				22B2BD6518CB7EA8002A4A69 /* reader.h */,
 				22B2BD6618CB7EB1002A4A69 /* reader.c */,
 			);
@@ -201,10 +218,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				22B747C118B903710019BC58 /* objc_lexer.c in Sources */,
+				22B2C5B618CFEBF0002A4A69 /* map.c in Sources */,
+				22B2C5B318CFE9A9002A4A69 /* subroutine.c in Sources */,
 				221E02FB18BBBC5800EA4571 /* arch.c in Sources */,
 				22B747C218B903710019BC58 /* objc_runtime.c in Sources */,
 				22B747C018B903710019BC58 /* loader.c in Sources */,
 				22B2C59018CD4945002A4A69 /* eh_frame.c in Sources */,
+				22B2C5AF18CFE819002A4A69 /* objc.c in Sources */,
 				22B2BD6718CB7EB1002A4A69 /* reader.c in Sources */,
 				2234603818BA822000FC106D /* compare.c in Sources */,
 				22345EFA18B95AE100FC106D /* diff.c in Sources */,

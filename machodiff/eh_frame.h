@@ -11,6 +11,7 @@
 
 #include "util.h"
 #include "reader.h"
+#include "loader_type.h"
 
 #define EH_FRAME "__eh_frame"
 
@@ -101,5 +102,10 @@ struct loader_eh_frame {
 };
 
 struct loader_eh_frame_map* SDMSTParseCallFrame(CoreRange frame, bool is64bit);
+
+CoreRange SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit, uint64_t header_offset);
+bool SDMSTTEXTHasEH_Frame(struct loader_segment *text, bool is64Bit, uint64_t header_offset, CoreRange *eh_frame);
+
+
 
 #endif
