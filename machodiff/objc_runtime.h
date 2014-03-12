@@ -73,22 +73,22 @@ struct loader_objc_map {
 	CoreRange instMRange;
 } ATR_PACK;
 
-#define CLS_CLASS               0x1
-#define CLS_META                0x2
-#define CLS_INITIALIZED         0x4
-#define CLS_POSING              0x8
-#define CLS_MAPPED              0x10
-#define CLS_FLUSH_CACHE         0x20
-#define CLS_GROW_CACHE          0x40
-#define CLS_NEED_BIND           0x80
-#define CLS_METHOD_ARRAY        0x100
-#define CLS_JAVA_HYBRID         0x200
-#define CLS_JAVA_CLASS          0x400
-#define CLS_INITIALIZING        0x800
-#define CLS_FROM_BUNDLE         0x1000
-#define CLS_HAS_CXX_STRUCTORS   0x2000
-#define CLS_NO_METHOD_ARRAY     0x4000
-#define CLS_HAS_LOAD_METHOD     0x8000
+#define CLS_CLASS               	0x1
+#define CLS_META                	0x2
+#define CLS_INITIALIZED         	0x4
+#define CLS_POSING					0x8
+#define CLS_MAPPED                 0x10
+#define CLS_FLUSH_CACHE            0x20
+#define CLS_GROW_CACHE             0x40
+#define CLS_NEED_BIND              0x80
+#define CLS_METHOD_ARRAY          0x100
+#define CLS_JAVA_HYBRID           0x200
+#define CLS_JAVA_CLASS            0x400
+#define CLS_INITIALIZING          0x800
+#define CLS_FROM_BUNDLE          0x1000
+#define CLS_HAS_CXX_STRUCTORS    0x2000
+#define CLS_NO_METHOD_ARRAY      0x4000
+#define CLS_HAS_LOAD_METHOD      0x8000
 #define CLS_CONSTRUCTING        0x10000
 #define CLS_EXT                 0x20000
 

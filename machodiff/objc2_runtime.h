@@ -15,13 +15,13 @@ enum loader_objc_2_class_type {
 	loader_objc_2_class_metaclass_type
 };
 
-#define kObjc2SelRef "__objc_selrefs"
-#define kObjc2MsgRefs "__objc_msgrefs"
+#define kObjc2SelRef 	"__objc_selrefs"
+#define kObjc2MsgRefs	"__objc_msgrefs"
 #define kObjc2ClassRefs "__objc_classrefs"
 #define kObjc2SuperRefs "__objc_superrefs"
 #define kObjc2ClassList "__objc_classlist"
 #define kObjc2NlClsList "__objc_nlclslist"
-#define kObjc2CatList "__objc_catlist"
+#define kObjc2CatList 	"__objc_catlist"
 #define kObjc2NlCatList "__objc_nlcatlist"
 #define kObjc2ProtoList "__objc_protolist"
 #define kObjc2ProtoRefs "__objc_protorefs"
