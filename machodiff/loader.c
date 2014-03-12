@@ -13,11 +13,8 @@
 #pragma mark #include
 #include "loader.h"
 #include <mach-o/dyld.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/fcntl.h>
 #include <sys/mman.h>
-#include <unistd.h>
+#include "file_include.h"
 #include "arch.h"
 #include "reader.h"
 #include "subroutine.h"

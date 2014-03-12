@@ -10,13 +10,9 @@
 #define machodiff_diff_c
 
 #include "diff.h"
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/fcntl.h>
-#include <errno.h>
-#include <unistd.h>
 #include "compare.h"
 #include "subroutine.h"
+#include "file_include.h"
 
 #define kBufferSize 1024
 
