@@ -14,7 +14,7 @@
 #define kLength (sizeof(uint32_t))
 #define kExtendedLength (sizeof(uint64_t) + kLength)
 
-static struct loader_eh_frame *last_cie = NULL;
+static struct loader_eh_frame *last_cie;
 
 uint64_t SDMSTParseCIEFrame(struct loader_eh_frame *frame, Pointer frame_offset);
 
@@ -50,6 +50,8 @@ struct loader_eh_frame_map* SDMSTParseCallFrame(CoreRange frame, bool is64bit) {
 					frame_length += sizeof(uint64_t);
 				}
 				
+				map->frame[map->count].identifier_ptr = frame_offset;
+
 				uint32_t identifier = 0;
 				frame_offset = read_uint32(frame_offset, &identifier);
 				map->frame[map->count].id = identifier;
@@ -204,8 +206,18 @@ uint64_t SDMSTParseCIEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 	return frame_length;
 }
 
+uint64_t SDMSTDecodePC_Begin(struct loader_eh_frame *frame) {
+	uint64_t pc_begin = frame->fde.pc_begin;
+	if ((frame->fde.relevant_cie->cie.aug_string_type & loader_eh_frame_aug_encode) == loader_eh_frame_aug_encode) {
+		pc_begin = ((uint64_t)frame->fde.pc_begin_ptr + (uint64_t)frame->fde.pc_begin);
+	}
+	return pc_begin;
+}
+
 uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset) {
 	uint64_t frame_length = 0;
+	
+	frame->fde.relevant_cie = (struct loader_eh_frame *)PtrSub(frame->identifier_ptr, frame->id);
 	
 	uint8_t length_size = (frame->length == k32BitMask ? kExtendedLength : kLength);
 	
@@ -215,35 +227,33 @@ uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 		}
 		case loader_eh_frame_32_size: {
 			uint32_t pc_begin = 0;
+			frame->fde.pc_begin_ptr = frame_offset;
 			frame_offset = read_uint32(frame_offset, &pc_begin);
 			frame->fde.pc_begin = pc_begin;
 			frame_length += sizeof(uint32_t);
 			
-			// SDM: change encoding
+			frame->fde.pc_begin = SDMSTDecodePC_Begin(frame);
 			
 			uint32_t pc_range = 0;
 			frame_offset = read_uint32(frame_offset, &pc_range);
 			frame->fde.pc_range = pc_range;
 			frame_length += sizeof(uint32_t);
 			
-			// SDM: change encoding
-			
 			break;
 		}
 		case loader_eh_frame_64_size: {
 			uint64_t pc_begin = 0;
+			frame->fde.pc_begin_ptr = frame_offset;
 			frame_offset = read_uint64(frame_offset, &pc_begin);
 			frame->fde.pc_begin = pc_begin;
 			frame_length += sizeof(uint64_t);
 			
-			// SDM: change encoding
+			frame->fde.pc_begin = SDMSTDecodePC_Begin(frame);
 			
 			uint64_t pc_range = 0;
 			frame_offset = read_uint64(frame_offset, &pc_range);
 			frame->fde.pc_range = pc_range;
 			frame_length += sizeof(uint64_t);
-			
-			// SDM: change encoding
 			
 			break;
 		}
@@ -252,7 +262,7 @@ uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 		}
 	}
 	
-	if ((last_cie->cie.aug_string_type & loader_eh_frame_aug_data) == loader_eh_frame_aug_data) {
+	if ((frame->cie.aug_string_type & loader_eh_frame_aug_data) == loader_eh_frame_aug_data) {
 		Pointer old_position = NULL;
 		
 		uint64_t aug_length = 0;
@@ -271,8 +281,6 @@ uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 	frame->fde.initial_instructions = frame_offset;
 	frame->fde.instructions_length = (frame->length == k32BitMask ? frame->extended_length : frame->length) - frame_length - length_size;
 	frame_length += frame->fde.instructions_length;
-	
-	frame->fde.relevant_cie = last_cie;
 	
 	return frame_length;
 }

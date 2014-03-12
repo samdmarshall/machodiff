@@ -169,7 +169,7 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 
 void SDMSTCreateSubtroutineForFrame(struct loader_binary *binary, struct loader_eh_frame *frame) {
 	
-	uint64_t subroutine_offset = frame->fde.pc_begin;
+	uint64_t subroutine_offset = (frame->fde.pc_begin | ((uint64_t)binary->header));
 	
 	char *buffer = calloc(1024, sizeof(char));
 	binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, ((binary->map->subroutine_map->count+1)*sizeof(struct loader_subroutine)));

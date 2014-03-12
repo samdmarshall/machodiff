@@ -122,6 +122,17 @@
 			name = diff;
 			sourceTree = "<group>";
 		};
+		22B2C5BF18CFFC09002A4A69 /* objc */ = {
+			isa = PBXGroup;
+			children = (
+				22B747BD18B903710019BC58 /* objc_runtime.h */,
+				22B747BE18B903710019BC58 /* objc1_runtime.h */,
+				22B747BF18B903710019BC58 /* objc2_runtime.h */,
+				22B747BC18B903710019BC58 /* objc_runtime.c */,
+			);
+			name = objc;
+			sourceTree = "<group>";
+		};
 		22B7478718B8F5310019BC58 = {
 			isa = PBXGroup;
 			children = (
@@ -160,6 +171,7 @@
 				22B2C5BE18CFF727002A4A69 /* diff */,
 				22B2C5BD18CFF712002A4A69 /* lexing */,
 				22B747B718B9030D0019BC58 /* mach-o */,
+				22B2C5BF18CFFC09002A4A69 /* objc */,
 				22B7479618B8F5310019BC58 /* main.c */,
 				22B7479818B8F5310019BC58 /* machodiff.1 */,
 			);
@@ -184,10 +196,6 @@
 				22B2C5B518CFEBF0002A4A69 /* map.c */,
 				22B2C5B718CFEE7C002A4A69 /* symbol.h */,
 				22B2C5B818CFEE84002A4A69 /* symbol.c */,
-				22B747BD18B903710019BC58 /* objc_runtime.h */,
-				22B747BE18B903710019BC58 /* objc1_runtime.h */,
-				22B747BF18B903710019BC58 /* objc2_runtime.h */,
-				22B747BC18B903710019BC58 /* objc_runtime.c */,
 			);
 			name = "mach-o";
 			sourceTree = "<group>";

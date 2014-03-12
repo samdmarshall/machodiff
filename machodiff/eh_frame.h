@@ -76,6 +76,8 @@ struct loader_eh_frame_cie {
 };
 
 struct loader_eh_frame_fde {
+	Pointer pc_begin_ptr;
+	
 	uint64_t pc_begin;
 	uint64_t pc_range;
 	
@@ -93,6 +95,7 @@ struct loader_eh_frame {
 	enum loader_eh_frame_size size;
 	// always present
 	uint32_t length;
+	Pointer identifier_ptr;
 	uint32_t id;
 	uint64_t extended_length;
 	
@@ -106,6 +109,6 @@ struct loader_eh_frame_map* SDMSTParseCallFrame(CoreRange frame, bool is64bit);
 CoreRange SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit, uint64_t header_offset);
 bool SDMSTTEXTHasEH_Frame(struct loader_segment *text, bool is64Bit, uint64_t header_offset, CoreRange *eh_frame);
 
-
+uint64_t SDMSTDecodePC_Begin(struct loader_eh_frame *frame);
 
 #endif
