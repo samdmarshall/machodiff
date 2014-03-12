@@ -260,9 +260,7 @@ uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 	}
 	
 	frame->fde.initial_instructions = frame_offset;
-	
 	frame->fde.instructions_length = (frame->length == k32BitMask ? frame->extended_length : frame->length) - frame_length - length_size;
-	
 	frame_length += frame->fde.instructions_length;
 	
 	frame->fde.relevant_cie = last_cie;
