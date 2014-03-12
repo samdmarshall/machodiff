@@ -18,6 +18,7 @@
 		22B2C5AF18CFE819002A4A69 /* objc.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5AE18CFE819002A4A69 /* objc.c */; };
 		22B2C5B318CFE9A9002A4A69 /* subroutine.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B218CFE9A9002A4A69 /* subroutine.c */; };
 		22B2C5B618CFEBF0002A4A69 /* map.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B518CFEBF0002A4A69 /* map.c */; };
+		22B2C5B918CFEE84002A4A69 /* symbol.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B818CFEE84002A4A69 /* symbol.c */; };
 		22B7479718B8F5310019BC58 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B7479618B8F5310019BC58 /* main.c */; };
 		22B747C018B903710019BC58 /* loader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747B818B903710019BC58 /* loader.c */; };
 		22B747C118B903710019BC58 /* objc_lexer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747BA18B903710019BC58 /* objc_lexer.c */; };
@@ -53,6 +54,8 @@
 		22B2C5B218CFE9A9002A4A69 /* subroutine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = subroutine.c; sourceTree = "<group>"; };
 		22B2C5B418CFEBE5002A4A69 /* map.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = map.h; sourceTree = "<group>"; };
 		22B2C5B518CFEBF0002A4A69 /* map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = map.c; sourceTree = "<group>"; };
+		22B2C5B718CFEE7C002A4A69 /* symbol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = symbol.h; sourceTree = "<group>"; };
+		22B2C5B818CFEE84002A4A69 /* symbol.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = symbol.c; sourceTree = "<group>"; };
 		22B7479018B8F5310019BC58 /* machodiff */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = machodiff; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B7479618B8F5310019BC58 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		22B7479818B8F5310019BC58 /* machodiff.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = machodiff.1; sourceTree = "<group>"; };
@@ -148,6 +151,8 @@
 				22B2C5B218CFE9A9002A4A69 /* subroutine.c */,
 				22B2C5B418CFEBE5002A4A69 /* map.h */,
 				22B2C5B518CFEBF0002A4A69 /* map.c */,
+				22B2C5B718CFEE7C002A4A69 /* symbol.h */,
+				22B2C5B818CFEE84002A4A69 /* symbol.c */,
 				22B747BD18B903710019BC58 /* objc_runtime.h */,
 				22B747BE18B903710019BC58 /* objc1_runtime.h */,
 				22B747BF18B903710019BC58 /* objc2_runtime.h */,
@@ -230,6 +235,7 @@
 				22345EFA18B95AE100FC106D /* diff.c in Sources */,
 				221BEE9D18BBFAC30089B879 /* cpp_lexer.c in Sources */,
 				22B7479718B8F5310019BC58 /* main.c in Sources */,
+				22B2C5B918CFEE84002A4A69 /* symbol.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

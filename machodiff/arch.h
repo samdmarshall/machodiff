@@ -11,6 +11,7 @@
 
 #include "loader.h"
 #include "capstone.h"
+#include <mach-o/fat.h>
 
 #ifndef CPU_SUBTYPE_ARM_V8
 #define CPU_SUBTYPE_ARM_V8		((cpu_subtype_t) 13)

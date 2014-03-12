@@ -12,8 +12,6 @@
 #pragma mark -
 #pragma mark #include
 #include "loader.h"
-#include <mach-o/fat.h>
-#include <mach-o/nlist.h>
 #include <mach-o/dyld.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -24,17 +22,6 @@
 #include "reader.h"
 #include "subroutine.h"
 #include "map.h"
-
-#pragma mark -
-#pragma mark Private Function Declaration
-
-bool SDMIsBinaryLoaded(char *path, struct loader_binary *binary);
-
-bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t target_arch);
-
-uint8_t SDMGetFatBinaryEndianness(uint32_t magic);
-
-bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName);
 
 #pragma mark -
 #pragma mark Private Function Definitions
@@ -82,70 +69,6 @@ uint64_t SDMComputeFslide(struct loader_segment_map * segment_map, bool is64Bit)
 		}
 	}
 	return fslide;
-}
-
-void SDMGenerateSymbols(struct loader_binary * binary) {
-	uintptr_t symbol_address = 0;
-	binary->map->symbol_table->symbol = calloc(1, sizeof(struct loader_symbol));
-	binary->map->symbol_table->count = 0;
-	struct loader_symtab_cmd *symtab_cmd = PtrCast(binary->map->symbol_table->symtab, struct loader_symtab_cmd *);
-	bool is64Bit = SDMBinaryIs64Bit(binary->header);
-	uint64_t fslide = SDMComputeFslide(binary->map->segment_map, is64Bit);//(binary->memory_ref == true ? SDMComputeFslide(binary->map->segment_map, is64Bit) : 0);
-	if (symtab_cmd != NULL) {
-		struct loader_generic_nlist *entry = (struct loader_generic_nlist *)PtrAdd(binary->header, (symtab_cmd->symoff + fslide));
-		for (uint32_t symbol_index = 0; symbol_index < symtab_cmd->nsyms; symbol_index++) {
-			if (!(entry->n_type & N_STAB) && ((entry->n_type & N_TYPE) == N_SECT)) {
-				char *strTable = PtrAdd(binary->header, (symtab_cmd->stroff + fslide));
-				if (is64Bit) {
-					uint64_t *n_value = (uint64_t *)PtrAdd(entry, sizeof(struct loader_generic_nlist));
-					symbol_address = (uintptr_t)*n_value;
-				}
-				else {
-					uint32_t *n_value = (uint32_t *)PtrAdd(entry, sizeof(struct loader_generic_nlist));
-					symbol_address = (uintptr_t)*n_value;
-				}
-				binary->map->symbol_table->symbol = realloc(binary->map->symbol_table->symbol, sizeof(struct loader_symbol)*(unsigned long)(binary->map->symbol_table->count+0x1));
-				struct loader_symbol *symbol = (struct loader_symbol *)calloc(1, sizeof(struct loader_symbol));
-				if (symbol) {
-					symbol->symbol_number = symbol_index;
-					symbol->offset = (uintptr_t)PtrAdd(symbol_address, SDMCalculateVMSlide(binary));
-					if (entry->n_un.n_strx && (entry->n_un.n_strx < symtab_cmd->strsize)) {
-						symbol->symbol_name = PtrAdd(strTable, entry->n_un.n_strx);
-						symbol->stub = false;
-					}
-					else {
-						symbol->symbol_name = calloc(1 + strlen(kStubName) + GetDigitsOfNumber(binary->map->symbol_table->count), sizeof(char));
-						sprintf(symbol->symbol_name, "%s%llu", kStubName, binary->map->symbol_table->count);
-						symbol->stub = true;
-					}
-					memcpy(&(binary->map->symbol_table->symbol[binary->map->symbol_table->count]), symbol, sizeof(struct loader_symbol));
-					free(symbol);
-					binary->map->symbol_table->count++;
-				}
-			}
-			entry = (struct loader_generic_nlist *)PtrAdd(entry, (sizeof(struct loader_generic_nlist) + (is64Bit ? sizeof(uint64_t) : sizeof(uint32_t))));
-		}
-	}
-}
-
-Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary) {
-	Pointer pointer = NULL;
-	uint64_t offset = 0;
-	pointer = read_uleb128(PtrCast(*fPointer, uint8_t*), &offset);
-	
-	if (offset) {
-		char *buffer = calloc(1024, sizeof(char));
-		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, sizeof(struct loader_subroutine)*(binary->map->subroutine_map->count+0x1));
-		struct loader_subroutine *subroutine = &(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count]);
-		subroutine->offset = (uintptr_t)PtrAdd(offset, (binary->map->subroutine_map->count ? PtrCast(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count-0x1].offset, uintptr_t) : PtrCast(binary->header, uintptr_t)));
-		sprintf(buffer, kSubFormatter, (uintptr_t)PtrSub(subroutine->offset, binary->header));
-		subroutine->name = calloc((5 + strlen(buffer)), sizeof(char));
-		sprintf(subroutine->name, kSubName, (uintptr_t)PtrSub(subroutine->offset, binary->header));
-		subroutine->section_offset = k32BitMask;
-		free(buffer);
-		binary->map->subroutine_map->count++;
-	}
-	return pointer;
 }
 
 uint8_t SDMGetFatBinaryEndianness(uint32_t magic) {
@@ -212,27 +135,6 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 	}
 	return result;
 }
-
-bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName) {
-	bool matchesName = false;
-	if (symFromTable && symbolName) {
-		uint32_t tabSymLength = (uint32_t)strlen(symFromTable);
-		uint32_t symLength = (uint32_t)strlen(symbolName);
-		if (symLength <= tabSymLength) {
-			char *offset = strstr(symFromTable, symbolName);
-			if (offset) {
-				uint32_t originOffset = (uint32_t)(offset - symFromTable);
-				if (tabSymLength-originOffset == symLength) {
-					matchesName = (strcmp(&symFromTable[originOffset], symbolName) == 0);
-				}
-			}
-		}
-	}
-	return matchesName;
-}
-
-#pragma mark -
-#pragma mark Public Function Definitions
 
 uint8_t SDMIsBinaryFat(char *path) {
 	uint8_t fat = loader_binary_arch_invalid_type;
