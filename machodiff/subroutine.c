@@ -80,7 +80,7 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 		}
 	}
 	if (binary->header->arch.cputype == CPU_TYPE_X86_64 || binary->header->arch.cputype == CPU_TYPE_I386) {
-		for (uint32_t i = 0x0; i < textSections; i++) {
+		for (uint32_t i = 0; i < textSections; i++) {
 			if (hasLCFunctionStarts && binary->map->subroutine_map->count) {
 				for (uint32_t j = 0; j < binary->map->subroutine_map->count; j++) {
 					if (binary->map->subroutine_map->subroutine[j].section_offset == k32BitMask) {
