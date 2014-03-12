@@ -99,6 +99,29 @@
 			path = capstone/include;
 			sourceTree = "<group>";
 		};
+		22B2C5BD18CFF712002A4A69 /* lexing */ = {
+			isa = PBXGroup;
+			children = (
+				221BEE9F18BBFB5C0089B879 /* lexer.h */,
+				22B747BB18B903710019BC58 /* objc_lexer.h */,
+				22B747BA18B903710019BC58 /* objc_lexer.c */,
+				221BEE9E18BBFAD50089B879 /* cpp_lexer.h */,
+				221BEE9C18BBFAC30089B879 /* cpp_lexer.c */,
+			);
+			name = lexing;
+			sourceTree = "<group>";
+		};
+		22B2C5BE18CFF727002A4A69 /* diff */ = {
+			isa = PBXGroup;
+			children = (
+				22345EF818B95AD100FC106D /* diff.h */,
+				22345EF918B95AE100FC106D /* diff.c */,
+				2234603618BA821800FC106D /* compare.h */,
+				2234603718BA822000FC106D /* compare.c */,
+			);
+			name = diff;
+			sourceTree = "<group>";
+		};
 		22B7478718B8F5310019BC58 = {
 			isa = PBXGroup;
 			children = (
@@ -130,8 +153,12 @@
 			isa = PBXGroup;
 			children = (
 				22B747B318B903080019BC58 /* util.h */,
+				22B2BD6518CB7EA8002A4A69 /* reader.h */,
+				22B2BD6618CB7EB1002A4A69 /* reader.c */,
 				22B2C5BB18CFF13F002A4A69 /* file_include.h */,
 				22B2C5BC18CFF655002A4A69 /* link_include.h */,
+				22B2C5BE18CFF727002A4A69 /* diff */,
+				22B2C5BD18CFF712002A4A69 /* lexing */,
 				22B747B718B9030D0019BC58 /* mach-o */,
 				22B7479618B8F5310019BC58 /* main.c */,
 				22B7479818B8F5310019BC58 /* machodiff.1 */,
@@ -161,17 +188,6 @@
 				22B747BE18B903710019BC58 /* objc1_runtime.h */,
 				22B747BF18B903710019BC58 /* objc2_runtime.h */,
 				22B747BC18B903710019BC58 /* objc_runtime.c */,
-				221BEE9F18BBFB5C0089B879 /* lexer.h */,
-				22B747BB18B903710019BC58 /* objc_lexer.h */,
-				22B747BA18B903710019BC58 /* objc_lexer.c */,
-				221BEE9E18BBFAD50089B879 /* cpp_lexer.h */,
-				221BEE9C18BBFAC30089B879 /* cpp_lexer.c */,
-				22345EF818B95AD100FC106D /* diff.h */,
-				22345EF918B95AE100FC106D /* diff.c */,
-				2234603618BA821800FC106D /* compare.h */,
-				2234603718BA822000FC106D /* compare.c */,
-				22B2BD6518CB7EA8002A4A69 /* reader.h */,
-				22B2BD6618CB7EB1002A4A69 /* reader.c */,
 			);
 			name = "mach-o";
 			sourceTree = "<group>";
