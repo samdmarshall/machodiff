@@ -12,6 +12,7 @@
 #include "subroutine.h"
 #include "link_include.h"
 #include "loader.h"
+#include "map.h"
 
 #define Intel_x86_32bit_StackSetupLength 0x3
 static uint8_t Intel_x86_32bit_StackSetup[Intel_x86_32bit_StackSetupLength] = {0x55, 0x89, 0xe5};
@@ -77,18 +78,7 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 	}
 	if (binary->header->arch.cputype == CPU_TYPE_X86_64 || binary->header->arch.cputype == CPU_TYPE_I386) {
 		for (uint32_t i = 0; i < textSections; i++) {
-			if (hasLCFunctionStarts && binary->map->subroutine_map->count) {
-				for (uint32_t j = 0; j < binary->map->subroutine_map->count; j++) {
-					if (binary->map->subroutine_map->subroutine[j].section_offset == k32BitMask) {
-						uint64_t subOffset = memOffset+binary->map->subroutine_map->subroutine[j].offset;
-						if (subOffset < (address+size)) {
-							binary->map->subroutine_map->subroutine[j].section_offset = textSectionOffset;
-							//binary->map->subroutine_map->subroutine[j].offset = (uintptr_t)(memOffset+binary->map->subroutine_map->subroutine[j].offset);
-						}
-					}
-				}
-			}
-			else {
+			if (!hasLCFunctionStarts) {
 				// SDM: Fall back on manually parsing it if we cannot find the subroutine mappings...
 				Dl_info info;
 				uint64_t loaded;
@@ -163,6 +153,9 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 				}
 			}
 		}
+		
+		SDMSTMapSubroutineSectionOffset(binary);
+		
 		printf("Found %i subroutines\n",binary->map->subroutine_map->count);
 	}
 }

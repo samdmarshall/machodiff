@@ -21,6 +21,8 @@ uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, st
 void SDMSTMapMethodsToSubroutines(struct loader_binary *binary);
 void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary);
 
+void SDMSTMapSubroutineSectionOffset(struct loader_binary *binary);
+
 void SDMReleaseMap(struct loader_map *map);
 
 #endif
