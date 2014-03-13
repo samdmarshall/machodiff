@@ -66,10 +66,10 @@ Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary
 		char *buffer = calloc(1024, sizeof(char));
 		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, sizeof(struct loader_subroutine)*(binary->map->subroutine_map->count+1));
 		struct loader_subroutine *subroutine = &(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count]);
-		subroutine->offset = (uintptr_t)PtrAdd(offset, (binary->map->subroutine_map->count ? PtrCast(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count-1].offset, uintptr_t) : PtrCast(binary->header, uintptr_t)));
-		sprintf(buffer, kSubFormatter, (uintptr_t)PtrSub(subroutine->offset, binary->header));
+		subroutine->offset = (uintptr_t)PtrAdd(offset, (binary->map->subroutine_map->count ? PtrCast(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count-1].offset, uintptr_t) : 0));
+		sprintf(buffer, kSubFormatter, (uintptr_t)subroutine->offset);
 		subroutine->name = calloc(1024, sizeof(char));
-		sprintf(subroutine->name, kSubName, (uintptr_t)PtrSub(subroutine->offset, binary->header));
+		sprintf(subroutine->name, kSubName, (uintptr_t)subroutine->offset);
 		subroutine->section_offset = k32BitMask;
 		free(buffer);
 		binary->map->subroutine_map->count++;

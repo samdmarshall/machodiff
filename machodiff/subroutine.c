@@ -80,10 +80,10 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 			if (hasLCFunctionStarts && binary->map->subroutine_map->count) {
 				for (uint32_t j = 0; j < binary->map->subroutine_map->count; j++) {
 					if (binary->map->subroutine_map->subroutine[j].section_offset == k32BitMask) {
-						uint64_t subOffset = pageZero+memOffset+binary->map->subroutine_map->subroutine[j].offset;
+						uint64_t subOffset = memOffset+binary->map->subroutine_map->subroutine[j].offset;
 						if (subOffset < (address+size)) {
 							binary->map->subroutine_map->subroutine[j].section_offset = textSectionOffset;
-							binary->map->subroutine_map->subroutine[j].offset = (uintptr_t)(pageZero+memOffset+binary->map->subroutine_map->subroutine[j].offset);
+							//binary->map->subroutine_map->subroutine[j].offset = (uintptr_t)(memOffset+binary->map->subroutine_map->subroutine[j].offset);
 						}
 					}
 				}
@@ -142,7 +142,7 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 		
 		if (binary->map->subroutine_map->count == 0) {
 			// SDM: checking eh_frame for symbols
-			if (binary->map->frame_map->count) {
+			if (binary->map->frame_map && binary->map->frame_map->count) {
 				for (uint32_t index = 0; index < binary->map->frame_map->count; index++) {
 					struct loader_eh_frame *frame = &(binary->map->frame_map->frame[index]);
 					if (frame->type == loader_eh_frame_fde_type) {
@@ -208,11 +208,11 @@ CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct lo
 				if (next < binary->map->subroutine_map->count) {
 					range.length = ((binary->map->subroutine_map->subroutine[next].offset) - range.offset);
 					
-					if (binary->map->frame_map->count) {
+					if (binary->map->frame_map && binary->map->frame_map->count) {
 						for (uint32_t index = 0; index < binary->map->frame_map->count; index++) {
 							struct loader_eh_frame *frame = &(binary->map->frame_map->frame[index]);
 							if (frame->type == loader_eh_frame_fde_type) {
-								uint64_t offset = frame->fde.pc_begin;
+								uint64_t offset = ((uint64_t)frame->fde.pc_begin - ((uint64_t)binary->header));
 								if (offset == range.offset) {
 									range.length = frame->fde.pc_range;
 									break;
@@ -222,17 +222,19 @@ CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct lo
 					}
 				}
 				else {
-					uint64_t size, address;
-					uint64_t memOffset = SDMCalculateVMSlide(binary);
-					if (SDMBinaryIs64Bit(binary->header)) {
-						size = ((struct loader_section_64 *)(subroutine->section_offset))->position.size;
-						address = ((struct loader_section_64 *)(subroutine->section_offset))->position.addr + memOffset;
+					if (subroutine->section_offset != k32BitMask) {
+						uint64_t size, address;
+						uint64_t memOffset = SDMCalculateVMSlide(binary);
+						if (SDMBinaryIs64Bit(binary->header)) {
+							size = ((struct loader_section_64 *)(subroutine->section_offset))->position.size;
+							address = ((struct loader_section_64 *)(subroutine->section_offset))->position.addr + memOffset;
+						}
+						else {
+							size = ((struct loader_section_32 *)(subroutine->section_offset))->position.size;
+							address = ((struct loader_section_32 *)(subroutine->section_offset))->position.addr + memOffset;
+						}
+						range.length = ((address+size) - range.offset);
 					}
-					else {
-						size = ((struct loader_section_32 *)(subroutine->section_offset))->position.size;
-						address = ((struct loader_section_32 *)(subroutine->section_offset))->position.addr + memOffset;
-					}
-					range.length = ((address+size) - range.offset);
 				}
 				break;
 			}

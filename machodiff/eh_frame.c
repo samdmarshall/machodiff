@@ -389,12 +389,12 @@ CoreRange SDMSTEH_FramePointer(struct loader_segment *text, bool is64Bit, uint64
 		for (uint32_t index = 0; index < sections_count; index++) {
 			struct loader_section_64 *text_section = (struct loader_section_64 *)offset;
 			if (strncmp(text_section->name.sectname, EH_FRAME, sizeof(char[16])) == 0) {
-				Pointer result_offset = PtrCast(PtrCastSmallPointer(text_section->info.offset), Pointer);
+				Pointer result_offset = (Pointer)((uint64_t)text_section->info.offset);
 				uint64_t addr_offset = text_section->position.addr - text_segment->data.vm_position.addr;
 				if (text_section->info.offset != addr_offset) {
 					result_offset = PtrCast(addr_offset, Pointer);
 				}
-				result.offset = (uint64_t)PtrAdd(result_offset, header_offset);
+				result.offset = (uint64_t)PtrAdd((uint64_t)result_offset, header_offset);
 				result.length = (uint64_t)text_section->position.size;
 				break;
 			}
