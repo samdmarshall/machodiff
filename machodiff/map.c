@@ -204,7 +204,9 @@ void SDMSTMapMethodsToSubroutines(struct loader_binary *binary) {
 		uint32_t counter = 0;
 		for (uint32_t class_index = 0; class_index < binary->objc->clsCount; class_index++) {
 			struct loader_objc_class *class = &(binary->objc->cls[class_index]);
+			
 			//printf("Class: %s\n",class->className);
+			
 			counter += SDMSTMapMethodsOfClassToSubroutines(class, binary);
 			counter += SDMSTMapMethodsOfClassToSubroutines(class->superCls, binary);
 		}
