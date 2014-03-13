@@ -292,7 +292,7 @@ uint64_t SDMSTDecodePC_Begin(struct loader_eh_frame *frame) {
 uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset) {
 	uint64_t frame_length = 0;
 	
-	frame->fde.relevant_cie = last_cie;//(struct loader_eh_frame *)PtrSub(frame->identifier_ptr, frame->id);
+	frame->fde.relevant_cie = last_cie;
 	
 	uint8_t length_size = (frame->length == k32BitMask ? kExtendedLength : kLength);
 	
