@@ -51,6 +51,7 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 		
 		uintptr_t calculated_offset2 = (uintptr_t)(input_two->map->subroutine_map->subroutine[index].offset );//+ (SDMBinaryIs64Bit(input_two->header) ? (uint64_t)input_two->header : 0));
 		
+		printf("Found Item:\n");
 //		if (unnamed_subroutine) {
 //			int has_offset = sscanf(subroutine_name, kSubName, &offset);
 //			if (has_offset == 1) {
@@ -59,13 +60,15 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 //		}
 //		else {
 			offset1 = calculated_offset1;
+			CoreRange subroutine_range1 = SDMSTRangeOfSubroutine(&(input_one->map->subroutine_map->subroutine[index]), input_one);
 			char *name1 = SDMSTDemangleSymbolName(subroutine_name1);
-			printf("%s %lx\n",name1,offset1);
+			printf("\tName: %s \n\tOffset: %lx \n\tLength: %lld\n",name1,offset1,subroutine_range1.length);
 			free(name1);
 			
 			offset2 = calculated_offset2;
+			CoreRange subroutine_range2 = SDMSTRangeOfSubroutine(&(input_two->map->subroutine_map->subroutine[index]), input_two);
 			char *name2 = SDMSTDemangleSymbolName(subroutine_name2);
-			printf("%s %lx\n",name2,offset2);
+			printf("\tName: %s \n\tOffset: %lx \n\tLength: %lld\n",name2,offset2,subroutine_range2.length);
 			free(name2);
 //		}
 		printf("\n");
