@@ -54,7 +54,7 @@ struct loader_map * SDMCreateBinaryMap(struct loader_generic_header *header) {
 			};
 			case LC_LOAD_DYLIB: {
 				map->dependency_map->dependency = realloc(map->dependency_map->dependency, sizeof(uintptr_t)*(map->dependency_map->count+1));
-				map->dependency_map->dependency[map->dependency_map->count] = *PtrCast(loadCmd, uintptr_t *);
+				map->dependency_map->dependency[map->dependency_map->count] = *PtrCast(loadCmd, Pointer);
 				map->dependency_map->count++;
 				break;
 			};

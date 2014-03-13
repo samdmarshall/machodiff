@@ -60,7 +60,7 @@ void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_
 		struct loader_objc_method *method = &(class->method[method_index]);
 		
 		char *buffer = calloc(1024, sizeof(char));
-		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, ((binary->map->subroutine_map->count+1)*sizeof(struct loader_subroutine)));
+		binary->map->subroutine_map->subroutine = realloc(binary->map->subroutine_map->subroutine, (sizeof(struct loader_subroutine)*(binary->map->subroutine_map->count+1)));
 		struct loader_subroutine *subroutine = (struct loader_subroutine *)calloc(1, sizeof(struct loader_subroutine));
 		subroutine->offset = (uintptr_t)(address+(method->offset) - (address-memOffset));
 		

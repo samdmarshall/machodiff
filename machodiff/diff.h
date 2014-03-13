@@ -34,4 +34,6 @@ struct loader_binary * SDMLoadTarget(char *path, uint8_t type);
 
 void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary *input_two, char *output_path);
 
+void SDMDiffRelease(struct loader_diff *diff);
+
 #endif

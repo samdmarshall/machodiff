@@ -9,20 +9,13 @@
 #ifndef loader_loader_h
 #define loader_loader_h
 
-#pragma mark -
-#pragma mark #include
 #include "loader_type.h"
-#include <mach-o/loader.h>
 #include "eh_frame.h"
 #include "objc.h"
 #include "capstone.h"
 #include "symbol.h"
 
-#pragma mark -
-#pragma mark Public Types
-
-#pragma mark -
-#pragma mark Functions
+#include <mach-o/loader.h>
 
 struct loader_binary * SDMLoadBinaryWithPath(char *path, uint8_t target_arch);
 bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t target_arch);

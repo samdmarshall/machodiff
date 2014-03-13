@@ -59,6 +59,7 @@
 		22B2C5BB18CFF13F002A4A69 /* file_include.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = file_include.h; sourceTree = "<group>"; };
 		22B2C5BC18CFF655002A4A69 /* link_include.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = link_include.h; sourceTree = "<group>"; };
 		22B2C5C018D219FA002A4A69 /* dwarf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dwarf.h; sourceTree = "<group>"; };
+		22B2C5C118D2306F002A4A69 /* eh_frame_type.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = eh_frame_type.h; sourceTree = "<group>"; };
 		22B7479018B8F5310019BC58 /* machodiff */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = machodiff; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B7479618B8F5310019BC58 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		22B7479818B8F5310019BC58 /* machodiff.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = machodiff.1; sourceTree = "<group>"; };
@@ -188,6 +189,7 @@
 				221E02F918BBBC5100EA4571 /* arch.h */,
 				221E02FA18BBBC5800EA4571 /* arch.c */,
 				22B2C5C018D219FA002A4A69 /* dwarf.h */,
+				22B2C5C118D2306F002A4A69 /* eh_frame_type.h */,
 				22B2C58E18CD4938002A4A69 /* eh_frame.h */,
 				22B2C58F18CD4945002A4A69 /* eh_frame.c */,
 				22B2C5AD18CFE805002A4A69 /* objc.h */,

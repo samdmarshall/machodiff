@@ -12,6 +12,7 @@
 #include <mach/machine.h>
 #include <mach/vm_prot.h>
 #include "util.h"
+#include "eh_frame_type.h"
 
 #define EndianFix(type, value) ((type == loader_endian_little_type) ? SDMSwapEndian32(value) : value);
 
@@ -193,7 +194,7 @@ struct loader_symtab_cmd {
 } ATR_PACK;
 
 struct loader_dependency_map {
-	uintptr_t *dependency;
+	Pointer dependency;
 	uint32_t count;
 } ATR_PACK;
 

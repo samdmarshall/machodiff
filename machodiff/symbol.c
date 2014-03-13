@@ -33,9 +33,9 @@ void SDMGenerateSymbols(struct loader_binary * binary) {
 					uint32_t *n_value = (uint32_t *)PtrAdd(entry, sizeof(struct loader_generic_nlist));
 					symbol_address = (uintptr_t)*n_value;
 				}
-				binary->map->symbol_table->symbol = realloc(binary->map->symbol_table->symbol, sizeof(struct loader_symbol)*(unsigned long)(binary->map->symbol_table->count+1));
 				struct loader_symbol *symbol = (struct loader_symbol *)calloc(1, sizeof(struct loader_symbol));
 				if (symbol) {
+					binary->map->symbol_table->symbol = realloc(binary->map->symbol_table->symbol, sizeof(struct loader_symbol)*(unsigned long)(binary->map->symbol_table->count+1));
 					symbol->symbol_number = symbol_index;
 					symbol->offset = (uintptr_t)PtrAdd(symbol_address, SDMCalculateVMSlide(binary));
 					if (entry->n_un.n_strx && (entry->n_un.n_strx < symtab_cmd->strsize)) {

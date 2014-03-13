@@ -102,7 +102,7 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 						if (found_arch) {
 							uint32_t fat_size = EndianFix(binary->endian_type, arch_header->size)
 							uint32_t fat_offset = EndianFix(binary->endian_type, arch_header->offset);
-							binary->header = (struct loader_generic_header *)malloc(fat_size*sizeof(char));
+							binary->header = (struct loader_generic_header *)malloc(fat_size);
 							binary->file_offset = fat_offset;
 							lseek(fd, fat_offset, SEEK_SET);
 							read(fd, binary->header, fat_size);
@@ -117,7 +117,7 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 					
 					bool found_arch = SDMMatchArchToCPU(&(slim_binary->arch), target_arch, binary->endian_type);
 					if (found_arch) {
-						binary->header = (struct loader_generic_header *)malloc((uint32_t)size*sizeof(char));
+						binary->header = (struct loader_generic_header *)malloc((uint32_t)size);
 						binary->file_offset = 0;
 						lseek(fd, offset, SEEK_SET);
 						read(fd, binary->header, (uint32_t)size);
