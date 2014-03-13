@@ -179,8 +179,8 @@ uint32_t SDMSTMapMethodsOfClassToSubroutines(struct loader_objc_class *class, st
 			//printf("%s %s %lx\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name),method->offset);
 			
 			for (uint32_t subroutine_index = 0; subroutine_index < binary->map->subroutine_map->count; subroutine_index++) {
-				uint32_t method_offset = PtrLowPointer(method->offset);
-				uint32_t subroutine_offset = (((uint32_t)binary->map->subroutine_map->subroutine[subroutine_index].offset - ((uint32_t)((uintptr_t)binary->header)) + (uint32_t)(SDMBinaryIs64Bit(binary->header) ? 0 : 0x1000)));
+				uint64_t method_offset = PtrLowPointer(method->offset);
+				uint64_t subroutine_offset = ((uint64_t)binary->map->subroutine_map->subroutine[subroutine_index].offset);
 				if (method_offset == subroutine_offset) {
 					
 					char *method_name = SDMSTCreateNameForMethod(method, class->className);

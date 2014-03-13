@@ -33,27 +33,42 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 //	}
 	
 	for (uint32_t index = 0; index < input_one->map->subroutine_map->count; index++) {
-		bool unnamed_subroutine = false;
-		uintptr_t offset = 0;
+		bool unnamed_subroutine1, unnamed_subroutine2 = false;
+		uintptr_t offset1, offset2 = 0;
 		
-		char *subroutine_name = input_one->map->subroutine_map->subroutine[index].name;
-		if (strncmp(subroutine_name, kSubPrefix, sizeof(char[4])) == 0) {
-			unnamed_subroutine = true;
+		char *subroutine_name1 = input_one->map->subroutine_map->subroutine[index].name;
+		if (strncmp(subroutine_name1, kSubPrefix, sizeof(char[4])) == 0) {
+			unnamed_subroutine1 = true;
 		}
 		
-		uintptr_t calculated_offset = (uintptr_t)(input_one->map->subroutine_map->subroutine[index].offset - (SDMBinaryIs64Bit(input_one->header) ? (uint64_t)input_one->header : 0));
-		
-		if (unnamed_subroutine) {
-			int has_offset = sscanf(subroutine_name, kSubName, &offset);
-			if (has_offset == 1) {
-				printf("offset: %lx %lx\n",offset,calculated_offset);
-			}
-		} else {
-			offset = calculated_offset;
-			char *name = SDMSTDemangleSymbolName(subroutine_name);
-			printf("%s %lx\n",name,offset);
-			free(name);
+		char *subroutine_name2 = input_two->map->subroutine_map->subroutine[index].name;
+		if (strncmp(subroutine_name2, kSubPrefix, sizeof(char[4])) == 0) {
+			unnamed_subroutine2 = true;
 		}
+
+		
+		uintptr_t calculated_offset1 = (uintptr_t)(input_one->map->subroutine_map->subroutine[index].offset );//+ (SDMBinaryIs64Bit(input_one->header) ? (uint64_t)input_one->header : 0));
+		
+		uintptr_t calculated_offset2 = (uintptr_t)(input_two->map->subroutine_map->subroutine[index].offset );//+ (SDMBinaryIs64Bit(input_two->header) ? (uint64_t)input_two->header : 0));
+		
+//		if (unnamed_subroutine) {
+//			int has_offset = sscanf(subroutine_name, kSubName, &offset);
+//			if (has_offset == 1) {
+//				printf("offset: %lx %lx\n",offset,calculated_offset);
+//			}
+//		}
+//		else {
+			offset1 = calculated_offset1;
+			char *name1 = SDMSTDemangleSymbolName(subroutine_name1);
+			printf("%s %lx\n",name1,offset1);
+			free(name1);
+			
+			offset2 = calculated_offset2;
+			char *name2 = SDMSTDemangleSymbolName(subroutine_name2);
+			printf("%s %lx\n",name2,offset2);
+			free(name2);
+//		}
+		printf("\n");
 		
 		/*
 		CoreRange subroutine_range = SDMSTRangeOfSubroutine(&(input_one->map->subroutine_map->subroutine[index]), input_one);
