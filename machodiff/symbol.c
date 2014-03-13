@@ -43,7 +43,7 @@ void SDMGenerateSymbols(struct loader_binary * binary) {
 						symbol->stub = false;
 					}
 					else {
-						symbol->symbol_name = calloc(1 + strlen(kStubName) + GetDigitsOfNumber(binary->map->symbol_table->count), sizeof(char));
+						symbol->symbol_name = calloc(1024, sizeof(char));
 						sprintf(symbol->symbol_name, "%s%llu", kStubName, binary->map->symbol_table->count);
 						symbol->stub = true;
 					}
@@ -68,7 +68,7 @@ Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary
 		struct loader_subroutine *subroutine = &(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count]);
 		subroutine->offset = (uintptr_t)PtrAdd(offset, (binary->map->subroutine_map->count ? PtrCast(binary->map->subroutine_map->subroutine[binary->map->subroutine_map->count-1].offset, uintptr_t) : PtrCast(binary->header, uintptr_t)));
 		sprintf(buffer, kSubFormatter, (uintptr_t)PtrSub(subroutine->offset, binary->header));
-		subroutine->name = calloc((5 + strlen(buffer)), sizeof(char));
+		subroutine->name = calloc(1024, sizeof(char));
 		sprintf(subroutine->name, kSubName, (uintptr_t)PtrSub(subroutine->offset, binary->header));
 		subroutine->section_offset = k32BitMask;
 		free(buffer);

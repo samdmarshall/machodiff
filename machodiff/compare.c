@@ -55,6 +55,7 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 			free(name);
 		}
 		
+		/*
 		CoreRange subroutine_range = SDMSTRangeOfSubroutine(&(input_one->map->subroutine_map->subroutine[index]), input_one);
 		
 		csh handle;
@@ -69,7 +70,7 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 			if (count > 0) {
 				size_t j;
 				for (j = 0; j < count; j++) {
-					//printf("0x%"PRIx64":\t%s\t\t%s\n", insn[j].address, insn[j].mnemonic,insn[j].op_str);
+					printf("0x%"PRIx64":\t%s\t\t%s\n", insn[j].address, insn[j].mnemonic,insn[j].op_str);
 				}
 				cs_free(insn, count);
 			}
@@ -79,7 +80,7 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 		}
 		
 		cs_close(&handle);
-		
+		*/
 	}
 }
 

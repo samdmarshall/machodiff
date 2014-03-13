@@ -20,6 +20,8 @@ uint64_t SDMSTParseCIEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 
 uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset);
 
+void SDMSTAppendAugDataOrdering(struct loader_eh_frame_aug_array *array, uint8_t type);
+
 struct loader_eh_frame_map* SDMSTParseCallFrame(CoreRange frame, bool is64bit) {
 	struct loader_eh_frame_map *map = calloc(1, sizeof(struct loader_eh_frame_map));
 	map->frame = calloc(1, sizeof(struct loader_eh_frame));
@@ -95,10 +97,22 @@ struct loader_eh_frame_map* SDMSTParseCallFrame(CoreRange frame, bool is64bit) {
 	return map;
 }
 
+void SDMSTAppendAugDataOrdering(struct loader_eh_frame_aug_array *array, uint8_t type) {
+	if (array->aug_order_length == 0) {
+		array->aug_order = calloc(array->aug_order_length+1, sizeof(uint8_t));
+	} else {
+		array->aug_order = realloc(array->aug_order, (array->aug_order_length+1)*sizeof(uint8_t));
+	}
+	array->aug_order[array->aug_order_length] = type;
+	array->aug_order_length++;
+}
+
 uint64_t SDMSTParseCIEFrame(struct loader_eh_frame *frame, Pointer frame_offset) {
 	uint64_t frame_length = 0;
 	
 	uint8_t length_size = (frame->length == k32BitMask ? kExtendedLength : kLength);
+	
+	frame->cie.order_array.aug_order_length = 0;
 	
 	uint8_t version = 0;
 	frame_offset = read_uint8(frame_offset, &version);
@@ -110,27 +124,30 @@ uint64_t SDMSTParseCIEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 	if (data) {
 		frame->cie.aug_string_type |= loader_eh_frame_aug_data;
 	}
-	
+
 	char *ehdata = strstr(Ptr(frame->cie.aug_string), kLoader_EH_FRAME_aug_ehdata);
 	if (ehdata) {
 		frame->cie.aug_string_type |= loader_eh_frame_aug_ehdata;
+		SDMSTAppendAugDataOrdering(&frame->cie.order_array, loader_eh_frame_aug_order_ehdata);
 	}
-	
 	
 	if ((frame->cie.aug_string_type & loader_eh_frame_aug_data) == loader_eh_frame_aug_data) {
 		char *lsda = strstr(Ptr(frame->cie.aug_string), kLoader_EH_FRAME_aug_lsda);
 		if (lsda) {
 			frame->cie.aug_string_type |= loader_eh_frame_aug_lsda;
+			SDMSTAppendAugDataOrdering(&frame->cie.order_array, loader_eh_frame_aug_order_ldsa);
 		}
 		
 		char *person = strstr(Ptr(frame->cie.aug_string), kLoader_EH_FRAME_aug_person);
 		if (person) {
 			frame->cie.aug_string_type |= loader_eh_frame_aug_person;
+			SDMSTAppendAugDataOrdering(&frame->cie.order_array, loader_eh_frame_aug_order_person);
 		}
 		
 		char *encode = strstr(Ptr(frame->cie.aug_string), kLoader_EH_FRAME_aug_encode);
 		if (encode) {
 			frame->cie.aug_string_type |= loader_eh_frame_aug_encode;
+			SDMSTAppendAugDataOrdering(&frame->cie.order_array, loader_eh_frame_aug_order_encode);
 		}
 	}
 	
@@ -195,6 +212,42 @@ uint64_t SDMSTParseCIEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 		frame->cie.aug_data = frame_offset;
 		
 		frame_length += frame->cie.aug_length;
+		
+		Pointer aug_ptr = frame->cie.aug_data;
+		for (uint8_t index = 0; index < frame->cie.order_array.aug_order_length; index++) {
+			switch (frame->cie.order_array.aug_order[index]) {
+				case loader_eh_frame_aug_order_ehdata: {
+					break;
+				}
+				case loader_eh_frame_aug_order_person: {
+					uint8_t person_encoding = 0;
+					aug_ptr = read_uint8(aug_ptr, &person_encoding);
+					frame->cie.personality_encoding = person_encoding;
+					
+					uint32_t person_routine = 0;
+					aug_ptr = read_uint32(aug_ptr, &person_routine);
+					frame->cie.personality_routine = person_routine;
+					
+					break;
+				}
+				case loader_eh_frame_aug_order_ldsa: {
+					uint8_t ldsa_encoding = 0;
+					aug_ptr = read_uint8(aug_ptr, &ldsa_encoding);
+					frame->cie.lsda_pointer_encoding = ldsa_encoding;
+					break;
+				}
+				case loader_eh_frame_aug_order_encode: {
+					uint8_t fde_encoding = 0;
+					aug_ptr = read_uint8(aug_ptr, &fde_encoding);
+					frame->cie.fde_pointer_encoding = fde_encoding;
+					break;
+				}
+				default: {
+					break;
+				}
+			}
+		}
+		
 	}
 	
 	frame->cie.initial_instructions = frame_offset;
@@ -209,7 +262,29 @@ uint64_t SDMSTParseCIEFrame(struct loader_eh_frame *frame, Pointer frame_offset)
 uint64_t SDMSTDecodePC_Begin(struct loader_eh_frame *frame) {
 	uint64_t pc_begin = frame->fde.pc_begin;
 	if ((frame->fde.relevant_cie->cie.aug_string_type & loader_eh_frame_aug_encode) == loader_eh_frame_aug_encode) {
-		pc_begin = ((uint64_t)frame->fde.pc_begin_ptr + (uint64_t)frame->fde.pc_begin);
+		uint8_t encoding = frame->fde.relevant_cie->cie.fde_pointer_encoding;
+		if (encoding == DW_EH_PE_absptr) {
+			pc_begin = frame->fde.pc_begin;
+		}
+		else if ((encoding & DW_EH_PE_pcrel) == DW_EH_PE_pcrel) {
+			pc_begin = ((uint64_t)frame->fde.pc_begin_ptr - TwosComp64(frame->fde.pc_begin));
+		}
+		else if ((encoding & DW_EH_PE_textrel) == DW_EH_PE_textrel) {
+			
+		}
+		else if ((encoding & DW_EH_PE_datarel) == DW_EH_PE_datarel) {
+			
+		}
+		else if ((encoding & DW_EH_PE_funcrel) == DW_EH_PE_funcrel) {
+			
+		}
+		else if ((encoding & DW_EH_PE_aligned) == DW_EH_PE_aligned) {
+			
+		}
+		
+		if ((encoding & DW_EH_PE_indirect) == DW_EH_PE_indirect) {
+			
+		}
 	}
 	return pc_begin;
 }
@@ -217,7 +292,7 @@ uint64_t SDMSTDecodePC_Begin(struct loader_eh_frame *frame) {
 uint64_t SDMSTParseFDEFrame(struct loader_eh_frame *frame, Pointer frame_offset) {
 	uint64_t frame_length = 0;
 	
-	frame->fde.relevant_cie = (struct loader_eh_frame *)PtrSub(frame->identifier_ptr, frame->id);
+	frame->fde.relevant_cie = last_cie;//(struct loader_eh_frame *)PtrSub(frame->identifier_ptr, frame->id);
 	
 	uint8_t length_size = (frame->length == k32BitMask ? kExtendedLength : kLength);
 	

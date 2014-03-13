@@ -158,10 +158,17 @@ void SDMSTObjc2ClassPopulate(struct loader_objc_class *newClass, struct loader_o
 			newClass->method = calloc(newClass->methodCount, sizeof(struct loader_objc_method));
 			struct loader_objc_2_class_method *methodOffset = (struct loader_objc_2_class_method *)PtrAdd(methodInfo, sizeof(struct loader_objc_2_class_method_info));
 			for (uint32_t i = 0; i < newClass->methodCount; i++) {
-				newClass->method[i].name = Ptr(PtrAdd(offset, methodOffset[i].name));
-				newClass->method[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
-				newClass->method[i].offset = (uintptr_t)(methodOffset[i].imp);
-				newClass->method[i].method_type = (class_type == loader_objc_2_class_metaclass_type ? loader_objc_method_class_type : loader_objc_method_instance_type);
+				char *method_name = Ptr(PtrAdd(offset, methodOffset[i].name));
+#if HIDE_CXX_DESTRUCT
+				if (strcmp(method_name, ".cxx_destruct") != 0) {
+#endif
+					newClass->method[i].name = method_name;
+					newClass->method[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
+					newClass->method[i].offset = (uintptr_t)(methodOffset[i].imp);
+					newClass->method[i].method_type = (class_type == loader_objc_2_class_metaclass_type ? loader_objc_method_class_type : loader_objc_method_instance_type);
+#if HIDE_CXX_DESTRUCT
+				}
+#endif
 			}
 		}
 	}

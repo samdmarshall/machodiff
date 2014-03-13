@@ -8,6 +8,9 @@
 
 #ifndef loader_objc_runtime_h
 #define loader_objc_runtime_h
+
+#define HIDE_CXX_DESTRUCT 0
+
 #include "objc_lexer.h"
 #include "objc1_runtime.h"
 #include "objc2_runtime.h"

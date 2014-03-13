@@ -118,7 +118,7 @@ void SDMSTFindSubroutines(struct loader_binary *binary) {
 									subroutine->offset = (uintptr_t)(address+offset);
 									
 									sprintf(buffer, kSubFormatter, subroutine->offset);
-									subroutine->name = calloc(5 + (strlen(buffer)), sizeof(char));
+									subroutine->name = calloc(1024, sizeof(char));
 									sprintf(subroutine->name, kSubName, subroutine->offset);
 									
 									subroutine->section_offset = textSectionOffset;
@@ -177,7 +177,7 @@ void SDMSTCreateSubtroutineForFrame(struct loader_binary *binary, struct loader_
 	subroutine->offset = (uintptr_t)(subroutine_offset);
 	
 	sprintf(buffer, kSubFormatter, subroutine->offset);
-	subroutine->name = calloc(5 + (strlen(buffer)), sizeof(char));
+	subroutine->name = calloc(1024, sizeof(char));
 	sprintf(subroutine->name, kSubName, subroutine->offset);
 	
 	subroutine->section_offset = k32BitMask;

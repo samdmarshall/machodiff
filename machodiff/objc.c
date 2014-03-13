@@ -16,8 +16,8 @@
 char* SDMSTCreateNameForMethod(struct loader_objc_method *method, char *class_name) {
 	char *method_name = method->name;
 	
-	uint32_t name_length = (uint32_t)strlen(class_name)+5+(uint32_t)strlen(method_name);
-	char *new_name = calloc(1+name_length, sizeof(char));
+	//uint32_t name_length = (uint32_t)strlen(class_name)+5+(uint32_t)strlen(method_name);
+	char *new_name = calloc(1024, sizeof(char));
 	char method_type = (method->method_type == loader_objc_method_instance_type ? '-' : (method->method_type == loader_objc_method_class_type ? '+' : '?'));
 	sprintf(new_name, "%c[%s %s]",method_type,class_name,method_name);
 
@@ -65,7 +65,7 @@ void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_
 		subroutine->offset = (uintptr_t)(address+(method->offset) - (address-memOffset));
 		
 		sprintf(buffer, kSubFormatter, subroutine->offset);
-		subroutine->name = calloc(5 + (strlen(buffer)), sizeof(char));
+		subroutine->name = calloc(1024, sizeof(char));
 		sprintf(subroutine->name, kSubName, subroutine->offset);
 		
 		subroutine->section_offset = textSectionOffset;

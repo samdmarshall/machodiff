@@ -12,6 +12,7 @@
 #include "util.h"
 #include "reader.h"
 #include "loader_type.h"
+#include "dwarf.h"
 
 #define EH_FRAME "__eh_frame"
 
@@ -30,6 +31,13 @@ enum loader_eh_frame_aug {
 	loader_eh_frame_aug_encode =  0x10000, // R
 };
 
+enum loader_eh_frame_aug_order {
+	loader_eh_frame_aug_order_ehdata,
+	loader_eh_frame_aug_order_person,
+	loader_eh_frame_aug_order_ldsa,
+	loader_eh_frame_aug_order_encode
+};
+
 enum loader_eh_frame_type {
 	loader_eh_frame_invalid_type = 0,
 	loader_eh_frame_cie_type,
@@ -45,6 +53,11 @@ enum loader_eh_frame_size {
 struct loader_eh_frame_map {
 	struct loader_eh_frame *frame;
 	uint32_t count;
+} ATR_PACK;
+
+struct loader_eh_frame_aug_array {
+	uint8_t *aug_order;
+	uint8_t aug_order_length;
 } ATR_PACK;
 
 struct loader_eh_frame_cie {
@@ -70,9 +83,12 @@ struct loader_eh_frame_cie {
 	uint8_t lsda_pointer_encoding;
 	
 	uint8_t personality_encoding;
+	uint32_t personality_routine;
 	uint64_t personality_pointer;
 	
 	uint8_t fde_pointer_encoding;
+	
+	struct loader_eh_frame_aug_array order_array;
 };
 
 struct loader_eh_frame_fde {

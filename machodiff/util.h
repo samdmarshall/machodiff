@@ -58,4 +58,10 @@ typedef uintptr_t* (*FunctionPointer)();
 #define SDMSwapEndian16(num) ((num<<8) | (num>>8))
 #define SDMSwapEndian32(num) (((num>>24)&0xff) | ((num<<8)&0xff0000) | ((num>>8)&0xff00) |((num<<24)&0xff000000))
 
+#define OnesComp32(value) (k32BitMask - value)
+#define TwosComp32(value) ((k32BitMask - value) + 1)
+
+#define OnesComp64(value) (k64BitMask - value)
+#define TwosComp64(value) ((k64BitMask - value) + 1)
+
 #endif
