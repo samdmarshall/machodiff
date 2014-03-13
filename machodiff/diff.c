@@ -127,8 +127,12 @@ void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary 
 void SDMDiffRelease(struct loader_diff *diff) {
 	if (diff) {
 		if (diff->symbol) {
-			
+			for (uint32_t index = 0; index < diff->name_count; index++) {
+				free(diff->symbol[index].name);
+			}
+			free(diff->symbol);
 		}
+		free(diff);
 	}
 }
 
