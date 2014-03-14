@@ -127,9 +127,25 @@ void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary 
 	free(diff);
 }
 
+void SDMDiffSymbolRelease(struct loader_diff_symbol *symbol) {
+	if (symbol) {
+		if (symbol->name) {
+			free(symbol->name);
+		}
+		free(symbol);
+	}
+}
+
 void SDMDiffRelease(struct loader_diff *diff) {
 	if (diff) {
 		if (diff->map) {
+			if (diff->index) {
+				for (uint32_t index = 0; index < diff->index_count; index++) {
+					struct loader_diff_symbol *symbol = cmap_str_objectForKey(diff->map, diff->index[index].symbol_name);
+					SDMDiffSymbolRelease(symbol);
+				}
+				free(diff->index);
+			}
 			cmap_str_free(diff->map);
 		}
 		free(diff);

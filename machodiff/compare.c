@@ -83,12 +83,8 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 			CoreRange subroutine_range2 = SDMSTRangeOfSubroutine(subroutine_b2, input_two);
 			
 			bool compare_result = SDMCompareSymbol(symbol, subroutine_range1, input_one, subroutine_range2, input_two);
-			if (compare_result) {
-				// SDM: they seem to match, they can be zero'd out.
-				symbol->match = true;
-			}
-			else {
-				// SDM: symbols are different!
+			if (compare_result == false) {
+				// SDM: symbols are different, find another
 			}
 		}
 		else {
@@ -112,7 +108,7 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 				hash = SDMSTCreateSymbolHash(symbol_b2->symbol_name);
 			}
 			else {
-				
+				// SDM: how do we calculate the uuid for this?
 			}
 			
 			struct loader_diff_symbol *found_symbol = cmap_str_objectForKey(diff->map, hash);
@@ -144,9 +140,6 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 //			add_counter++;
 //		}
 //	}
-	
-	//struct loader_cpp_map *cpp_map1 = SDMSTCPPMapInitialize();
-	//struct loader_cpp_map *cpp_map2 = SDMSTCPPMapInitialize();
 	
 	/*
 	
@@ -203,7 +196,24 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 		printf("\tName: %s \n\tOffset: %lx \n\tLength: %lld\n",name2,offset2,subroutine_range2.length);
 		
 		printf("\n");
+	}
+	*/
+}
+
+bool SDMCompareSymbol(struct loader_diff_symbol *symbol, CoreRange range_one, struct loader_binary *input_one, CoreRange range_two, struct loader_binary *input_two) {
+	bool status = false;
+	
+	Pointer ptr_subroutine_one = PtrCast(Ptr(range_one.offset), Pointer);
+	
+	Pointer ptr_subroutine_two = PtrCast(Ptr(range_two.offset), Pointer);
+	
+	if (range_one.length == range_two.length) {
+		status = (memcmp(ptr_subroutine_one, ptr_subroutine_two, (unsigned long)range_one.length) == 0);
+	}
+	else {
+		// SDM: do comparison on binary code.
 		
+		/*
 		CoreRange subroutine_range = SDMSTRangeOfSubroutine(&(input_one->map->subroutine_map->subroutine[index]), input_one);
 		
 		csh handle;
@@ -228,27 +238,12 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 		}
 		printf("\n");
 		cs_close(&handle);
+		*/
 	}
 	
-	//SDMSTCPPMapRelease(cpp_map1);
-	//SDMSTCPPMapRelease(cpp_map2);
-	*/
-}
-
-bool SDMCompareSymbol(struct loader_diff_symbol *symbol, CoreRange range_one, struct loader_binary *input_one, CoreRange range_two, struct loader_binary *input_two) {
-	bool status = false;
-	
-	Pointer ptr_subroutine_one = PtrCast(Ptr(range_one.offset), Pointer);
-	
-	Pointer ptr_subroutine_two = PtrCast(Ptr(range_two.offset), Pointer);
-	
-	if (range_one.length == range_two.length) {
-		status = (memcmp(ptr_subroutine_one, ptr_subroutine_two, (unsigned long)range_one.length) == 0);
-	}
-	else {
-		// SDM: do comparison on binary code.
-		
-		
+	if (status == true) {
+		// SDM: they seem to match, they can be zero'd out.
+		symbol->match = true;
 	}
 	
 	return status;
