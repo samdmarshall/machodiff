@@ -21,6 +21,8 @@ void SDMGenerateSymbols(struct loader_binary *binary);
 
 Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary);
 
+struct loader_symbol* SDMSTFindSymbolForSubroutine(struct loader_symtab *symbol_table, struct loader_subroutine *subroutine);
+
 bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName);
 
 #endif

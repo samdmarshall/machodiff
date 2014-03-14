@@ -77,6 +77,17 @@ Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary
 	return pointer;
 }
 
+struct loader_symbol* SDMSTFindSymbolForSubroutine(struct loader_symtab *symbol_table, struct loader_subroutine *subroutine) {
+	struct loader_symbol *symbol = NULL;
+	for (uint32_t index = 0; index < symbol_table->count; index++) {
+		struct loader_symbol *item = &(symbol_table->symbol[index]);
+		if (item->offset == subroutine->offset) {
+			return item;
+		}
+	}
+	return symbol;
+}
+
 bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName) {
 	bool matchesName = false;
 	if (symFromTable && symbolName) {

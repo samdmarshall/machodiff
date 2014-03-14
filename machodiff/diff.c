@@ -62,8 +62,7 @@ struct loader_binary * SDMLoadTarget(char *path, uint8_t type) {
 
 struct loader_diff * SDMGenerateSymbolList(struct loader_binary *input_one, struct loader_binary *input_two) {
 	struct loader_diff *diff = calloc(1, sizeof(struct loader_diff));
-	diff->symbol = calloc(1, sizeof(struct loader_diff_symbol));
-	diff->name_count = 0;
+	diff->map = cmap_str_new();
 	
 	SDMDiffAddSymbols(diff, input_one, input_two);
 	
@@ -126,11 +125,8 @@ void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary 
 
 void SDMDiffRelease(struct loader_diff *diff) {
 	if (diff) {
-		if (diff->symbol) {
-			for (uint32_t index = 0; index < diff->name_count; index++) {
-				free(diff->symbol[index].name);
-			}
-			free(diff->symbol);
+		if (diff->map) {
+			cmap_str_free(diff->map);
 		}
 		free(diff);
 	}

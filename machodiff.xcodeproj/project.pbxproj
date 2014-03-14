@@ -19,6 +19,13 @@
 		22B2C5B318CFE9A9002A4A69 /* subroutine.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B218CFE9A9002A4A69 /* subroutine.c */; };
 		22B2C5B618CFEBF0002A4A69 /* map.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B518CFEBF0002A4A69 /* map.c */; };
 		22B2C5B918CFEE84002A4A69 /* symbol.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B818CFEE84002A4A69 /* symbol.c */; };
+		22B2C5C518D3961D002A4A69 /* objc-class.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5C418D3961D002A4A69 /* objc-class.c */; };
+		22B2C5C818D3963B002A4A69 /* cxx-class.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5C718D3963B002A4A69 /* cxx-class.c */; };
+		22B2C5CB18D3966B002A4A69 /* cmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5C918D3966B002A4A69 /* cmap.cpp */; };
+		22B2C5D118D3991C002A4A69 /* c-class.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5D018D3991C002A4A69 /* c-class.c */; };
+		22B2C5D518D39A1A002A4A69 /* hash.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5D418D39A1A002A4A69 /* hash.c */; };
+		22B2C5D918D39B58002A4A69 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B2C5D818D39B58002A4A69 /* libssl.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		22B2C5DC18D39C06002A4A69 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B2C5DA18D39BFC002A4A69 /* Security.framework */; };
 		22B7479718B8F5310019BC58 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B7479618B8F5310019BC58 /* main.c */; };
 		22B747C018B903710019BC58 /* loader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747B818B903710019BC58 /* loader.c */; };
 		22B747C118B903710019BC58 /* objc_lexer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747BA18B903710019BC58 /* objc_lexer.c */; };
@@ -60,6 +67,19 @@
 		22B2C5BC18CFF655002A4A69 /* link_include.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = link_include.h; sourceTree = "<group>"; };
 		22B2C5C018D219FA002A4A69 /* dwarf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dwarf.h; sourceTree = "<group>"; };
 		22B2C5C118D2306F002A4A69 /* eh_frame_type.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = eh_frame_type.h; sourceTree = "<group>"; };
+		22B2C5C318D39612002A4A69 /* objc-class.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "objc-class.h"; sourceTree = "<group>"; };
+		22B2C5C418D3961D002A4A69 /* objc-class.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "objc-class.c"; sourceTree = "<group>"; };
+		22B2C5C618D39634002A4A69 /* cxx-class.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "cxx-class.h"; sourceTree = "<group>"; };
+		22B2C5C718D3963B002A4A69 /* cxx-class.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "cxx-class.c"; sourceTree = "<group>"; };
+		22B2C5C918D3966B002A4A69 /* cmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cmap.cpp; sourceTree = "<group>"; };
+		22B2C5CA18D3966B002A4A69 /* cmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cmap.h; sourceTree = "<group>"; };
+		22B2C5CF18D39913002A4A69 /* c-class.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "c-class.h"; sourceTree = "<group>"; };
+		22B2C5D018D3991C002A4A69 /* c-class.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "c-class.c"; sourceTree = "<group>"; };
+		22B2C5D218D39937002A4A69 /* class.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = class.h; sourceTree = "<group>"; };
+		22B2C5D318D39A12002A4A69 /* hash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hash.h; sourceTree = "<group>"; };
+		22B2C5D418D39A1A002A4A69 /* hash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hash.c; sourceTree = "<group>"; };
+		22B2C5D818D39B58002A4A69 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
+		22B2C5DA18D39BFC002A4A69 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		22B7479018B8F5310019BC58 /* machodiff */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = machodiff; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B7479618B8F5310019BC58 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		22B7479818B8F5310019BC58 /* machodiff.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = machodiff.1; sourceTree = "<group>"; };
@@ -79,6 +99,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B2C5DC18D39C06002A4A69 /* Security.framework in Frameworks */,
+				22B2C5D918D39B58002A4A69 /* libssl.dylib in Frameworks */,
 				221E02DB18BB972700EA4571 /* libcapstone.a in Frameworks */,
 				22345EFC18B95EC300FC106D /* libobjc.dylib in Frameworks */,
 			);
@@ -135,6 +157,43 @@
 			name = objc;
 			sourceTree = "<group>";
 		};
+		22B2C5C218D395F9002A4A69 /* class */ = {
+			isa = PBXGroup;
+			children = (
+				22B2C5D218D39937002A4A69 /* class.h */,
+				22B2C5C318D39612002A4A69 /* objc-class.h */,
+				22B2C5C418D3961D002A4A69 /* objc-class.c */,
+				22B2C5C618D39634002A4A69 /* cxx-class.h */,
+				22B2C5C718D3963B002A4A69 /* cxx-class.c */,
+				22B2C5CF18D39913002A4A69 /* c-class.h */,
+				22B2C5D018D3991C002A4A69 /* c-class.c */,
+			);
+			name = class;
+			sourceTree = "<group>";
+		};
+		22B2C5CD18D3967D002A4A69 /* utilities */ = {
+			isa = PBXGroup;
+			children = (
+				22B747B318B903080019BC58 /* util.h */,
+				22B2BD6518CB7EA8002A4A69 /* reader.h */,
+				22B2BD6618CB7EB1002A4A69 /* reader.c */,
+				22B2C5CA18D3966B002A4A69 /* cmap.h */,
+				22B2C5C918D3966B002A4A69 /* cmap.cpp */,
+				22B2C5D318D39A12002A4A69 /* hash.h */,
+				22B2C5D418D39A1A002A4A69 /* hash.c */,
+			);
+			name = utilities;
+			sourceTree = "<group>";
+		};
+		22B2C5CE18D396A6002A4A69 /* batch includes */ = {
+			isa = PBXGroup;
+			children = (
+				22B2C5BB18CFF13F002A4A69 /* file_include.h */,
+				22B2C5BC18CFF655002A4A69 /* link_include.h */,
+			);
+			name = "batch includes";
+			sourceTree = "<group>";
+		};
 		22B7478718B8F5310019BC58 = {
 			isa = PBXGroup;
 			children = (
@@ -156,6 +215,8 @@
 		22B7479218B8F5310019BC58 /* Link */ = {
 			isa = PBXGroup;
 			children = (
+				22B2C5DA18D39BFC002A4A69 /* Security.framework */,
+				22B2C5D818D39B58002A4A69 /* libssl.dylib */,
 				221E02DA18BB972700EA4571 /* libcapstone.a */,
 				22345EFB18B95EC200FC106D /* libobjc.dylib */,
 			);
@@ -165,11 +226,9 @@
 		22B7479518B8F5310019BC58 /* machodiff */ = {
 			isa = PBXGroup;
 			children = (
-				22B747B318B903080019BC58 /* util.h */,
-				22B2BD6518CB7EA8002A4A69 /* reader.h */,
-				22B2BD6618CB7EB1002A4A69 /* reader.c */,
-				22B2C5BB18CFF13F002A4A69 /* file_include.h */,
-				22B2C5BC18CFF655002A4A69 /* link_include.h */,
+				22B2C5CE18D396A6002A4A69 /* batch includes */,
+				22B2C5CD18D3967D002A4A69 /* utilities */,
+				22B2C5C218D395F9002A4A69 /* class */,
 				22B2C5BE18CFF727002A4A69 /* diff */,
 				22B2C5BD18CFF712002A4A69 /* lexing */,
 				22B747B718B9030D0019BC58 /* mach-o */,
@@ -256,6 +315,8 @@
 			files = (
 				22B747C118B903710019BC58 /* objc_lexer.c in Sources */,
 				22B2C5B618CFEBF0002A4A69 /* map.c in Sources */,
+				22B2C5CB18D3966B002A4A69 /* cmap.cpp in Sources */,
+				22B2C5C818D3963B002A4A69 /* cxx-class.c in Sources */,
 				22B2C5B318CFE9A9002A4A69 /* subroutine.c in Sources */,
 				221E02FB18BBBC5800EA4571 /* arch.c in Sources */,
 				22B747C218B903710019BC58 /* objc_runtime.c in Sources */,
@@ -264,7 +325,10 @@
 				22B2C5AF18CFE819002A4A69 /* objc.c in Sources */,
 				22B2BD6718CB7EB1002A4A69 /* reader.c in Sources */,
 				2234603818BA822000FC106D /* compare.c in Sources */,
+				22B2C5C518D3961D002A4A69 /* objc-class.c in Sources */,
 				22345EFA18B95AE100FC106D /* diff.c in Sources */,
+				22B2C5D118D3991C002A4A69 /* c-class.c in Sources */,
+				22B2C5D518D39A1A002A4A69 /* hash.c in Sources */,
 				221BEE9D18BBFAC30089B879 /* cpp_lexer.cpp in Sources */,
 				22B7479718B8F5310019BC58 /* main.c in Sources */,
 				22B2C5B918CFEE84002A4A69 /* symbol.c in Sources */,
@@ -353,7 +417,8 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -367,6 +432,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/build/Universal",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-all_load";
@@ -381,7 +447,8 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -395,6 +462,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/build/Universal",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";

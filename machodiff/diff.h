@@ -10,11 +10,12 @@
 #define machodiff_diff_h
 
 #include "loader.h"
+#include "cmap.h"
 
 struct loader_diff_symbol_imp {
-	char *name;
-	uintptr_t offset;
 	struct loader_binary *binary;
+	struct loader_symbol *symbol;
+	struct loader_subroutine *subroutine;
 } ATR_PACK;
 
 struct loader_diff_symbol {
@@ -24,8 +25,7 @@ struct loader_diff_symbol {
 } ATR_PACK;
 
 struct loader_diff {
-	struct loader_diff_symbol *symbol;
-	uint32_t name_count;
+	cmap_str map;
 } ATR_PACK;
 
 bool SDMMakeNewFolderAtPath(char *path, mode_t mode);
