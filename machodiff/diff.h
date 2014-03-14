@@ -24,8 +24,14 @@ struct loader_diff_symbol {
 	struct loader_diff_symbol_imp input_two;
 } ATR_PACK;
 
+struct loader_symboL_index {
+	char *symbol_name;
+} ATR_PACK;
+
 struct loader_diff {
 	cmap_str map;
+	struct loader_symboL_index *index;
+	uint32_t index_count;
 } ATR_PACK;
 
 bool SDMMakeNewFolderAtPath(char *path, mode_t mode);

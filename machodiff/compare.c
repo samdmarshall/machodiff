@@ -18,9 +18,6 @@
 #include "hash.h"
 #include <uuid/uuid.h>
 
-
-bool SDMDiffAddName(struct loader_diff_symbol *diff, struct loader_symbol *symbol);
-
 bool SDMDiffAddName(struct loader_diff_symbol *diff, struct loader_symbol *symbol) {
 	bool result = false;
 	if (symbol->stub == false) {
@@ -31,8 +28,30 @@ bool SDMDiffAddName(struct loader_diff_symbol *diff, struct loader_symbol *symbo
 	return result;
 }
 
+void SDMDiffAddSymbol(struct loader_diff *diff, struct loader_diff_symbol *symbol) {
+	if (diff->index == NULL) {
+		diff->index = calloc(1, sizeof(struct loader_symboL_index));
+		diff->index_count = 0;
+	}
+	
+	if (symbol->name == NULL) {
+		uuid_t t;
+		uuid_generate(t);
+		symbol->name = calloc(37, sizeof(char));
+		uuid_unparse(t, symbol->name);
+	}
+	
+	char *hash = calloc((HASH_LENGTH+1), sizeof(char));
+	hash = (char *)StringToSHA1(symbol->name, (uint32_t)strlen(symbol->name), (unsigned char *)hash);
+
+	diff->index = realloc(diff->index, sizeof(struct loader_symboL_index)*(diff->index_count+1));
+	diff->index[diff->index_count].symbol_name = hash;
+	
+	cmap_str_setObjectForKey(diff->map, hash, symbol);
+}
+
 // SDM: this will give some variation due to the approximation in unique when parsing dynamically created block_ref symbols in a binary.
-void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one, struct loader_binary *input_two) {
+void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_one, struct loader_binary *input_two) {
 	
 	for (uint32_t index = 0; index < input_one->map->subroutine_map->count; index++) {
 		struct loader_diff_symbol *symbol = calloc(1, sizeof(struct loader_diff_symbol));
@@ -76,21 +95,11 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 			
 		}
 		
-		char *name = NULL;
-		if (!named) {
-			uuid_t t;
-			uuid_generate(t);
-			symbol->name = calloc(37, sizeof(char));
-			uuid_unparse(t, symbol->name);
-		}
+		SDMDiffAddSymbol(diff, symbol);
 		
-		name = symbol->name;
-
-		char *hash = calloc((HASH_LENGTH+1), sizeof(char));
-		hash = (char *)StringToSHA1(name, (uint32_t)strlen(name), (unsigned char *)hash);
-		
-		cmap_str_setObjectForKey(diff->map, hash, symbol);
 	}
+	
+	// SDM: now diff the second binary for more symbols
 	
 	
 //	uint32_t add_counter = 0;
@@ -209,6 +218,8 @@ bool SDMCompareSymbol(struct loader_diff_symbol *symbol, CoreRange range_one, st
 	}
 	else {
 		// SDM: do comparison on binary code.
+		
+		
 	}
 	
 	return status;

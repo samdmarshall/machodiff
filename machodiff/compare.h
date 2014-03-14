@@ -11,7 +11,12 @@
 
 #include "diff.h"
 
-void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one, struct loader_binary *input_two);
+bool SDMDiffAddName(struct loader_diff_symbol *diff, struct loader_symbol *symbol);
+
+void SDMDiffAddSymbol(struct loader_diff *diff, struct loader_diff_symbol *symbol);
+
+void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_one, struct loader_binary *input_two);
+
 bool SDMCompareSymbol(struct loader_diff_symbol *symbol, CoreRange range_one, struct loader_binary *input_one, CoreRange range_two, struct loader_binary *input_two);
 
 #endif
