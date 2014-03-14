@@ -218,7 +218,7 @@ void SDMSTMapSymbolsToSubroutines(struct loader_binary *binary) {
 	uint32_t counter = 0;
 	for (uint32_t i = 0; i < binary->map->symbol_table->count; i++) {
 		for (uint32_t j = 0; j < binary->map->subroutine_map->count; j++) {
-			if (binary->map->symbol_table->symbol[i].offset == (binary->map->subroutine_map->subroutine[j].offset - (uint64_t)binary->header)) {
+			if (binary->map->symbol_table->symbol[i].offset == binary->map->subroutine_map->subroutine[j].offset) {
 				uint32_t name_length = sizeof(char)*(uint32_t)strlen(binary->map->symbol_table->symbol[i].symbol_name);
 				binary->map->subroutine_map->subroutine[j].name = realloc(binary->map->subroutine_map->subroutine[j].name, name_length+1);
 				memcpy(binary->map->subroutine_map->subroutine[j].name, binary->map->symbol_table->symbol[i].symbol_name, name_length);

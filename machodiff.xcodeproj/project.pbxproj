@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		221BEE9D18BBFAC30089B879 /* cpp_lexer.c in Sources */ = {isa = PBXBuildFile; fileRef = 221BEE9C18BBFAC30089B879 /* cpp_lexer.c */; };
+		221BEE9D18BBFAC30089B879 /* cpp_lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 221BEE9C18BBFAC30089B879 /* cpp_lexer.cpp */; };
 		221E02DB18BB972700EA4571 /* libcapstone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 221E02DA18BB972700EA4571 /* libcapstone.a */; };
 		221E02FB18BBBC5800EA4571 /* arch.c in Sources */ = {isa = PBXBuildFile; fileRef = 221E02FA18BBBC5800EA4571 /* arch.c */; };
 		22345EFA18B95AE100FC106D /* diff.c in Sources */ = {isa = PBXBuildFile; fileRef = 22345EF918B95AE100FC106D /* diff.c */; };
@@ -26,7 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		221BEE9C18BBFAC30089B879 /* cpp_lexer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cpp_lexer.c; sourceTree = "<group>"; };
+		221BEE9C18BBFAC30089B879 /* cpp_lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cpp_lexer.cpp; sourceTree = "<group>"; };
 		221BEE9E18BBFAD50089B879 /* cpp_lexer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cpp_lexer.h; sourceTree = "<group>"; };
 		221BEE9F18BBFB5C0089B879 /* lexer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lexer.h; sourceTree = "<group>"; };
 		221E02D418BB95BB00EA4571 /* arm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arm.h; sourceTree = "<group>"; };
@@ -108,7 +108,7 @@
 				22B747BB18B903710019BC58 /* objc_lexer.h */,
 				22B747BA18B903710019BC58 /* objc_lexer.c */,
 				221BEE9E18BBFAD50089B879 /* cpp_lexer.h */,
-				221BEE9C18BBFAC30089B879 /* cpp_lexer.c */,
+				221BEE9C18BBFAC30089B879 /* cpp_lexer.cpp */,
 			);
 			name = lexing;
 			sourceTree = "<group>";
@@ -265,7 +265,7 @@
 				22B2BD6718CB7EB1002A4A69 /* reader.c in Sources */,
 				2234603818BA822000FC106D /* compare.c in Sources */,
 				22345EFA18B95AE100FC106D /* diff.c in Sources */,
-				221BEE9D18BBFAC30089B879 /* cpp_lexer.c in Sources */,
+				221BEE9D18BBFAC30089B879 /* cpp_lexer.cpp in Sources */,
 				22B7479718B8F5310019BC58 /* main.c in Sources */,
 				22B2C5B918CFEE84002A4A69 /* symbol.c in Sources */,
 			);
@@ -279,8 +279,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -318,8 +318,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;

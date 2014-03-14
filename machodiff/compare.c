@@ -32,6 +32,9 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 //		}
 //	}
 	
+	//struct loader_cpp_map *cpp_map1 = SDMSTCPPMapInitialize();
+	//struct loader_cpp_map *cpp_map2 = SDMSTCPPMapInitialize();
+	
 	for (uint32_t index = 0; index < input_one->map->subroutine_map->count; index++) {
 		bool unnamed_subroutine1, unnamed_subroutine2 = false;
 		uintptr_t offset1, offset2 = 0;
@@ -52,25 +55,39 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 		uintptr_t calculated_offset2 = (uintptr_t)(input_two->map->subroutine_map->subroutine[index].offset );//+ (SDMBinaryIs64Bit(input_two->header) ? (uint64_t)input_two->header : 0));
 		
 		printf("Found Item:\n");
-//		if (unnamed_subroutine) {
-//			int has_offset = sscanf(subroutine_name, kSubName, &offset);
-//			if (has_offset == 1) {
-//				printf("offset: %lx %lx\n",offset,calculated_offset);
-//			}
-//		}
-//		else {
-			offset1 = calculated_offset1;
-			CoreRange subroutine_range1 = SDMSTRangeOfSubroutine(&(input_one->map->subroutine_map->subroutine[index]), input_one);
-			char *name1 = SDMSTDemangleSymbolName(subroutine_name1);
-			printf("\tName: %s \n\tOffset: %lx \n\tLength: %lld\n",name1,offset1,subroutine_range1.length);
-			free(name1);
-			
-			offset2 = calculated_offset2;
-			CoreRange subroutine_range2 = SDMSTRangeOfSubroutine(&(input_two->map->subroutine_map->subroutine[index]), input_two);
-			char *name2 = SDMSTDemangleSymbolName(subroutine_name2);
-			printf("\tName: %s \n\tOffset: %lx \n\tLength: %lld\n",name2,offset2,subroutine_range2.length);
-			free(name2);
-//		}
+		
+		offset1 = calculated_offset1;
+		CoreRange subroutine_range1 = SDMSTRangeOfSubroutine(&(input_one->map->subroutine_map->subroutine[index]), input_one);
+		char *name1 = NULL;
+		if (SDMSTCPPSymbolName(subroutine_name1)) {
+			//struct loader_cpp_lexer_type *demangle1 = SDMSTDecodeNameString(cpp_map1, subroutine_name1);
+			//name1 = SDMSTCPPSymbolNameGenerate(demangle1, "::");
+			name1 = SDMSTCPPDemangleName(&(subroutine_name1[1]));
+		}
+		else if (SDMSTCSymbolName(subroutine_name1)) {
+			name1 = &(subroutine_name1[1]);
+		}
+		else {
+			name1 = subroutine_name1;
+		}
+		printf("\tName: %s \n\tOffset: %lx \n\tLength: %lld\n",name1,offset1,subroutine_range1.length);
+		
+		offset2 = calculated_offset2;
+		CoreRange subroutine_range2 = SDMSTRangeOfSubroutine(&(input_two->map->subroutine_map->subroutine[index]), input_two);
+		char *name2 = NULL;
+		if (SDMSTCPPSymbolName(subroutine_name2)) {
+			//struct loader_cpp_lexer_type *demangle2 = SDMSTDecodeNameString(cpp_map2, subroutine_name2);
+			//name2 = SDMSTCPPSymbolNameGenerate(demangle2, "::");
+			name2 = SDMSTCPPDemangleName(&(subroutine_name1[1]));
+		}
+		else if (SDMSTCSymbolName(subroutine_name2)) {
+			name2 = &(subroutine_name2[1]);
+		}
+		else {
+			name2 = subroutine_name2;
+		}
+		printf("\tName: %s \n\tOffset: %lx \n\tLength: %lld\n",name2,offset2,subroutine_range2.length);
+		
 		printf("\n");
 		
 		/*
@@ -100,6 +117,10 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 		cs_close(&handle);
 		*/
 	}
+	
+	//SDMSTCPPMapRelease(cpp_map1);
+	//SDMSTCPPMapRelease(cpp_map2);
+	
 }
 
 bool SDMCompareSymbol(struct loader_diff_symbol *symbol, CoreRange range_one, struct loader_binary *input_one, CoreRange range_two, struct loader_binary *input_two) {

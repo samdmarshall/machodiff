@@ -9,6 +9,19 @@
 #ifndef machodiff_cpp_lexer_h
 #define machodiff_cpp_lexer_h
 
+#if __cplusplus
+extern "C" {
+#endif
+	
+	char* SDMSTCPPDemangleName(char *name);
+	bool SDMSTCPPSymbolName(char *name);
+	bool SDMSTCSymbolName(char *name);
+	
+#if __cplusplus
+};
+#endif
+
+/*
 #define kCPPType_prefix "_Z"
 
 #define kCPPType_void "v"
@@ -51,31 +64,47 @@
 
 #include "util.h"
 
-struct loader_cpp_lexer_token {
-	char *type;
-	char *type_name;
-	struct loader_cpp_lexer_token *child;
-	uint32_t children_count;
-} ATR_PACK;
-
-struct loader_cpp_lexer_type {
-	struct loader_cpp_lexer_token *token;
-	uint32_t token_count;
+struct loader_cpp_token_name {
+	char *name;
+	uint32_t name_length;
 } ATR_PACK;
 
 struct loader_cpp_namespace {
 	char *space_name;
-	
-};
-
-struct loader_cpp_map {
-	
 } ATR_PACK;
 
-void SDMSTInitializeCPP();
+struct loader_cpp_map {
+	struct loader_cpp_namespace *cpp_namespace;
+	uint32_t namespace_count;
+} ATR_PACK;
 
-struct loader_cpp_lexer_type* SDMSTDecodeNameString(char *name);
+struct loader_cpp_lexer_token {
+	bool has_separator;
+	char *type;
+	char *type_name;
+	struct loader_cpp_lexer_type *child;
+} ATR_PACK;
+
+struct loader_cpp_lexer_type {
+	struct loader_cpp_map *map;
+	struct loader_cpp_lexer_token *token;
+	uint32_t token_count;
+} ATR_PACK;
+
+struct loader_cpp_map* SDMSTCPPMapInitialize(void);
+
+bool SDMSTCPPSymbolName(char *name);
+
+struct loader_cpp_lexer_type* SDMSTDecodeNameString(struct loader_cpp_map *map, char *name);
+
+char* SDMSTCPPSymbolNameGenerate(struct loader_cpp_lexer_type *token_name, char *separator);
+
+void SDMSTCPPNamespaceRelease(struct loader_cpp_namespace *cpp_namespace);
+void SDMSTCPPMapRelease(struct loader_cpp_map *cpp_map);
+
+bool SDMSTCSymbolName(char *name);
 
 char* SDMSTDemangleSymbolName(char *name);
+*/
 
 #endif
