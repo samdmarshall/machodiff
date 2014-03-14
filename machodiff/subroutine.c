@@ -229,6 +229,7 @@ CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct lo
 						range.length = ((address+size) - range.offset);
 					}
 				}
+				range.offset += (uint64_t)binary->header;
 				break;
 			}
 		}

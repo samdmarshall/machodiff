@@ -9,10 +9,9 @@
 #ifndef machodiff_cpp_lexer_c
 #define machodiff_cpp_lexer_c
 
+#include "cpp_lexer.h"
 #include <cxxabi.h>
 #include <string.h>
-
-#include "cpp_lexer.h"
 
 char* SDMSTCPPDemangleName(char *name) {
 	int status = 0;

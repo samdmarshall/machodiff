@@ -49,7 +49,6 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 			unnamed_subroutine2 = true;
 		}
 
-		
 		uintptr_t calculated_offset1 = (uintptr_t)(input_one->map->subroutine_map->subroutine[index].offset );//+ (SDMBinaryIs64Bit(input_one->header) ? (uint64_t)input_one->header : 0));
 		
 		uintptr_t calculated_offset2 = (uintptr_t)(input_two->map->subroutine_map->subroutine[index].offset );//+ (SDMBinaryIs64Bit(input_two->header) ? (uint64_t)input_two->header : 0));
@@ -90,7 +89,7 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 		
 		printf("\n");
 		
-		/*
+		
 		CoreRange subroutine_range = SDMSTRangeOfSubroutine(&(input_one->map->subroutine_map->subroutine[index]), input_one);
 		
 		csh handle;
@@ -101,7 +100,7 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 		cs_mode mode_type = SDM_CS_ModeType(&(input_one->header->arch), 0);
 		
 		if (cs_open(arch_type, mode_type, &handle) == CS_ERR_OK) {
-			count = cs_disasm_ex(handle, PtrCast(Ptr(subroutine_range.offset), uint8_t *), (uint32_t)subroutine_range.length, offset, 0, &insn);
+			count = cs_disasm_ex(handle, PtrCast(Ptr(subroutine_range.offset), uint8_t *), (uint32_t)subroutine_range.length, offset1, 0, &insn);
 			if (count > 0) {
 				size_t j;
 				for (j = 0; j < count; j++) {
@@ -113,9 +112,9 @@ void SDMDiffAddSymbols(struct loader_diff *diff, struct loader_binary *input_one
 		else {
 			printf("ERROR: Failed to disassemble given code!\n");
 		}
-		
+		printf("\n");
 		cs_close(&handle);
-		*/
+		
 	}
 	
 	//SDMSTCPPMapRelease(cpp_map1);
