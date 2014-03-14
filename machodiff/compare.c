@@ -15,7 +15,6 @@
 #include "arch.h"
 #include "lexer.h"
 #include "subroutine.h"
-#include "hash.h"
 #include <uuid/uuid.h>
 
 bool SDMDiffAddName(struct loader_diff_symbol *diff, struct loader_symbol *symbol) {
@@ -41,13 +40,14 @@ void SDMDiffAddSymbol(struct loader_diff *diff, struct loader_diff_symbol *symbo
 		uuid_unparse(t, symbol->name);
 	}
 	
-	char *hash = calloc((HASH_LENGTH+1), sizeof(char));
-	hash = (char *)StringToSHA1(symbol->name, (uint32_t)strlen(symbol->name), (unsigned char *)hash);
+	char *hash = SDMSTCreateSymbolHash(symbol->name);
 
 	diff->index = realloc(diff->index, sizeof(struct loader_symboL_index)*(diff->index_count+1));
 	diff->index[diff->index_count].symbol_name = hash;
 	
 	cmap_str_setObjectForKey(diff->map, hash, symbol);
+	
+	diff->index_count++;
 }
 
 // SDM: this will give some variation due to the approximation in unique when parsing dynamically created block_ref symbols in a binary.
@@ -84,14 +84,15 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 			
 			bool compare_result = SDMCompareSymbol(symbol, subroutine_range1, input_one, subroutine_range2, input_two);
 			if (compare_result) {
-				// SDM: they seem to match, they can be stubbed out.
+				// SDM: they seem to match, they can be zero'd out.
+				symbol->match = true;
 			}
 			else {
 				// SDM: symbols are different!
 			}
 		}
 		else {
-			// SDM: we need to guess
+			// SDM: we need to guess or add a old symbol from binary 1
 			
 		}
 		
@@ -100,7 +101,35 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 	}
 	
 	// SDM: now diff the second binary for more symbols
-	
+	for (uint32_t index = 0; index < input_two->map->subroutine_map->count; index++) {
+		struct loader_subroutine *subroutine_b2 = &(input_two->map->subroutine_map->subroutine[index]);
+		
+		struct loader_symbol *symbol_b2 = SDMSTFindSymbolForSubroutine(input_two->map->symbol_table, subroutine_b2);
+		
+		if (symbol_b2) {
+			char *hash = NULL;
+			if (symbol_b2->stub == false) {
+				hash = SDMSTCreateSymbolHash(symbol_b2->symbol_name);
+			}
+			else {
+				
+			}
+			
+			struct loader_diff_symbol *found_symbol = cmap_str_objectForKey(diff->map, hash);
+			free(hash);
+			if (found_symbol == NULL) {
+				// SDM: this needs to be added;
+				struct loader_diff_symbol *new_symbol = calloc(1, sizeof(struct loader_diff_symbol));
+				SDMDiffAddName(new_symbol, symbol_b2);
+				new_symbol->input_two.symbol = symbol_b2;
+				new_symbol->input_two.subroutine = subroutine_b2;
+				new_symbol->input_two.binary = input_two;
+				
+				SDMDiffAddSymbol(diff, new_symbol);
+			}
+		}
+
+	}
 	
 //	uint32_t add_counter = 0;
 //	for (uint32_t index = 0; index < input->map->subroutine_map->count; index++) {

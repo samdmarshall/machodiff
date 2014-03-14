@@ -12,6 +12,7 @@
 #include "symbol.h"
 #include <mach-o/nlist.h>
 #include "loader.h"
+#include "hash.h"
 
 void SDMGenerateSymbols(struct loader_binary * binary) {
 	uintptr_t symbol_address = 0;
@@ -104,6 +105,12 @@ bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName) {
 		}
 	}
 	return matchesName;
+}
+
+char* SDMSTCreateSymbolHash(char *name) {
+	char *hash = calloc((HASH_LENGTH+1), sizeof(char));
+	hash = (char *)StringToSHA1(name, (uint32_t)strlen(name), (unsigned char *)hash);
+	return hash;
 }
 
 #endif

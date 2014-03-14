@@ -118,7 +118,11 @@ void SDMAnalyzeSymbol(struct loader_diff_symbol *symbol, struct loader_binary *i
 void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary *input_two, char *output_path) {
 	struct loader_diff *diff = SDMGenerateSymbolList(input_one, input_two);
 	for (uint32_t index = 0; index < diff->index_count; index++) {
-		//SDMAnalyzeSymbol(&(diff->symbol[index]), input_one, input_two, output_path);
+		char *fetch_name = diff->index[index].symbol_name;
+		struct loader_diff_symbol *symbol = cmap_str_objectForKey(diff->map, fetch_name);
+		if (symbol) {
+			printf("");
+		}
 	}
 	free(diff);
 }

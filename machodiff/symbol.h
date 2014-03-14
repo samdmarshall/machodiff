@@ -25,4 +25,6 @@ struct loader_symbol* SDMSTFindSymbolForSubroutine(struct loader_symtab *symbol_
 
 bool SMDSTSymbolDemangleAndCompare(char *symFromTable, char *symbolName);
 
+char* SDMSTCreateSymbolHash(char *name);
+
 #endif

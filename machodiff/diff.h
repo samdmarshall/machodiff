@@ -20,6 +20,7 @@ struct loader_diff_symbol_imp {
 
 struct loader_diff_symbol {
 	char *name;
+	bool match;
 	struct loader_diff_symbol_imp input_one;
 	struct loader_diff_symbol_imp input_two;
 } ATR_PACK;
