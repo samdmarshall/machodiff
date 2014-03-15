@@ -80,6 +80,7 @@
 		22B2C5D418D39A1A002A4A69 /* hash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hash.c; sourceTree = "<group>"; };
 		22B2C5D818D39B58002A4A69 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
 		22B2C5DA18D39BFC002A4A69 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		22B2C5DD18D4D629002A4A69 /* diff_type.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff_type.h; sourceTree = "<group>"; };
 		22B7479018B8F5310019BC58 /* machodiff */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = machodiff; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B7479618B8F5310019BC58 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		22B7479818B8F5310019BC58 /* machodiff.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = machodiff.1; sourceTree = "<group>"; };
@@ -138,6 +139,7 @@
 		22B2C5BE18CFF727002A4A69 /* diff */ = {
 			isa = PBXGroup;
 			children = (
+				22B2C5DD18D4D629002A4A69 /* diff_type.h */,
 				22345EF818B95AD100FC106D /* diff.h */,
 				22345EF918B95AE100FC106D /* diff.c */,
 				2234603618BA821800FC106D /* compare.h */,

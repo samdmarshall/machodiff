@@ -34,6 +34,7 @@ void SDMDiffAddSymbol(struct loader_diff *diff, struct loader_diff_symbol *symbo
 	}
 	
 	if (symbol->name == NULL) {
+		// SDM: this need to be calculated
 		uuid_t t;
 		uuid_generate(t);
 		symbol->name = calloc(37, sizeof(char));
@@ -48,6 +49,10 @@ void SDMDiffAddSymbol(struct loader_diff *diff, struct loader_diff_symbol *symbo
 	cmap_str_setObjectForKey(diff->map, hash, symbol);
 	
 	diff->index_count++;
+}
+
+struct loader_subroutine* SDMSTFindSubroutineFromInfo(struct loader_binary *binary, struct loader_diff_symbol_imp symbol) {
+	return NULL;
 }
 
 // SDM: this will give some variation due to the approximation in unique when parsing dynamically created block_ref symbols in a binary.
@@ -66,6 +71,12 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 		symbol->input_one.subroutine = subroutine_b1;
 		
 		struct loader_subroutine *subroutine_b2 = SDMFindSubroutineFromName(input_two, subroutine_b1->name);
+		
+		if (subroutine_b2 == NULL) {
+			// SDM: we need to guess or add a old symbol from binary 1
+			subroutine_b2 = SDMSTFindSubroutineFromInfo(input_two, symbol->input_one);
+		}
+		
 		if (subroutine_b2 != NULL) {
 			// SDM: found a symbol name match!
 			
@@ -74,7 +85,7 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 			symbol->input_two.binary = input_two;
 			symbol->input_two.symbol = symbol_b2;
 			symbol->input_two.subroutine = subroutine_b2;
-
+			
 			if (named == false) {
 				named = SDMDiffAddName(symbol, symbol_b2);
 			}
@@ -85,11 +96,8 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 			bool compare_result = SDMCompareSymbol(symbol, subroutine_range1, input_one, subroutine_range2, input_two);
 			if (compare_result == false) {
 				// SDM: symbols are different, find another
+				
 			}
-		}
-		else {
-			// SDM: we need to guess or add a old symbol from binary 1
-			
 		}
 		
 		SDMDiffAddSymbol(diff, symbol);
@@ -200,6 +208,54 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 	*/
 }
 
+bool SDMAnalyzeSubroutines(struct loader_binary *input_one, CoreRange range_one, struct loader_binary *input_two, CoreRange range_two) {
+	bool result = false;
+	
+	uint64_t offset_one = ((uint64_t)range_one.offset - (uint64_t)input_one->header);
+	uint64_t offset_two = ((uint64_t)range_two.offset - (uint64_t)input_two->header);
+	
+	csh handle_one, handle_two;
+	cs_insn *insn_one, *insn_two;
+	size_t count_one, count_two;
+	
+	cs_arch arch_type_one = SDM_CS_ArchType(&(input_one->header->arch), 0);
+	cs_mode mode_type_one = SDM_CS_ModeType(&(input_one->header->arch), 0);
+	
+	cs_err result_one = cs_open(arch_type_one, mode_type_one, &handle_one);
+	
+	cs_arch arch_type_two = SDM_CS_ArchType(&(input_two->header->arch), 0);
+	cs_mode mode_type_two = SDM_CS_ModeType(&(input_two->header->arch), 0);
+	
+	cs_err result_two = cs_open(arch_type_two, mode_type_two, &handle_two);
+	
+	if (result_one == CS_ERR_OK && result_two == CS_ERR_OK) {
+		count_one = cs_disasm_ex(handle_one, PtrCast(Ptr(range_one.offset), uint8_t *), (uint32_t)range_one.length, offset_one, 0, &insn_one);
+		count_two = cs_disasm_ex(handle_two, PtrCast(Ptr(range_two.offset), uint8_t *), (uint32_t)range_two.length, offset_two, 0, &insn_two);
+		
+		if (count_one != 0 && count_two != 0) {
+			
+			//printf("0x%"PRIx64":\t%s\t\t%s\n", insn[j].address, insn[j].mnemonic,insn[j].op_str);
+			
+		}
+		
+		if (count_one) {
+			cs_free(insn_one, count_one);
+		}
+		
+		if (count_two) {
+			cs_free(insn_two, count_two);
+		}
+	}
+	else {
+		printf("ERROR: Failed to disassemble given code!\n");
+	}
+	
+	cs_close(&handle_one);
+	cs_close(&handle_two);
+	
+	return result;
+}
+
 bool SDMCompareSymbol(struct loader_diff_symbol *symbol, CoreRange range_one, struct loader_binary *input_one, CoreRange range_two, struct loader_binary *input_two) {
 	bool status = false;
 	
@@ -207,43 +263,31 @@ bool SDMCompareSymbol(struct loader_diff_symbol *symbol, CoreRange range_one, st
 	
 	Pointer ptr_subroutine_two = PtrCast(Ptr(range_two.offset), Pointer);
 	
+	bool srs_cmp = false;
+	
 	if (range_one.length == range_two.length) {
-		status = (memcmp(ptr_subroutine_one, ptr_subroutine_two, (unsigned long)range_one.length) == 0);
-	}
-	else {
-		// SDM: do comparison on binary code.
+		uint64_t length = (range_one.length < range_two.length ? range_one.length : range_two.length);
 		
-		/*
-		CoreRange subroutine_range = SDMSTRangeOfSubroutine(&(input_one->map->subroutine_map->subroutine[index]), input_one);
-		
-		csh handle;
-		cs_insn *insn;
-		size_t count;
-		
-		cs_arch arch_type = SDM_CS_ArchType(&(input_one->header->arch), 0);
-		cs_mode mode_type = SDM_CS_ModeType(&(input_one->header->arch), 0);
-		
-		if (cs_open(arch_type, mode_type, &handle) == CS_ERR_OK) {
-			count = cs_disasm_ex(handle, PtrCast(Ptr(subroutine_range.offset), uint8_t *), (uint32_t)subroutine_range.length, offset1, 0, &insn);
-			if (count > 0) {
-				size_t j;
-				for (j = 0; j < count; j++) {
-					printf("0x%"PRIx64":\t%s\t\t%s\n", insn[j].address, insn[j].mnemonic,insn[j].op_str);
-				}
-				cs_free(insn, count);
-			}
+		int cmp_result = memcmp(ptr_subroutine_one, ptr_subroutine_two, (unsigned long)length);
+		if (cmp_result == 0) {
+			status = true;
 		}
 		else {
-			printf("ERROR: Failed to disassemble given code!\n");
+			srs_cmp = true;
 		}
-		printf("\n");
-		cs_close(&handle);
-		*/
+	}
+	else {
+		srs_cmp = true;
+	}
+	
+	if (srs_cmp == true) {
+		// SDM: do comparison on binary code.
+		status = SDMAnalyzeSubroutines(input_one, range_one, input_two, range_one);
 	}
 	
 	if (status == true) {
 		// SDM: they seem to match, they can be zero'd out.
-		symbol->match = true;
+		symbol->match = status;
 	}
 	
 	return status;

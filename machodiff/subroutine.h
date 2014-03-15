@@ -12,6 +12,7 @@
 #include "loader_type.h"
 #include "objc.h"
 #include "eh_frame.h"
+#include "diff_type.h"
 
 void SDMSTFindSubroutines(struct loader_binary *binary);
 
@@ -19,6 +20,7 @@ void SDMSTCreateSubtroutineForFrame(struct loader_binary *binary, struct loader_
 void SDMSTCreateSubroutinesForClass(struct loader_binary *binary, struct loader_objc_class *class);
 
 struct loader_subroutine* SDMFindSubroutineFromName(struct loader_binary *binary, char *name);
+
 CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct loader_binary *binary);
 
 #endif
