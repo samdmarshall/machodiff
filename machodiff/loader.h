@@ -12,7 +12,6 @@
 #include "loader_type.h"
 #include "eh_frame.h"
 #include "objc.h"
-#include "capstone.h"
 #include "symbol.h"
 
 #include <mach-o/loader.h>

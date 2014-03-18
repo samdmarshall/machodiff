@@ -234,6 +234,8 @@ bool SDMAnalyzeSubroutines(struct loader_binary *input_one, CoreRange range_one,
 		
 		if (count_one != 0 && count_two != 0) {
 			
+			
+			
 			//printf("0x%"PRIx64":\t%s\t\t%s\n", insn[j].address, insn[j].mnemonic,insn[j].op_str);
 			
 		}

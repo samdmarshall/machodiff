@@ -68,7 +68,7 @@ struct loader_eh_frame_map* SDMSTParseCallFrame(CoreRange frame, bool is64bit) {
 					map->frame[map->count].size = loader_eh_frame_32_size;
 				}
 				
-				uint8_t length_size = (frame->length == k32BitMask ? kExtendedLength : kLength);
+				uint8_t length_size = (frame.length == k32BitMask ? kExtendedLength : kLength);
 				
 				frame_length -= length_size;
 				
