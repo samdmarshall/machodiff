@@ -35,4 +35,14 @@ struct loader_diff {
 	uint32_t index_count;
 } ATR_PACK;
 
+#pragma mark -
+
+struct loader_match_tree {
+	CoreRange matched1;
+	CoreRange matched2;
+	struct loader_match_tree *parent; // in the root node this will be NULL
+	struct loader_match_tree *child;
+} ATR_PACK;
+
+
 #endif

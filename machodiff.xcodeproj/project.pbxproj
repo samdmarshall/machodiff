@@ -30,6 +30,7 @@
 		22B747C018B903710019BC58 /* loader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747B818B903710019BC58 /* loader.c */; };
 		22B747C118B903710019BC58 /* objc_lexer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747BA18B903710019BC58 /* objc_lexer.c */; };
 		22B747C218B903710019BC58 /* objc_runtime.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747BC18B903710019BC58 /* objc_runtime.c */; };
+		22DC401B18D9D03D00E990FB /* match.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DC401A18D9D03D00E990FB /* match.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +94,8 @@
 		22B747BD18B903710019BC58 /* objc_runtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objc_runtime.h; sourceTree = "<group>"; };
 		22B747BE18B903710019BC58 /* objc1_runtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objc1_runtime.h; sourceTree = "<group>"; };
 		22B747BF18B903710019BC58 /* objc2_runtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objc2_runtime.h; sourceTree = "<group>"; };
+		22DC401918D9D03500E990FB /* match.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = match.h; sourceTree = "<group>"; };
+		22DC401A18D9D03D00E990FB /* match.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = match.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +147,8 @@
 				22345EF918B95AE100FC106D /* diff.c */,
 				2234603618BA821800FC106D /* compare.h */,
 				2234603718BA822000FC106D /* compare.c */,
+				22DC401918D9D03500E990FB /* match.h */,
+				22DC401A18D9D03D00E990FB /* match.c */,
 			);
 			name = diff;
 			sourceTree = "<group>";
@@ -320,6 +325,7 @@
 				22B2C5CB18D3966B002A4A69 /* cmap.cpp in Sources */,
 				22B2C5C818D3963B002A4A69 /* cxx-class.c in Sources */,
 				22B2C5B318CFE9A9002A4A69 /* subroutine.c in Sources */,
+				22DC401B18D9D03D00E990FB /* match.c in Sources */,
 				221E02FB18BBBC5800EA4571 /* arch.c in Sources */,
 				22B747C218B903710019BC58 /* objc_runtime.c in Sources */,
 				22B747C018B903710019BC58 /* loader.c in Sources */,

@@ -16,6 +16,7 @@
 #include "lexer.h"
 #include "subroutine.h"
 #include <uuid/uuid.h>
+#include "match.h"
 
 bool SDMDiffAddName(struct loader_diff_symbol *diff, struct loader_symbol *symbol) {
 	bool result = false;
@@ -234,7 +235,13 @@ bool SDMAnalyzeSubroutines(struct loader_binary *input_one, CoreRange range_one,
 		
 		if (count_one != 0 && count_two != 0) {
 			
+			struct loader_match_tree *tree = SDMBuildMatchTree(range_one, range_two);
 			
+			uint8_t result = SDMMatchPercentFromTree(tree, range_one.length);
+			
+			printf("matched to %d%%\n",result);
+			
+			SDMReleaseMatchTree(tree);
 			
 			//printf("0x%"PRIx64":\t%s\t\t%s\n", insn[j].address, insn[j].mnemonic,insn[j].op_str);
 			
@@ -284,7 +291,7 @@ bool SDMCompareSymbol(struct loader_diff_symbol *symbol, CoreRange range_one, st
 	
 	if (srs_cmp == true) {
 		// SDM: do comparison on binary code.
-		status = SDMAnalyzeSubroutines(input_one, range_one, input_two, range_one);
+		status = SDMAnalyzeSubroutines(input_one, range_one, input_two, range_two);
 	}
 	
 	if (status == true) {
