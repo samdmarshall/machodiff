@@ -52,7 +52,14 @@ struct loader_objc_2_class_method {
 } ATR_PACK;
 
 struct loader_objc_2_class_protocol {
-	uint64_t offset;
+	uint64_t isa;
+	uint64_t name;
+	uint64_t protocols;
+	uint64_t instance_methods;
+	uint64_t class_methods;
+	uint64_t opt_instance_methods;
+	uint64_t opt_class_methods;
+	uint64_t instance_properties;
 } ATR_PACK;
 
 struct loader_objc_2_class_ivar {

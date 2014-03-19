@@ -52,7 +52,7 @@ void SDMDiffAddSymbol(struct loader_diff *diff, struct loader_diff_symbol *symbo
 	diff->index_count++;
 }
 
-struct loader_subroutine* SDMSTFindSubroutineFromInfo(struct loader_binary *binary, struct loader_diff_symbol_imp symbol) {
+struct loader_subroutine* SDMSTFindSubroutineFromInfo(struct loader_binary *binary __attribute__((unused)), struct loader_diff_symbol_imp symbol __attribute__((unused))) {
 	return NULL;
 }
 

@@ -27,7 +27,7 @@
 #define kObjc1ModuleInfo 	"__module_info"
 #define kObjc1Symbols 		"__symbols"
 
-struct loader_objc_1_class_method_desc_info {
+struct loader_objc_1_method_desc_info {
 	uint32_t count;
 } ATR_PACK;
 
@@ -46,13 +46,22 @@ struct loader_objc_1_class_ivar {
 	uint32_t offset;
 } ATR_PACK;
 
-struct loader_objc_1_class_method {
+struct loader_objc_1_method_details {
 	uint32_t name;
 	uint32_t type;
+} ATR_PACK;
+
+struct loader_objc_1_class_method {
+	struct loader_objc_1_method_details details;
 	uint32_t imp;
 } ATR_PACK;
 
-struct loader_objc_1_procotol {
+struct loader_objc_1_protocol_info {
+	uint32_t next;
+	uint32_t count;
+} ATR_PACK;
+
+struct loader_objc_1_protocol {
 	uint32_t isa;
 	uint32_t name;
 	uint32_t protocolList;

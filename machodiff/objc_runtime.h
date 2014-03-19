@@ -18,7 +18,7 @@
 struct loader_objc_ivar {
 	char *name;
 	char *type;
-	uintptr_t offset;
+	uint64_t offset;
 } ATR_PACK;
 
 enum loader_objc_method_type {
@@ -30,12 +30,15 @@ enum loader_objc_method_type {
 struct loader_objc_method {
 	char *name;
 	char *type;
-	uintptr_t offset;
+	uint64_t offset;
 	uint8_t method_type;
 } ATR_PACK;
 
 struct loader_objc_protocol {
-	uintptr_t offset;
+	char *name;
+	uint64_t offset;
+	struct loader_objc_method *method;
+	uint32_t methodCount;
 } ATR_PACK;
 
 struct loader_objc_class {
@@ -97,7 +100,10 @@ struct loader_objc_map {
 
 #define SDMSTObjc1ValidClassCheck(a) ((a | CLS_CLASS) == 0 || (a | CLS_META) == 0 || (a | CLS_INITIALIZED) == 0 || (a | CLS_POSING) == 0 || (a | CLS_MAPPED) == 0 || (a | CLS_FLUSH_CACHE) == 0 || (a | CLS_GROW_CACHE) == 0 || (a | CLS_NEED_BIND) == 0 || (a | CLS_METHOD_ARRAY) == 0 || (a | CLS_JAVA_HYBRID) == 0 || (a | CLS_JAVA_CLASS) == 0 || (a | CLS_INITIALIZING) == 0 || (a | CLS_FROM_BUNDLE) == 0 || (a | CLS_HAS_CXX_STRUCTORS) == 0 || (a | CLS_NO_METHOD_ARRAY) == 0 || (a | CLS_HAS_LOAD_METHOD) == 0 || (a | CLS_CONSTRUCTING) == 0 || (a | CLS_EXT) == 0)
 
-struct loader_objc_class* SDMSTObjc1CreateClassFromProtocol(struct loader_objc_map *objcData, struct loader_objc_1_procotol *prot, uint64_t offset);
+void SDMObjc1MatchProtocolMethodImp(struct loader_objc_protocol *protocol, struct loader_objc_class *class, uint8_t type);
+void SDMObjc1CreateProtocolMethodsForClassOfType(uint64_t offset, struct loader_objc_1_protocol *protocol, struct loader_objc_protocol *class, uint8_t type);
+
+struct loader_objc_class* SDMSTObjc1CreateClassFromProtocol(struct loader_objc_map *objcData, struct loader_objc_1_protocol *prot, uint64_t offset);
 struct loader_objc_class* SDMSTObjc1CreateClassFromCategory(struct loader_objc_map *objcData, struct loader_objc_1_category *cat, uint64_t offset);
 uint8_t SDMSTGetObjc1MethodType(struct loader_objc_map *objcData, struct loader_objc_1_class_method *method, uint64_t offset);
 struct loader_objc_class* SDMSTObjc1CreateClassFromClass(struct loader_objc_map *objcData, struct loader_objc_1_class *cls, uint64_t offset);
