@@ -228,6 +228,7 @@ struct loader_binary {
 	uint32_t image_index;
 	bool memory_ref;
 	uint64_t file_offset;
+	uint64_t binary_length;
 	uint8_t endian_type;
 	struct loader_generic_header *header;
 	struct loader_map *map;

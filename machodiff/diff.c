@@ -117,14 +117,18 @@ void SDMAnalyzeSymbol(struct loader_diff_symbol *symbol, struct loader_binary *i
 
 void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary *input_two, char *output_path) {
 	struct loader_diff *diff = SDMGenerateSymbolList(input_one, input_two);
+	
+	
+	
 	for (uint32_t index = 0; index < diff->index_count; index++) {
 		char *fetch_name = diff->index[index].symbol_name;
 		struct loader_diff_symbol *symbol = cmap_str_objectForKey(diff->map, fetch_name);
 		if (symbol) {
 			printf("");
+			// SDM: in here create stubbed binary.
 		}
 	}
-	free(diff);
+	SDMDiffRelease(diff);
 }
 
 void SDMDiffSymbolRelease(struct loader_diff_symbol *symbol) {
@@ -143,6 +147,7 @@ void SDMDiffRelease(struct loader_diff *diff) {
 				for (uint32_t index = 0; index < diff->index_count; index++) {
 					struct loader_diff_symbol *symbol = cmap_str_objectForKey(diff->map, diff->index[index].symbol_name);
 					SDMDiffSymbolRelease(symbol);
+					cmap_str_setObjectForKey(diff->map, diff->index[index].symbol_name, NULL);
 				}
 				free(diff->index);
 			}

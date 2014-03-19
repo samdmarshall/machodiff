@@ -106,6 +106,7 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 							binary->file_offset = fat_offset;
 							lseek(fd, fat_offset, SEEK_SET);
 							read(fd, binary->header, fat_size);
+							binary->binary_length = fat_size;
 							result = true;
 							break;
 						}
@@ -121,6 +122,7 @@ bool SDMLoadBinaryFromFile(struct loader_binary *binary, char *path, uint8_t tar
 						binary->file_offset = 0;
 						lseek(fd, offset, SEEK_SET);
 						read(fd, binary->header, (uint32_t)size);
+						binary->binary_length = (uint64_t)size;
 						result = true;
 					}
 				}

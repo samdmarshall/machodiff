@@ -235,16 +235,19 @@ bool SDMAnalyzeSubroutines(struct loader_binary *input_one, CoreRange range_one,
 		
 		if (count_one != 0 && count_two != 0) {
 			
-			struct loader_match_tree *tree = SDMBuildMatchTree(range_one, range_two);
-			
-			uint8_t result = SDMMatchPercentFromTree(tree, range_one.length);
-			
-			printf("matched to %d%%\n",result);
-			
-			SDMReleaseMatchTree(tree);
-			
 			//printf("0x%"PRIx64":\t%s\t\t%s\n", insn[j].address, insn[j].mnemonic,insn[j].op_str);
 			
+			struct loader_match_tree *tree = SDMBuildMatchTree(range_one, range_two);
+			
+			// SDM: this is hopelessly inaccurate for almost everything
+			uint8_t percent = SDMMatchPercentFromTree(tree, range_one.length);
+			
+			if (percent >= 90) {
+				result = true;
+			}
+			
+			SDMReleaseMatchTree(tree);
+						
 		}
 		
 		if (count_one) {
