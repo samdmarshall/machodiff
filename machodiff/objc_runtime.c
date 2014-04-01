@@ -230,7 +230,7 @@ uint32_t SDMObjc2CreateMethodList(uint64_t method_offset, uint64_t offset, struc
 					(*method_list)[i].name = method_name;
 					(*method_list)[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
 					(*method_list)[i].offset = (uint64_t)(methodOffset[i].imp);
-					(*method_list)[i].method_type = method_type; //
+					(*method_list)[i].method_type = method_type;
 #if HIDE_CXX_DESTRUCT
 				}
 #endif

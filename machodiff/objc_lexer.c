@@ -459,7 +459,7 @@ struct loader_objc_lexer_type* SDMSTObjcDecodeTypeWithLength(char *type, uint64_
 	return decode;
 }
 
-struct loader_objc_lexer_type* SDMSTObjcDecodeType(char *type) {
+struct loader_objc_lexer_type * SDMSTObjcDecodeType(char *type) {
 	return SDMSTObjcDecodeTypeWithLength(type, strlen(type));
 }
 

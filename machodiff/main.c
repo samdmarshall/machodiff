@@ -12,17 +12,20 @@
 #include <getopt.h>
 
 #include "diff.h"
+#include "generate_objc.h"
 
 static char *help_arg_def = "-h,--help";
 static char *input_arg_def = "-i,--input";
 static char *output_arg_def = "-o,--output";
 static char *arch_arg_def = "-a,--arch";
+static char *dump_arg_def = "-d,--dump";
 
 enum MachODiffOptions {
 	OptionsHelp = 0,
 	OptionsInput,
 	OptionsOutput,
 	OptionsArch,
+	OptionsDump,
 	OptionsCount
 };
 
@@ -30,14 +33,16 @@ enum AnalysisFlags {
 	Invaid = 0,
 	InputOK,
 	OutputOK,
-	ArchOK
+	ArchOK,
+	DumpOK
 };
 
 static struct option long_options[OptionsCount] = {
 	{"help", no_argument, 0, 'h'},
 	{"input", required_argument, 0, 'i'},
 	{"outout", required_argument, 0, 'o'},
-	{"arch", required_argument, 0, 'a'}
+	{"arch", required_argument, 0, 'a'},
+	{"dump", no_argument, 0, 'd'}
 };
 
 static uint8_t options_enabled[OptionsCount] = {0};
@@ -46,11 +51,13 @@ static uint8_t options_enabled[OptionsCount] = {0};
 #define kSatisfiedInput (options_enabled[OptionsInput] == 2)
 #define kSatisfiedOutput (options_enabled[OptionsOutput] == 1)
 #define kSatisfiedArch (options_enabled[OptionsArch] != 0)
+#define kSatisfiedDump (options_enabled[OptionsDump] != 0)
 
 void usage(void);
 
 void usage() {
 	printf("%s : display help\n",help_arg_def);
+	printf("%s : dump headers",dump_arg_def);
 	printf("%s [Mach-O binary] : specify an Mach-O binary as input\n",input_arg_def);
 	printf("%s [directory] : specify an output directory\n",output_arg_def);
 	printf("%s [i386|x86_64|armv6|armv7|armv7s|arm64|ppc|ppc64] : specify an architecture to target\n",arch_arg_def);
@@ -67,7 +74,7 @@ int main(int argc, const char * argv[]) {
 	int c;
 	while (search_args) {
 		int option_index = 0;
-		c = getopt_long (argc, (char * const *)argv, "ha:i:o:",long_options, &option_index);
+		c = getopt_long (argc, (char * const *)argv, "hda:i:o:",long_options, &option_index);
 		if (c == -1) {
 			break;
 		}
@@ -123,6 +130,10 @@ int main(int argc, const char * argv[]) {
 				}
 				break;
 			}
+			case 'd': {
+				options_enabled[OptionsDump]++;
+				break;
+			}
 			default: {
 				break;
 			};
@@ -167,6 +178,11 @@ int main(int argc, const char * argv[]) {
 		bool status = SDMMakeNewFolderAtPath(output_arg, 0700);
 		if (status && input_one && input_two) {
 			SDMPerformComparison(input_one, input_two, output_arg);
+		}
+		
+		if (kSatisfiedDump) {
+			GenerateObjcHeaders(input_one->objc, output_arg);
+			//GenerateObjcHeaders(input_two->objc, "binary2");
 		}
 		
 		SDMReleaseBinary(input_one);
