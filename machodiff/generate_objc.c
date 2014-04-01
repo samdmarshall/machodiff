@@ -46,6 +46,10 @@ void GenerateClassHeader(FILE *fd, struct loader_objc_class *class) {
 		}
 	}
 	
+	if ((strcmp(class->className, "MDKMCInstallConnection") == 0)) {
+		printf("");
+	}
+	
 	for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {
 		struct loader_objc_method *method = &(class->method[method_index]);
 		if (method) {
