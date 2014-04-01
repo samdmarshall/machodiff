@@ -128,7 +128,10 @@ void SDMPerformComparison(struct loader_binary *input_one, struct loader_binary 
 			// SDM: in here create stubbed binary.
 		}
 	}
+	
 	SDMDiffRelease(diff);
+	
+	
 }
 
 void SDMDiffSymbolRelease(struct loader_diff_symbol *symbol) {

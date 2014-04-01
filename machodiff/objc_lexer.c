@@ -145,7 +145,12 @@ char* SDMSTObjcCreateMethodDescription(struct loader_objc_lexer_type *type, char
 		argCount++;
 	}
 	if (counter != argCount) {
-		sprintf(description,"(%s)",type->token[0].type);
+		if (type->token[0].typeName) {
+			sprintf(description,"(%s %s)",type->token[0].type,type->token[0].typeName);
+		}
+		else {
+			sprintf(description,"(%s)",type->token[0].type);
+		}
 		uint32_t offset = 0;
 		while (counter < argCount) {
 			if (offset) {
