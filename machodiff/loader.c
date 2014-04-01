@@ -215,6 +215,10 @@ void SDMReleaseBinary(struct loader_binary *binary) {
 		
 		SDMReleaseMap(binary->map);
 		
+		if (binary->objc) {
+			SDMReleaseObjc(binary->objc);
+		}
+		
 		free(binary);
 	}
 }

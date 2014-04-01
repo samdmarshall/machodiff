@@ -110,4 +110,6 @@ struct loader_objc_class* SDMSTObjc1CreateClassFromClass(struct loader_objc_map 
 void SDMSTObjc1CreateClassFromSymbol(struct loader_objc_map *objcData, struct loader_objc_1_symtab *symtab, uint64_t mem_offset);
 struct loader_objc_class* SDMSTObjc2ClassCreateFromClass(struct loader_objc_2_class *cls, struct loader_objc_2_class *parentClass, CoreRange dataRange, uint64_t offset, uint8_t class_type);
 
+void SDMReleaseObjc(struct loader_objc_map *objc);
+
 #endif

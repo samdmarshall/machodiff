@@ -291,21 +291,25 @@ void SDMSTObjc2ClassPopulate(struct loader_objc_class *newClass, struct loader_o
 				uint32_t prot_inst_method_count = SDMObjc2CreateMethodList(protocol->instance_methods, offset, &prot_inst_method, loader_objc_method_instance_type);
 				
 				newClass->protocol[i].methodCount = SDMSTObjc2AppendMethodList(&(newClass->protocol[i].method), newClass->protocol[i].methodCount, prot_inst_method, prot_inst_method_count);
+				free(prot_inst_method);
 				
 				struct loader_objc_method *prot_class_method;
 				uint32_t prot_class_method_count = SDMObjc2CreateMethodList(protocol->class_methods, offset, &prot_class_method, loader_objc_method_class_type);
 
 				newClass->protocol[i].methodCount = SDMSTObjc2AppendMethodList(&(newClass->protocol[i].method), newClass->protocol[i].methodCount, prot_class_method, prot_class_method_count);
+				free(prot_class_method);
 				
 				struct loader_objc_method *prot_opt_inst_method;
 				uint32_t prot_opt_inst_method_count = SDMObjc2CreateMethodList(protocol->opt_instance_methods, offset, &prot_opt_inst_method, loader_objc_method_instance_type);
 
 				newClass->protocol[i].methodCount = SDMSTObjc2AppendMethodList(&(newClass->protocol[i].method), newClass->protocol[i].methodCount, prot_opt_inst_method, prot_opt_inst_method_count);
+				free(prot_opt_inst_method);
 				
 				struct loader_objc_method *prot_opt_class_method;
 				uint32_t prot_opt_class_method_count = SDMObjc2CreateMethodList(protocol->opt_class_methods, offset, &prot_opt_class_method, loader_objc_method_class_type);
 
 				newClass->protocol[i].methodCount = SDMSTObjc2AppendMethodList(&(newClass->protocol[i].method), newClass->protocol[i].methodCount, prot_opt_class_method, prot_opt_class_method_count);
+				free(prot_opt_class_method);
 				
 				protocol_offset =  PtrCast(PtrAdd(protocol_offset, sizeof(uint64_t)), uint64_t*);
 			}
@@ -324,6 +328,34 @@ struct loader_objc_class * SDMSTObjc2ClassCreateFromClass(struct loader_objc_2_c
 		}
 	}
 	return newClass;
+}
+
+void SDMReleaseObjc(struct loader_objc_map *objc) {
+	if (objc) {
+		for (uint32_t index = 0; index < objc->clsCount; index++) {
+			struct loader_objc_class *class = &(objc->cls[index]);
+			if (class) {
+				if (class->ivarCount) {
+					free(class->ivar);
+				}
+				
+				if (class->methodCount) {
+					free(class->method);
+				}
+				
+				if (class->protocolCount) {
+					for (uint32_t prot_index = 0; prot_index < class->protocolCount; prot_index++) {
+						struct loader_objc_protocol *protocol = &(class->protocol[prot_index]);
+						if (protocol) {
+							free(protocol->method);
+						}
+					}
+					free(class->protocol);
+				}
+				
+			}
+		}
+	}
 }
 
 #endif
