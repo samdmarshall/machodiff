@@ -11,6 +11,10 @@
 
 #include "objc_runtime.h"
 
+uint32_t SDMObjc2CreateMethodList(uint64_t method_offset, uint64_t offset, struct loader_objc_method **method_list, uint8_t method_type);
+
+uint32_t SDMSTObjc2AppendMethodList(struct loader_objc_method **list, uint32_t list_count, struct loader_objc_method *append, uint32_t append_count);
+
 void SDMSTObjc2ClassPopulate(struct loader_objc_class *newClass, struct loader_objc_2_class *cls, CoreRange dataRange, uint64_t offset, uint8_t class_type);
 
 struct loader_objc_class * SDMSTObjc1CreateClassFromProtocol(struct loader_objc_map *objcData __attribute__((unused)), struct loader_objc_1_protocol *prot, uint64_t offset) {
@@ -210,6 +214,46 @@ void SDMSTObjc1CreateClassFromSymbol(struct loader_objc_map *objcData, struct lo
 	}
 }
 
+uint32_t SDMObjc2CreateMethodList(uint64_t method_offset, uint64_t offset, struct loader_objc_method **method_list, uint8_t method_type) {
+	uint32_t method_count = 0;
+	if (method_offset) {
+		struct loader_objc_2_class_method_info *methodInfo = ((struct loader_objc_2_class_method_info *)PtrAdd(method_offset, offset));
+		if (methodInfo && (uint64_t)methodInfo != offset) {
+			method_count = methodInfo->count;
+			*method_list = calloc(method_count, sizeof(struct loader_objc_method));
+			struct loader_objc_2_class_method *methodOffset = (struct loader_objc_2_class_method *)PtrAdd(methodInfo, sizeof(struct loader_objc_2_class_method_info));
+			for (uint32_t i = 0; i < method_count; i++) {
+				char *method_name = Ptr(PtrAdd(offset, methodOffset[i].name));
+#if HIDE_CXX_DESTRUCT
+				if (strcmp(method_name, ".cxx_destruct") != 0) {
+#endif
+					(*method_list)[i].name = method_name;
+					(*method_list)[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
+					(*method_list)[i].offset = (uint64_t)(methodOffset[i].imp);
+					(*method_list)[i].method_type = method_type; //
+#if HIDE_CXX_DESTRUCT
+				}
+#endif
+			}
+		}
+	}
+	else {
+		*method_list = NULL;
+	}
+	return method_count;
+}
+
+uint32_t SDMSTObjc2AppendMethodList(struct loader_objc_method **list, uint32_t list_count, struct loader_objc_method *append, uint32_t append_count) {
+	if (append_count) {
+		if (*list == NULL) {
+			*list = calloc(1, sizeof(struct loader_objc_method));
+		}
+		*list = realloc(*list, sizeof(struct loader_objc_method)*(list_count + append_count));
+		memcpy(&((*list)[list_count]), append, sizeof(struct loader_objc_method)*append_count);
+	}
+	return append_count + list_count;
+}
+
 void SDMSTObjc2ClassPopulate(struct loader_objc_class *newClass, struct loader_objc_2_class *cls, CoreRange dataRange __attribute__((unused)), uint64_t offset, uint8_t class_type) {
 	struct loader_objc_2_class_data *data = (struct loader_objc_2_class_data *)PtrAdd(cls->data, offset);
 	cls->data = data;
@@ -228,28 +272,8 @@ void SDMSTObjc2ClassPopulate(struct loader_objc_class *newClass, struct loader_o
 			}
 		}
 	}
-	
-	if (data->method) {
-		struct loader_objc_2_class_method_info *methodInfo = ((struct loader_objc_2_class_method_info *)PtrAdd(data->method, offset));
-		if (methodInfo && (uint64_t)methodInfo != offset) {
-			newClass->methodCount = methodInfo->count;
-			newClass->method = calloc(newClass->methodCount, sizeof(struct loader_objc_method));
-			struct loader_objc_2_class_method *methodOffset = (struct loader_objc_2_class_method *)PtrAdd(methodInfo, sizeof(struct loader_objc_2_class_method_info));
-			for (uint32_t i = 0; i < newClass->methodCount; i++) {
-				char *method_name = Ptr(PtrAdd(offset, methodOffset[i].name));
-#if HIDE_CXX_DESTRUCT
-				if (strcmp(method_name, ".cxx_destruct") != 0) {
-#endif
-					newClass->method[i].name = method_name;
-					newClass->method[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
-					newClass->method[i].offset = (uint64_t)(methodOffset[i].imp);
-					newClass->method[i].method_type = (class_type == loader_objc_2_class_metaclass_type ? loader_objc_method_class_type : loader_objc_method_instance_type);
-#if HIDE_CXX_DESTRUCT
-				}
-#endif
-			}
-		}
-	}
+		
+	newClass->methodCount = SDMObjc2CreateMethodList(data->method, offset, &(newClass->method), (class_type == loader_objc_2_class_metaclass_type ? loader_objc_method_class_type : loader_objc_method_instance_type));
 	
 	if (data->protocol) {
 		struct loader_objc_2_class_protocol_info *protocolInfo = ((struct loader_objc_2_class_protocol_info *)PtrAdd(data->protocol, offset));
@@ -259,11 +283,31 @@ void SDMSTObjc2ClassPopulate(struct loader_objc_class *newClass, struct loader_o
 			uint64_t *protocol_offset = (uint64_t *)PtrAdd(protocolInfo, sizeof(struct loader_objc_2_class_protocol_info));
 			for (uint32_t i = 0; i < newClass->protocolCount; i++) {
 				struct loader_objc_2_class_protocol *protocol = PtrCast(PtrAdd(offset, *protocol_offset), struct loader_objc_2_class_protocol *);
-
+				
 				newClass->protocol[i].name = PtrAdd(offset, protocol->name);
 				newClass->protocol[i].offset = (uint64_t)protocol;
 				
-				protocol_offset += sizeof(uint64_t);
+				struct loader_objc_method *prot_inst_method;
+				uint32_t prot_inst_method_count = SDMObjc2CreateMethodList(protocol->instance_methods, offset, &prot_inst_method, loader_objc_method_instance_type);
+				
+				newClass->protocol[i].methodCount = SDMSTObjc2AppendMethodList(&(newClass->protocol[i].method), newClass->protocol[i].methodCount, prot_inst_method, prot_inst_method_count);
+				
+				struct loader_objc_method *prot_class_method;
+				uint32_t prot_class_method_count = SDMObjc2CreateMethodList(protocol->class_methods, offset, &prot_class_method, loader_objc_method_class_type);
+
+				newClass->protocol[i].methodCount = SDMSTObjc2AppendMethodList(&(newClass->protocol[i].method), newClass->protocol[i].methodCount, prot_class_method, prot_class_method_count);
+				
+				struct loader_objc_method *prot_opt_inst_method;
+				uint32_t prot_opt_inst_method_count = SDMObjc2CreateMethodList(protocol->opt_instance_methods, offset, &prot_opt_inst_method, loader_objc_method_instance_type);
+
+				newClass->protocol[i].methodCount = SDMSTObjc2AppendMethodList(&(newClass->protocol[i].method), newClass->protocol[i].methodCount, prot_opt_inst_method, prot_opt_inst_method_count);
+				
+				struct loader_objc_method *prot_opt_class_method;
+				uint32_t prot_opt_class_method_count = SDMObjc2CreateMethodList(protocol->opt_class_methods, offset, &prot_opt_class_method, loader_objc_method_class_type);
+
+				newClass->protocol[i].methodCount = SDMSTObjc2AppendMethodList(&(newClass->protocol[i].method), newClass->protocol[i].methodCount, prot_opt_class_method, prot_opt_class_method_count);
+				
+				protocol_offset =  PtrCast(PtrAdd(protocol_offset, sizeof(uint64_t)), uint64_t*);
 			}
 		}
 	}

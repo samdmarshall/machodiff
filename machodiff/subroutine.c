@@ -200,19 +200,6 @@ CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct lo
 				uint32_t next = i + 1;
 				if (next < binary->map->subroutine_map->count) {
 					range.length = ((binary->map->subroutine_map->subroutine[next].offset) - range.offset);
-					
-					if (binary->map->frame_map && binary->map->frame_map->count) {
-						for (uint32_t index = 0; index < binary->map->frame_map->count; index++) {
-							struct loader_eh_frame *frame = &(binary->map->frame_map->frame[index]);
-							if (frame->type == loader_eh_frame_fde_type) {
-								uint64_t offset = ((uint64_t)frame->fde.pc_begin - ((uint64_t)binary->header));
-								if (offset == range.offset) {
-									range.length = frame->fde.pc_range;
-									break;
-								}
-							}
-						}
-					}
 				}
 				else {
 					if (subroutine->section_offset != k32BitMask) {
@@ -229,6 +216,19 @@ CoreRange SDMSTRangeOfSubroutine(struct loader_subroutine *subroutine, struct lo
 						range.length = ((address+size) - range.offset);
 					}
 				}
+				if (binary->map->frame_map && binary->map->frame_map->count) {
+					for (uint32_t index = 0; index < binary->map->frame_map->count; index++) {
+						struct loader_eh_frame *frame = &(binary->map->frame_map->frame[index]);
+						if (frame->type == loader_eh_frame_fde_type) {
+							uint64_t offset = ((uint64_t)frame->fde.pc_begin - ((uint64_t)binary->header));
+							if (offset == range.offset) {
+								range.length = frame->fde.pc_range;
+								break;
+							}
+						}
+					}
+				}
+				
 				range.offset += (uint64_t)binary->header;
 				break;
 			}

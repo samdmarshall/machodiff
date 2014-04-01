@@ -56,6 +56,11 @@ void SDMGenerateSymbols(struct loader_binary * binary) {
 			entry = (struct loader_generic_nlist *)PtrAdd(entry, (sizeof(struct loader_generic_nlist) + (is64Bit ? sizeof(uint64_t) : sizeof(uint32_t))));
 		}
 	}
+	if (binary->map->symbol_table->count == 1) {
+		if (strcmp(binary->map->symbol_table->symbol[0].symbol_name, "__mh_execute_header") == 0) {
+			
+		}
+	}
 }
 
 Pointer SDMSTFindFunctionAddress(Pointer *fPointer, struct loader_binary *binary) {

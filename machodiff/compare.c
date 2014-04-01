@@ -65,7 +65,11 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 		struct loader_subroutine *subroutine_b1 = &(input_one->map->subroutine_map->subroutine[index]);
 		
 		struct loader_symbol *symbol_b1 = SDMSTFindSymbolForSubroutine(input_one->map->symbol_table, subroutine_b1);
-		bool named = SDMDiffAddName(symbol, symbol_b1);
+		
+		bool named = false;
+		if (symbol_b1 != NULL) {
+			named = SDMDiffAddName(symbol, symbol_b1);
+		}
 		
 		symbol->input_one.binary = input_one;
 		symbol->input_one.symbol = symbol_b1;
@@ -88,7 +92,9 @@ void SDMDiffParseSymbols(struct loader_diff *diff, struct loader_binary *input_o
 			symbol->input_two.subroutine = subroutine_b2;
 			
 			if (named == false) {
-				named = SDMDiffAddName(symbol, symbol_b2);
+				if (symbol_b2 != NULL) {
+					named = SDMDiffAddName(symbol, symbol_b2);
+				}
 			}
 			
 			CoreRange subroutine_range1 = SDMSTRangeOfSubroutine(subroutine_b1, input_one);
