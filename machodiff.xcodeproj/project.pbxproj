@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		221BEE9D18BBFAC30089B879 /* cpp_lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 221BEE9C18BBFAC30089B879 /* cpp_lexer.cpp */; };
-		221E02DB18BB972700EA4571 /* libcapstone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 221E02DA18BB972700EA4571 /* libcapstone.a */; };
 		221E02FB18BBBC5800EA4571 /* arch.c in Sources */ = {isa = PBXBuildFile; fileRef = 221E02FA18BBBC5800EA4571 /* arch.c */; };
 		22345EFA18B95AE100FC106D /* diff.c in Sources */ = {isa = PBXBuildFile; fileRef = 22345EF918B95AE100FC106D /* diff.c */; };
 		22345EFC18B95EC300FC106D /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22345EFB18B95EC200FC106D /* libobjc.dylib */; };
 		2234603818BA822000FC106D /* compare.c in Sources */ = {isa = PBXBuildFile; fileRef = 2234603718BA822000FC106D /* compare.c */; };
 		229D407618EB9697000F20A4 /* libclang.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407518EB9697000F20A4 /* libclang.dylib */; };
 		229D407918EB9F04000F20A4 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407718EB9EEE000F20A4 /* libcrypto.dylib */; };
+		229D407B18EBA107000F20A4 /* libcapstone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407A18EBA107000F20A4 /* libcapstone.a */; };
 		22B2BD6718CB7EB1002A4A69 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2BD6618CB7EB1002A4A69 /* reader.c */; };
 		22B2C59018CD4945002A4A69 /* eh_frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C58F18CD4945002A4A69 /* eh_frame.c */; };
 		22B2C5AF18CFE819002A4A69 /* objc.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5AE18CFE819002A4A69 /* objc.c */; };
@@ -46,7 +46,6 @@
 		221E02D718BB95BB00EA4571 /* mips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mips.h; sourceTree = "<group>"; };
 		221E02D818BB95BB00EA4571 /* ppc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ppc.h; sourceTree = "<group>"; };
 		221E02D918BB95BB00EA4571 /* x86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x86.h; sourceTree = "<group>"; };
-		221E02DA18BB972700EA4571 /* libcapstone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcapstone.a; path = ../Universal/libcapstone.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		221E02F918BBBC5100EA4571 /* arch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arch.h; sourceTree = "<group>"; };
 		221E02FA18BBBC5800EA4571 /* arch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arch.c; sourceTree = "<group>"; };
 		22345EF818B95AD100FC106D /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
@@ -62,6 +61,7 @@
 		229D3F7618EB8940000F20A4 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = libclang/include/Platform.h; sourceTree = SOURCE_ROOT; };
 		229D407518EB9697000F20A4 /* libclang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclang.dylib; path = Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib; sourceTree = DEVELOPER_DIR; };
 		229D407718EB9EEE000F20A4 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
+		229D407A18EBA107000F20A4 /* libcapstone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcapstone.a; path = build/Release/libcapstone.a; sourceTree = "<group>"; };
 		22B2BD6518CB7EA8002A4A69 /* reader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
 		22B2BD6618CB7EB1002A4A69 /* reader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = reader.c; sourceTree = "<group>"; };
 		22B2C58E18CD4938002A4A69 /* eh_frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = eh_frame.h; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 			files = (
 				229D407918EB9F04000F20A4 /* libcrypto.dylib in Frameworks */,
 				22B2C5D918D39B58002A4A69 /* libssl.dylib in Frameworks */,
-				221E02DB18BB972700EA4571 /* libcapstone.a in Frameworks */,
+				229D407B18EBA107000F20A4 /* libcapstone.a in Frameworks */,
 				22345EFC18B95EC300FC106D /* libobjc.dylib in Frameworks */,
 				229D407618EB9697000F20A4 /* libclang.dylib in Frameworks */,
 			);
@@ -263,10 +263,10 @@
 		22B7479218B8F5310019BC58 /* Link */ = {
 			isa = PBXGroup;
 			children = (
+				229D407A18EBA107000F20A4 /* libcapstone.a */,
 				229D407518EB9697000F20A4 /* libclang.dylib */,
 				229D407718EB9EEE000F20A4 /* libcrypto.dylib */,
 				22B2C5D818D39B58002A4A69 /* libssl.dylib */,
-				221E02DA18BB972700EA4571 /* libcapstone.a */,
 				22345EFB18B95EC200FC106D /* libobjc.dylib */,
 			);
 			name = Link;
@@ -514,6 +514,7 @@
 					"$(PROJECT_DIR)/build/Universal",
 					"$(PROJECT_DIR)/libclang",
 					"$(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib",
+					"$(BUILD_DIR)/$(CONFIGURATION)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
@@ -549,6 +550,7 @@
 					"$(PROJECT_DIR)/build/Universal",
 					"$(PROJECT_DIR)/libclang",
 					"$(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib",
+					"$(BUILD_DIR)/$(CONFIGURATION)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "";
