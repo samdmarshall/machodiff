@@ -53,6 +53,9 @@ void GenerateClassHeader(FILE *fd, struct loader_objc_class *class) {
 	for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {
 		struct loader_objc_method *method = &(class->method[method_index]);
 		if (method) {
+			if (strcmp(method->name, ".cxx_destruct") == 0) {
+				printf("// ");
+			}
 			printf("%s %s // IMP=0x%016llx\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name),(uint64_t)method->offset );
 		}
 	}

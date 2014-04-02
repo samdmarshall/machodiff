@@ -423,6 +423,7 @@ uint32_t SDMSTParseToken(struct loader_objc_lexer_type *decode, char *type, uint
 				free(structContents);
 				decode->tokenCount++;
 				decode->token = realloc(decode->token, sizeof(struct loader_objc_lexer_token)*(decode->tokenCount+1));
+				memset(&(decode->token[decode->tokenCount]), 0, sizeof(struct loader_objc_lexer_token));
 			}
 			if (strncmp(&(type[offset]), kObjcArrayTokenStart, sizeof(char)) == 0) {
 				uint64_t next = offset+1;
@@ -459,6 +460,7 @@ uint32_t SDMSTParseToken(struct loader_objc_lexer_type *decode, char *type, uint
 				free(arrayTypeString);
 				decode->tokenCount++;
 				decode->token = realloc(decode->token, sizeof(struct loader_objc_lexer_token)*(decode->tokenCount+1));
+				memset(&(decode->token[decode->tokenCount]), 0, sizeof(struct loader_objc_lexer_token));
 			}
 		}
 	}

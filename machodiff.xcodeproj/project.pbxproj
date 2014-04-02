@@ -13,6 +13,7 @@
 		22345EFA18B95AE100FC106D /* diff.c in Sources */ = {isa = PBXBuildFile; fileRef = 22345EF918B95AE100FC106D /* diff.c */; };
 		22345EFC18B95EC300FC106D /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22345EFB18B95EC200FC106D /* libobjc.dylib */; };
 		2234603818BA822000FC106D /* compare.c in Sources */ = {isa = PBXBuildFile; fileRef = 2234603718BA822000FC106D /* compare.c */; };
+		229D407118EB931C000F20A4 /* libclang.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407018EB931C000F20A4 /* libclang.dylib */; };
 		22B2BD6718CB7EB1002A4A69 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2BD6618CB7EB1002A4A69 /* reader.c */; };
 		22B2C59018CD4945002A4A69 /* eh_frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C58F18CD4945002A4A69 /* eh_frame.c */; };
 		22B2C5AF18CFE819002A4A69 /* objc.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5AE18CFE819002A4A69 /* objc.c */; };
@@ -53,6 +54,13 @@
 		22345EFB18B95EC200FC106D /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
 		2234603618BA821800FC106D /* compare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = compare.h; sourceTree = "<group>"; };
 		2234603718BA822000FC106D /* compare.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compare.c; sourceTree = "<group>"; };
+		229D3F7118EB8940000F20A4 /* BuildSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BuildSystem.h; path = libclang/include/BuildSystem.h; sourceTree = SOURCE_ROOT; };
+		229D3F7218EB8940000F20A4 /* CXCompilationDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXCompilationDatabase.h; path = libclang/include/CXCompilationDatabase.h; sourceTree = SOURCE_ROOT; };
+		229D3F7318EB8940000F20A4 /* CXErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXErrorCode.h; path = libclang/include/CXErrorCode.h; sourceTree = SOURCE_ROOT; };
+		229D3F7418EB8940000F20A4 /* CXString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXString.h; path = libclang/include/CXString.h; sourceTree = SOURCE_ROOT; };
+		229D3F7518EB8940000F20A4 /* Index.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Index.h; path = libclang/include/Index.h; sourceTree = SOURCE_ROOT; };
+		229D3F7618EB8940000F20A4 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = libclang/include/Platform.h; sourceTree = SOURCE_ROOT; };
+		229D407018EB931C000F20A4 /* libclang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclang.dylib; path = libclang/libclang.dylib; sourceTree = "<group>"; };
 		22B2BD6518CB7EA8002A4A69 /* reader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
 		22B2BD6618CB7EB1002A4A69 /* reader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = reader.c; sourceTree = "<group>"; };
 		22B2C58E18CD4938002A4A69 /* eh_frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = eh_frame.h; sourceTree = "<group>"; };
@@ -109,6 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				229D407118EB931C000F20A4 /* libclang.dylib in Frameworks */,
 				22B2C5DC18D39C06002A4A69 /* Security.framework in Frameworks */,
 				22B2C5D918D39B58002A4A69 /* libssl.dylib in Frameworks */,
 				221E02DB18BB972700EA4571 /* libcapstone.a in Frameworks */,
@@ -122,6 +131,16 @@
 		221E02D318BB95BB00EA4571 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				229D3F3018EB861B000F20A4 /* libclang */,
+				229D3F2F18EB8612000F20A4 /* capstone */,
+			);
+			name = include;
+			path = capstone/include;
+			sourceTree = "<group>";
+		};
+		229D3F2F18EB8612000F20A4 /* capstone */ = {
+			isa = PBXGroup;
+			children = (
 				221E02D418BB95BB00EA4571 /* arm.h */,
 				221E02D518BB95BB00EA4571 /* arm64.h */,
 				221E02D618BB95BB00EA4571 /* capstone.h */,
@@ -129,8 +148,20 @@
 				221E02D818BB95BB00EA4571 /* ppc.h */,
 				221E02D918BB95BB00EA4571 /* x86.h */,
 			);
-			name = include;
-			path = capstone/include;
+			name = capstone;
+			sourceTree = "<group>";
+		};
+		229D3F3018EB861B000F20A4 /* libclang */ = {
+			isa = PBXGroup;
+			children = (
+				229D3F7118EB8940000F20A4 /* BuildSystem.h */,
+				229D3F7218EB8940000F20A4 /* CXCompilationDatabase.h */,
+				229D3F7318EB8940000F20A4 /* CXErrorCode.h */,
+				229D3F7418EB8940000F20A4 /* CXString.h */,
+				229D3F7518EB8940000F20A4 /* Index.h */,
+				229D3F7618EB8940000F20A4 /* Platform.h */,
+			);
+			name = libclang;
 			sourceTree = "<group>";
 		};
 		22B2C5BD18CFF712002A4A69 /* lexing */ = {
@@ -232,6 +263,7 @@
 		22B7479218B8F5310019BC58 /* Link */ = {
 			isa = PBXGroup;
 			children = (
+				229D407018EB931C000F20A4 /* libclang.dylib */,
 				22B2C5DA18D39BFC002A4A69 /* Security.framework */,
 				22B2C5D818D39B58002A4A69 /* libssl.dylib */,
 				221E02DA18BB972700EA4571 /* libcapstone.a */,
@@ -289,6 +321,7 @@
 			buildPhases = (
 				22B7478C18B8F5310019BC58 /* Sources */,
 				22B7478D18B8F5310019BC58 /* Frameworks */,
+				229D407218EB94E0000F20A4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -324,6 +357,22 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		229D407218EB94E0000F20A4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "install_name_tool -change @rpath/libclang.dylib /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib ${BUILD_DIR}/${CONFIGURATION}/machodiff";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		22B7478C18B8F5310019BC58 /* Sources */ = {
@@ -361,8 +410,8 @@
 		22B7479A18B8F5310019BC58 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -391,6 +440,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				LIBRARY_SEARCH_PATHS = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
@@ -400,8 +454,8 @@
 		22B7479B18B8F5310019BC58 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -426,6 +480,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				LIBRARY_SEARCH_PATHS = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx;
 			};
@@ -434,7 +493,7 @@
 		22B7479D18B8F5310019BC58 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -453,12 +512,15 @@
 					"$(SDKROOT)/usr/lib/system/introspection",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/build/Universal",
+					"$(PROJECT_DIR)/libclang",
+					"$(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "";
 			};
 			name = Debug;
@@ -466,7 +528,7 @@
 		22B7479E18B8F5310019BC58 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -485,11 +547,14 @@
 					"$(SDKROOT)/usr/lib/system/introspection",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/build/Universal",
+					"$(PROJECT_DIR)/libclang",
+					"$(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "";
 			};
 			name = Release;
