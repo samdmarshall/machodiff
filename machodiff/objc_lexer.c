@@ -56,7 +56,7 @@ static char* ObjcTypeEncodingNames[kObjcTypeEncodingCount] = {
 	"char*",
 	"id",
 	"Class",
-	":",
+	"SEL",
 	"bitmask",
 	"*",
 	"UnknownType"

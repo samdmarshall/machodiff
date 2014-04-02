@@ -14,69 +14,77 @@
 
 void GenerateClassHeader(FILE *fd, struct loader_objc_class *class);
 
+char *string;
+
+#define WriteString(fd, ...) \
+string = calloc(4096, sizeof(char)); \
+sprintf(string, __VA_ARGS__); \
+FWRITE_STRING_TO_FILE(string,fd); \
+free(string);
+
 void GenerateClassHeader(FILE *fd, struct loader_objc_class *class) {
-	printf("@interface %s : %s ",class->className, class->superCls->className);
+	WriteString(fd, "@interface %s : %s ",class->className, class->superCls->className);
 	
 	if (class->protocolCount) {
-		printf("<");
+		WriteString(fd, "<");
 		for (uint32_t prot_index = 0; prot_index < class->protocolCount; prot_index++) {
-			printf("%s",class->protocol[prot_index].name);
+			WriteString(fd, "%s",class->protocol[prot_index].name);
 			if (prot_index+1 < class->protocolCount) {
-				printf(",");
+				WriteString(fd, ",");
 			}
 		}
-		printf(">");
+		WriteString(fd, ">");
 	}
-	printf(" {\n");
+	WriteString(fd, " {\n");
 	
 	for (uint32_t ivar_index = 0; ivar_index < class->ivarCount; ivar_index++) {
 		struct loader_objc_ivar *ivar = &(class->ivar[ivar_index]);
 		if (ivar) {
 			struct loader_objc_lexer_type *type = SDMSTObjcDecodeType(ivar->type);
 			char *ivar_type = (type->token[0].typeName ? type->token[0].typeName : type->token[0].type);
-			printf("\t%s %s; // 0x%016llx\n", ivar_type, ivar->name, ivar->offset);
+			WriteString(fd, "\t%s %s; // 0x%016llx\n", ivar_type, ivar->name, ivar->offset);
 		}
 	}
-	printf("}\n");
+	WriteString(fd, "}\n");
 	
 	for (uint32_t method_index = 0; method_index < class->superCls->methodCount; method_index++) {
 		struct loader_objc_method *method = &(class->superCls->method[method_index]);
 		if (method) {
-			printf("%s %s // IMP=0x%016llx\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name),(uint64_t)method->offset );
+			WriteString(fd, "%s %s // IMP=0x%016llx\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name),(uint64_t)method->offset );
 		}
 	}
 	
 	if ((strcmp(class->className, "MDKMCInstallConnection") == 0)) {
-		printf("");
+		WriteString(fd, "");
 	}
 	
 	for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {
 		struct loader_objc_method *method = &(class->method[method_index]);
 		if (method) {
 			if (strcmp(method->name, ".cxx_destruct") == 0) {
-				printf("// ");
+				WriteString(fd, "// ");
 			}
-			printf("%s %s // IMP=0x%016llx\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name),(uint64_t)method->offset );
+			WriteString(fd, "%s %s // IMP=0x%016llx\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name),(uint64_t)method->offset );
 		}
 	}
 	
 	if (class->protocolCount) {
 		for (uint32_t prot_index = 0; prot_index < class->protocolCount; prot_index++) {
-			printf("\n#pragma mark %s Interface\n",class->protocol[prot_index].name);
+			WriteString(fd, "\n#pragma mark %s Interface\n",class->protocol[prot_index].name);
 			for (uint32_t method_index = 0; method_index < class->protocol[prot_index].methodCount; method_index++) {
 				struct loader_objc_method *method = &(class->protocol[prot_index].method[method_index]);
 				if (method) {
-					printf("%s %s",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name));
+					WriteString(fd, "%s %s",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name));
 					if (method->offset) {
-						printf(" // IMP=0x%016llx",method->offset);
+						WriteString(fd, " // IMP=0x%016llx",method->offset);
 					}
-					printf("\n");
+					WriteString(fd, "\n");
 				}
 			}
 		}
 	}
 	
-	printf("\n@end\n\n");
+	WriteString(fd, "\n@end\n\n");
 }
 
 void GenerateObjcHeaders(struct loader_objc_map *objc_map, char *path) {

@@ -12,6 +12,8 @@
 #include "file_include.h"
 #include <stdbool.h>
 
+#define FWRITE_STRING_TO_FILE(a,b) fwrite(a, sizeof(char), strlen(a), b)
+
 bool make_dir(char *path, mode_t mode);
 
 #endif
