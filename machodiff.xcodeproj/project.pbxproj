@@ -13,7 +13,7 @@
 		22345EFA18B95AE100FC106D /* diff.c in Sources */ = {isa = PBXBuildFile; fileRef = 22345EF918B95AE100FC106D /* diff.c */; };
 		22345EFC18B95EC300FC106D /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22345EFB18B95EC200FC106D /* libobjc.dylib */; };
 		2234603818BA822000FC106D /* compare.c in Sources */ = {isa = PBXBuildFile; fileRef = 2234603718BA822000FC106D /* compare.c */; };
-		229D407118EB931C000F20A4 /* libclang.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407018EB931C000F20A4 /* libclang.dylib */; };
+		229D407618EB9697000F20A4 /* libclang.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407518EB9697000F20A4 /* libclang.dylib */; };
 		22B2BD6718CB7EB1002A4A69 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2BD6618CB7EB1002A4A69 /* reader.c */; };
 		22B2C59018CD4945002A4A69 /* eh_frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C58F18CD4945002A4A69 /* eh_frame.c */; };
 		22B2C5AF18CFE819002A4A69 /* objc.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5AE18CFE819002A4A69 /* objc.c */; };
@@ -60,7 +60,7 @@
 		229D3F7418EB8940000F20A4 /* CXString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXString.h; path = libclang/include/CXString.h; sourceTree = SOURCE_ROOT; };
 		229D3F7518EB8940000F20A4 /* Index.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Index.h; path = libclang/include/Index.h; sourceTree = SOURCE_ROOT; };
 		229D3F7618EB8940000F20A4 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = libclang/include/Platform.h; sourceTree = SOURCE_ROOT; };
-		229D407018EB931C000F20A4 /* libclang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclang.dylib; path = libclang/libclang.dylib; sourceTree = "<group>"; };
+		229D407518EB9697000F20A4 /* libclang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclang.dylib; path = Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib; sourceTree = DEVELOPER_DIR; };
 		22B2BD6518CB7EA8002A4A69 /* reader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
 		22B2BD6618CB7EB1002A4A69 /* reader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = reader.c; sourceTree = "<group>"; };
 		22B2C58E18CD4938002A4A69 /* eh_frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = eh_frame.h; sourceTree = "<group>"; };
@@ -117,7 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				229D407118EB931C000F20A4 /* libclang.dylib in Frameworks */,
+				229D407618EB9697000F20A4 /* libclang.dylib in Frameworks */,
 				22B2C5DC18D39C06002A4A69 /* Security.framework in Frameworks */,
 				22B2C5D918D39B58002A4A69 /* libssl.dylib in Frameworks */,
 				221E02DB18BB972700EA4571 /* libcapstone.a in Frameworks */,
@@ -263,7 +263,7 @@
 		22B7479218B8F5310019BC58 /* Link */ = {
 			isa = PBXGroup;
 			children = (
-				229D407018EB931C000F20A4 /* libclang.dylib */,
+				229D407518EB9697000F20A4 /* libclang.dylib */,
 				22B2C5DA18D39BFC002A4A69 /* Security.framework */,
 				22B2C5D818D39B58002A4A69 /* libssl.dylib */,
 				221E02DA18BB972700EA4571 /* libcapstone.a */,
