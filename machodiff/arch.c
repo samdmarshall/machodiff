@@ -75,7 +75,7 @@ bool SDMArchCPUSUB_I386(struct loader_arch *arch, uint8_t target_arch, uint8_t e
 bool SDMArchCPUSUB_X86_64(struct loader_arch *arch, uint8_t target_arch, uint8_t endian_type) {
 	bool result = false;
 	uint32_t subtype = (uint32_t)EndianFix(endian_type, (uint32_t)arch->subtype);
-	if (((subtype & CPU_SUBTYPE_X86_ALL) == CPU_SUBTYPE_X86_ALL) && target_arch == loader_arch_x86_64_type) {
+	if (((subtype & CPU_SUBTYPE_LIB64) == CPU_SUBTYPE_LIB64) && ((subtype & CPU_SUBTYPE_X86_ALL) == CPU_SUBTYPE_X86_ALL) && target_arch == loader_arch_x86_64_type) {
 		result = true;
 	}
 	return result;
@@ -156,10 +156,10 @@ bool SDMArchCPUSUB_ARM64(struct loader_arch *arch, uint8_t target_arch, uint8_t 
 bool SDMMatchArchToCPU(struct loader_arch *arch, uint8_t target_arch, uint8_t endian_type) {
 	bool result = false;
 	if (SDMArchCPU_X86(arch, endian_type)) {
-		if (SDMArchCPUSUB_X86_64(arch, target_arch, endian_type)) {
+		if (SDMArchCPUSUB_I386(arch, target_arch, endian_type)) {
 			result = true;
 		}
-		else if (SDMArchCPUSUB_I386(arch, target_arch, endian_type)) {
+		else if (SDMArchCPUSUB_X86_64(arch, target_arch, endian_type)) {
 			result = true;
 		}
 	}

@@ -138,7 +138,7 @@ char* SDMSTObjcCreateMethodDescription(struct loader_objc_lexer_type *type, char
 	else {
 		name = "";
 	}
-	char *description = calloc(1, sizeof(char)*(nameLength+3+strlen(type->token[0].type)));
+	char *description = calloc(4096, sizeof(char));
 	uint32_t counter = 0;
 	uint32_t argCount = 0;
 	for (uint32_t i = counter+3; i < type->tokenCount; i++) {
@@ -149,7 +149,13 @@ char* SDMSTObjcCreateMethodDescription(struct loader_objc_lexer_type *type, char
 			sprintf(description,"(%s %s)",type->token[0].type,type->token[0].typeName);
 		}
 		else {
-			sprintf(description,"(%s)",type->token[0].type);
+			char *objc_type = type->token[0].type;
+			if (strcmp(objc_type, ObjcTypeEncodingNames[SDMObjcLexerConvertTokenToIndex(ObjcCharEncoding)]) == 0) {
+				if (strncmp("is", name, sizeof(char[2])) == 0 || strncmp("has", name, sizeof(char[3])) == 0) {
+					objc_type = "BOOL";
+				}
+			}
+			sprintf(description,"(%s)",objc_type);
 		}
 		uint32_t offset = 0;
 		while (counter < argCount) {
@@ -175,7 +181,18 @@ char* SDMSTObjcCreateMethodDescription(struct loader_objc_lexer_type *type, char
 		}
 	}
 	else {
-		sprintf(description,"(%s)%s",type->token[0].type,name);
+		if (type->token[0].typeName) {
+			sprintf(description,"(%s %s)%s",type->token[0].type,type->token[0].typeName,name);
+		}
+		else {
+			char *objc_type = type->token[0].type;
+			if (strcmp(objc_type, ObjcTypeEncodingNames[SDMObjcLexerConvertTokenToIndex(ObjcCharEncoding)]) == 0) {
+				if (strncmp("is", name, sizeof(char[2])) == 0 || strncmp("has", name, sizeof(char[3])) == 0) {
+					objc_type = "BOOL";
+				}
+			}
+			sprintf(description,"(%s)%s",objc_type,name);
+		}
 	}
 	description = realloc(description, sizeof(char)*(strlen(description)+2));
 	sprintf(description,"%s;",description);

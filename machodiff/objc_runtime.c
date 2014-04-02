@@ -71,6 +71,7 @@ void SDMObjc1MatchProtocolMethodImp(struct loader_objc_protocol *protocol, struc
 
 void SDMObjc1CreateProtocolMethodsForClassOfType(uint64_t offset, struct loader_objc_1_protocol *protocol, struct loader_objc_protocol *class, uint8_t type) {
 	struct loader_objc_1_method_desc_info *info = NULL;
+	struct loader_objc_protocol *class_protocol = class;
 	switch (type) {
 		case loader_objc_method_instance_type: {
 			info = (struct loader_objc_1_method_desc_info *)PtrAdd(offset, protocol->instanceMethodDesc);
@@ -88,12 +89,12 @@ void SDMObjc1CreateProtocolMethodsForClassOfType(uint64_t offset, struct loader_
 	struct loader_objc_1_method_details *method_info = (struct loader_objc_1_method_details *)PtrAdd(info, sizeof(struct loader_objc_1_method_desc_info));
 	
 	for (uint32_t inst_index = 0; inst_index < info->count; inst_index++) {
-		class->method = realloc(class->method, sizeof(struct loader_objc_method)*(class->methodCount+1));
-		class->method[inst_index].name = Ptr(PtrAdd(offset, method_info->name));
-		class->method[inst_index].type = Ptr(PtrAdd(offset, method_info->type));
-		class->method[inst_index].method_type = type;
+		class_protocol->method = realloc(class_protocol->method, sizeof(struct loader_objc_method)*(class_protocol->methodCount+1));
+		class_protocol->method[class_protocol->methodCount].name = Ptr(PtrAdd(offset, method_info->name));
+		class_protocol->method[class_protocol->methodCount].type = Ptr(PtrAdd(offset, method_info->type));
+		class_protocol->method[class_protocol->methodCount].method_type = type;
 		
-		class->methodCount++;
+		class_protocol->methodCount++;
 		method_info = (struct loader_objc_1_method_details *)PtrAdd(method_info, sizeof(struct loader_objc_1_method_details));
 	}
 }
@@ -225,14 +226,14 @@ uint32_t SDMObjc2CreateMethodList(uint64_t method_offset, uint64_t offset, struc
 			struct loader_objc_2_class_method *methodOffset = (struct loader_objc_2_class_method *)PtrAdd(methodInfo, sizeof(struct loader_objc_2_class_method_info));
 			for (uint32_t i = 0; i < method_count; i++) {
 				char *method_name = Ptr(PtrAdd(offset, methodOffset[i].name));
-#if HIDE_CXX_DESTRUCT
-				if (strcmp(method_name, ".cxx_destruct") != 0) {
+#if HIDE_CXX_STRUCTERS
+				if (strcmp(method_name, ".cxx_destruct") != 0 && strcmp(method_name, ".cxx_construct") != 0) {
 #endif
 					(*method_list)[i].name = method_name;
 					(*method_list)[i].type = Ptr(PtrAdd(offset, methodOffset[i].type));
 					(*method_list)[i].offset = (uint64_t)(methodOffset[i].imp);
 					(*method_list)[i].method_type = method_type;
-#if HIDE_CXX_DESTRUCT
+#if HIDE_CXX_STRUCTERS
 				}
 #endif
 			}

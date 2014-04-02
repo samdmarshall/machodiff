@@ -41,8 +41,14 @@ void GenerateClassHeader(FILE *fd, struct loader_objc_class *class) {
 		struct loader_objc_ivar *ivar = &(class->ivar[ivar_index]);
 		if (ivar) {
 			struct loader_objc_lexer_type *type = SDMSTObjcDecodeType(ivar->type);
-			char *ivar_type = (type->token[0].typeName ? type->token[0].typeName : type->token[0].type);
-			WriteString(fd, "\t%s %s; // 0x%016llx\n", ivar_type, ivar->name, ivar->offset);
+			if (type->token[0].typeName && strcmp(type->token[0].type, "struct") == 0) {
+				WriteString(fd,"\t%s %s ",type->token[0].type,type->token[0].typeName);
+			}
+			else {
+				char *ivar_type = (type->token[0].typeName != NULL ? type->token[0].typeName : type->token[0].type);
+				WriteString(fd, "\t%s ",ivar_type);
+			}
+			WriteString(fd, "%s; // 0x%016llx\n", ivar->name, ivar->offset);
 		}
 	}
 	WriteString(fd, "}\n");
@@ -59,7 +65,7 @@ void GenerateClassHeader(FILE *fd, struct loader_objc_class *class) {
 	for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {
 		struct loader_objc_method *method = &(class->method[method_index]);
 		if (method) {
-			if (strcmp(method->name, ".cxx_destruct") == 0) {
+			if (strcmp(method->name, ".cxx_destruct") == 0 || strcmp(method->name, ".cxx_construct") == 0 ) {
 				WriteString(fd, "// ");
 			}
 			WriteString(fd, "%s %s // IMP=0x%016llx\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name),(uint64_t)method->offset );
