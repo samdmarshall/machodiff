@@ -11,6 +11,8 @@
 
 #include "hash.h"
 
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 unsigned char* StringToSHA1(char *str, uint32_t length, unsigned char output[HASH_LENGTH]) {
 	unsigned char hash[HASH_LENGTH];
 	SHA1(PtrCast(str, unsigned char*), length, hash);

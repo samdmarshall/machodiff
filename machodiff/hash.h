@@ -11,14 +11,7 @@
 
 #include "util.h"
 
-#if defined(__APPLE__)
-	#define COMMON_DIGEST_FOR_OPENSSL
-	#include <CommonCrypto/CommonDigest.h>
-	#define SHA1 CC_SHA1
-	#define SHA_DIGEST_LENGTH CC_SHA1_DIGEST_LENGTH
-#else
-	#include <openssl/sha.h>
-#endif
+#include <openssl/sha.h>
 
 #define HASH_LENGTH SHA_DIGEST_LENGTH
 
