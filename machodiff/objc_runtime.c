@@ -111,6 +111,7 @@ struct loader_objc_class * SDMSTObjc1CreateClassFromClass(struct loader_objc_map
 				newClass->superCls = (struct loader_objc_class *)PtrAdd(offset, cls->superClass);
 			}
 			else {
+				// give it a name
 				newClass->superCls = NULL;
 			}
 			newClass->className = Ptr(PtrAdd(offset, cls->name));
@@ -170,7 +171,7 @@ struct loader_objc_class * SDMSTObjc1CreateClassFromClass(struct loader_objc_map
 						
 						if (protocol->classMethodDesc) {
 							SDMObjc1CreateProtocolMethodsForClassOfType(offset, protocol, &(newClass->protocol[index]), loader_objc_method_class_type);
-							SDMObjc1MatchProtocolMethodImp(&(newClass->protocol[index]), newClass, loader_objc_method_instance_type);
+							SDMObjc1MatchProtocolMethodImp(&(newClass->protocol[index]), newClass, loader_objc_method_class_type);
 						}
 						
 						protocol_offset = (uint32_t *)PtrAdd(protocol_offset, sizeof(uint32_t));

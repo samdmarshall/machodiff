@@ -80,7 +80,7 @@ void usage(void);
 void usage() {
 	printf("%s : display help\n",help_arg_def);
 #ifndef CLASS_GEN
-	printf("%s : dump headers",dump_arg_def);
+	printf("%s : dump headers\n",dump_arg_def);
 #endif
 	printf("%s [i386|x86_64|armv6|armv7|armv7s|arm64|ppc|ppc64] : specify an architecture to target\n",arch_arg_def);
 	printf("%s [Mach-O binary] : specify an Mach-O binary as input\n",input_arg_def);

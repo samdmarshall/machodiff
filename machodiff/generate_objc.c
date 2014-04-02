@@ -23,7 +23,7 @@ FWRITE_STRING_TO_FILE(string,fd); \
 free(string);
 
 void GenerateClassHeader(FILE *fd, struct loader_objc_class *class) {
-	WriteString(fd, "@interface %s : %s ",class->className, class->superCls->className);
+	WriteString(fd, "@interface %s : %s ",class->className, (class->superCls ? class->superCls->className : ""));
 	
 	if (class->protocolCount) {
 		WriteString(fd, "<");
@@ -47,15 +47,13 @@ void GenerateClassHeader(FILE *fd, struct loader_objc_class *class) {
 	}
 	WriteString(fd, "}\n");
 	
-	for (uint32_t method_index = 0; method_index < class->superCls->methodCount; method_index++) {
-		struct loader_objc_method *method = &(class->superCls->method[method_index]);
-		if (method) {
-			WriteString(fd, "%s %s // IMP=0x%016llx\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name),(uint64_t)method->offset );
+	if (class->superCls) {
+		for (uint32_t method_index = 0; method_index < class->superCls->methodCount; method_index++) {
+			struct loader_objc_method *method = &(class->superCls->method[method_index]);
+			if (method) {
+				WriteString(fd, "%s %s // IMP=0x%016llx\n",(method->method_type == loader_objc_method_instance_type ? "-" : "+"),SDMSTObjcCreateMethodDescription(SDMSTObjcDecodeType(method->type),method->name),(uint64_t)method->offset );
+			}
 		}
-	}
-	
-	if ((strcmp(class->className, "MDKMCInstallConnection") == 0)) {
-		WriteString(fd, "");
 	}
 	
 	for (uint32_t method_index = 0; method_index < class->methodCount; method_index++) {
@@ -85,6 +83,10 @@ void GenerateClassHeader(FILE *fd, struct loader_objc_class *class) {
 	}
 	
 	WriteString(fd, "\n@end\n\n");
+}
+
+void GenerateClassImplementation(FILE *fd, struct loader_objc_class *class) {
+	
 }
 
 void GenerateObjcHeaders(struct loader_objc_map *objc_map, char *path) {
