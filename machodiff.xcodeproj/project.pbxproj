@@ -15,6 +15,33 @@
 		229D407618EB9697000F20A4 /* libclang.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407518EB9697000F20A4 /* libclang.dylib */; };
 		229D407918EB9F04000F20A4 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407718EB9EEE000F20A4 /* libcrypto.dylib */; };
 		229D407B18EBA107000F20A4 /* libcapstone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407A18EBA107000F20A4 /* libcapstone.a */; };
+		229D408B18EBA716000F20A4 /* libcapstone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407A18EBA107000F20A4 /* libcapstone.a */; };
+		229D408C18EBA718000F20A4 /* libclang.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407518EB9697000F20A4 /* libclang.dylib */; };
+		229D408D18EBA71A000F20A4 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 229D407718EB9EEE000F20A4 /* libcrypto.dylib */; };
+		229D408E18EBA71D000F20A4 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B2C5D818D39B58002A4A69 /* libssl.dylib */; };
+		229D408F18EBA71F000F20A4 /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 22345EFB18B95EC200FC106D /* libobjc.dylib */; };
+		229D409018EBA739000F20A4 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2BD6618CB7EB1002A4A69 /* reader.c */; };
+		229D409118EBA739000F20A4 /* cmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5C918D3966B002A4A69 /* cmap.cpp */; };
+		229D409218EBA739000F20A4 /* hash.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5D418D39A1A002A4A69 /* hash.c */; };
+		229D409318EBA739000F20A4 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D97518EB44210007F104 /* file.c */; };
+		229D409418EBA739000F20A4 /* objc-class.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5C418D3961D002A4A69 /* objc-class.c */; };
+		229D409518EBA739000F20A4 /* cxx-class.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5C718D3963B002A4A69 /* cxx-class.c */; };
+		229D409618EBA739000F20A4 /* c-class.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5D018D3991C002A4A69 /* c-class.c */; };
+		229D409718EBA739000F20A4 /* diff.c in Sources */ = {isa = PBXBuildFile; fileRef = 22345EF918B95AE100FC106D /* diff.c */; };
+		229D409818EBA739000F20A4 /* compare.c in Sources */ = {isa = PBXBuildFile; fileRef = 2234603718BA822000FC106D /* compare.c */; };
+		229D409918EBA739000F20A4 /* match.c in Sources */ = {isa = PBXBuildFile; fileRef = 22DC401A18D9D03D00E990FB /* match.c */; };
+		229D409A18EBA739000F20A4 /* objc_lexer.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747BA18B903710019BC58 /* objc_lexer.c */; };
+		229D409B18EBA739000F20A4 /* cpp_lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 221BEE9C18BBFAC30089B879 /* cpp_lexer.cpp */; };
+		229D409C18EBA739000F20A4 /* loader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747B818B903710019BC58 /* loader.c */; };
+		229D409D18EBA739000F20A4 /* arch.c in Sources */ = {isa = PBXBuildFile; fileRef = 221E02FA18BBBC5800EA4571 /* arch.c */; };
+		229D409E18EBA739000F20A4 /* eh_frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C58F18CD4945002A4A69 /* eh_frame.c */; };
+		229D409F18EBA739000F20A4 /* objc.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5AE18CFE819002A4A69 /* objc.c */; };
+		229D40A018EBA739000F20A4 /* subroutine.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B218CFE9A9002A4A69 /* subroutine.c */; };
+		229D40A118EBA739000F20A4 /* map.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B518CFEBF0002A4A69 /* map.c */; };
+		229D40A218EBA739000F20A4 /* symbol.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5B818CFEE84002A4A69 /* symbol.c */; };
+		229D40A318EBA739000F20A4 /* objc_runtime.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B747BC18B903710019BC58 /* objc_runtime.c */; };
+		229D40A418EBA739000F20A4 /* generate_objc.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B3D97218EB41D80007F104 /* generate_objc.c */; };
+		229D40A518EBA739000F20A4 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B7479618B8F5310019BC58 /* main.c */; };
 		22B2BD6718CB7EB1002A4A69 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2BD6618CB7EB1002A4A69 /* reader.c */; };
 		22B2C59018CD4945002A4A69 /* eh_frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C58F18CD4945002A4A69 /* eh_frame.c */; };
 		22B2C5AF18CFE819002A4A69 /* objc.c in Sources */ = {isa = PBXBuildFile; fileRef = 22B2C5AE18CFE819002A4A69 /* objc.c */; };
@@ -62,6 +89,7 @@
 		229D407518EB9697000F20A4 /* libclang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclang.dylib; path = Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib; sourceTree = DEVELOPER_DIR; };
 		229D407718EB9EEE000F20A4 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		229D407A18EBA107000F20A4 /* libcapstone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcapstone.a; path = build/Release/libcapstone.a; sourceTree = "<group>"; };
+		229D408218EBA6C1000F20A4 /* class-gen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "class-gen"; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B2BD6518CB7EA8002A4A69 /* reader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
 		22B2BD6618CB7EB1002A4A69 /* reader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = reader.c; sourceTree = "<group>"; };
 		22B2C58E18CD4938002A4A69 /* eh_frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = eh_frame.h; sourceTree = "<group>"; };
@@ -113,6 +141,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		229D407F18EBA6C1000F20A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				229D408E18EBA71D000F20A4 /* libssl.dylib in Frameworks */,
+				229D408B18EBA716000F20A4 /* libcapstone.a in Frameworks */,
+				229D408F18EBA71F000F20A4 /* libobjc.dylib in Frameworks */,
+				229D408C18EBA718000F20A4 /* libclang.dylib in Frameworks */,
+				229D408D18EBA71A000F20A4 /* libcrypto.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22B7478D18B8F5310019BC58 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -256,6 +296,7 @@
 			isa = PBXGroup;
 			children = (
 				22B7479018B8F5310019BC58 /* machodiff */,
+				229D408218EBA6C1000F20A4 /* class-gen */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -315,6 +356,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		229D408118EBA6C1000F20A4 /* class-gen */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 229D408A18EBA6C1000F20A4 /* Build configuration list for PBXNativeTarget "class-gen" */;
+			buildPhases = (
+				229D407E18EBA6C1000F20A4 /* Sources */,
+				229D407F18EBA6C1000F20A4 /* Frameworks */,
+				229D40A618EBA748000F20A4 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "class-gen";
+			productName = "class-gen";
+			productReference = 229D408218EBA6C1000F20A4 /* class-gen */;
+			productType = "com.apple.product-type.tool";
+		};
 		22B7478F18B8F5310019BC58 /* machodiff */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 22B7479C18B8F5310019BC58 /* Build configuration list for PBXNativeTarget "machodiff" */;
@@ -354,6 +412,7 @@
 			projectRoot = "";
 			targets = (
 				22B7478F18B8F5310019BC58 /* machodiff */,
+				229D408118EBA6C1000F20A4 /* class-gen */,
 			);
 		};
 /* End PBXProject section */
@@ -372,9 +431,51 @@
 			shellPath = /bin/sh;
 			shellScript = "install_name_tool -change @rpath/libclang.dylib /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib ${BUILD_DIR}/${CONFIGURATION}/${EXECUTABLE_NAME}";
 		};
+		229D40A618EBA748000F20A4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "install_name_tool -change @rpath/libclang.dylib /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib ${BUILD_DIR}/${CONFIGURATION}/${EXECUTABLE_NAME}";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		229D407E18EBA6C1000F20A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				229D409018EBA739000F20A4 /* reader.c in Sources */,
+				229D409118EBA739000F20A4 /* cmap.cpp in Sources */,
+				229D409218EBA739000F20A4 /* hash.c in Sources */,
+				229D409318EBA739000F20A4 /* file.c in Sources */,
+				229D409418EBA739000F20A4 /* objc-class.c in Sources */,
+				229D409518EBA739000F20A4 /* cxx-class.c in Sources */,
+				229D409618EBA739000F20A4 /* c-class.c in Sources */,
+				229D409718EBA739000F20A4 /* diff.c in Sources */,
+				229D409818EBA739000F20A4 /* compare.c in Sources */,
+				229D409918EBA739000F20A4 /* match.c in Sources */,
+				229D409A18EBA739000F20A4 /* objc_lexer.c in Sources */,
+				229D409B18EBA739000F20A4 /* cpp_lexer.cpp in Sources */,
+				229D409C18EBA739000F20A4 /* loader.c in Sources */,
+				229D409D18EBA739000F20A4 /* arch.c in Sources */,
+				229D409E18EBA739000F20A4 /* eh_frame.c in Sources */,
+				229D409F18EBA739000F20A4 /* objc.c in Sources */,
+				229D40A018EBA739000F20A4 /* subroutine.c in Sources */,
+				229D40A118EBA739000F20A4 /* map.c in Sources */,
+				229D40A218EBA739000F20A4 /* symbol.c in Sources */,
+				229D40A318EBA739000F20A4 /* objc_runtime.c in Sources */,
+				229D40A418EBA739000F20A4 /* generate_objc.c in Sources */,
+				229D40A518EBA739000F20A4 /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22B7478C18B8F5310019BC58 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -407,6 +508,49 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		229D408818EBA6C1000F20A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"CLASS_GEN=1",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Release",
+					"$(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		229D408918EBA6C1000F20A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "CLASS_GEN=1";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Release",
+					"$(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_CFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		22B7479A18B8F5310019BC58 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -564,6 +708,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		229D408A18EBA6C1000F20A4 /* Build configuration list for PBXNativeTarget "class-gen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				229D408818EBA6C1000F20A4 /* Debug */,
+				229D408918EBA6C1000F20A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		22B7478B18B8F5310019BC58 /* Build configuration list for PBXProject "machodiff" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
